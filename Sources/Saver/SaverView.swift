@@ -4,7 +4,8 @@ import QuartzCore
 
 /// The Clawd Wars screen saver: the window's location at full screen, the crew fighting on its floor, and each
 /// session's state as a hologram over its head. It only shows what the running app publishes (`SaverFeed`); with
-/// Clawd Wars not running it shows the empty location and says so.
+/// Clawd Wars not running it puts on a show instead (a made-up crew duelling, somewhere new every few minutes) and
+/// says, quietly, that the app isn't running.
 ///
 /// Runs inside macOS's sandboxed screen saver host, one instance per display (and one for the System Settings
 /// preview). Everything is Core Animation layers: the location's picture and pixel art scaled on the GPU with
@@ -37,6 +38,13 @@ final class ClawdWarsSaverView: ScreenSaverView {
     private var visit: Location?
     private let wipeLayer = CALayer(), wipeMask = CAShapeLayer()
     private var wipe: (start: Double, clock: Bool)?
+    private var trips = 0                       // the wipes take turns: a hard edge, then a clock
+    /// With Clawd Wars not running: a made-up crew, cast for `demoPlace` (a local or two among them), off somewhere
+    /// new every `demoEvery`.
+    private var demo: [SaverFeed.Session] = []
+    private var demoPlace: Location?
+    private var lastTrip = Date().timeIntervalSince1970
+    private static let demoEvery = 180.0        // three minutes
 
     override init?(frame: NSRect, isPreview: Bool) {
         super.init(frame: frame, isPreview: isPreview)
@@ -77,6 +85,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
         started = Date().timeIntervalSince1970
         period = 0
         visit = nil
+        lastTrip = started
     }
 
     override func draw(_ rect: NSRect) {}   // the layers are the picture
@@ -108,6 +117,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
         let p = isPreview ? 0 : Int((now - started) / Self.shiftEvery)
         shifted = p % 2 == 1
         if p != period { period = p; travel(now) }
+        else if !isPreview, !running(now), now - lastTrip >= Self.demoEvery { travel(now) }
         render(now)
     }
 
@@ -116,8 +126,9 @@ final class ClawdWarsSaverView: ScreenSaverView {
     /// Off somewhere new: freeze what's on screen into the wipe layer, pick the place, and start the wipe (a hard edge
     /// across the screen and a clock wipe, taking turns).
     private func travel(_ now: Double) {
+        lastTrip = now
         let here = visit ?? lastLocation
-        let crew = (feed?.sessions ?? []).flatMap { [$0.cast] + $0.agents.map(\.cast) }.map { Cast(id: $0) }
+        let crew = (running(now) ? feed?.sessions ?? [] : []).flatMap { [$0.cast] + $0.agents.map(\.cast) }.map { Cast(id: $0) }
         let homes = Set(crew.map(\.home)).subtracting([here])
         guard let next = crew.count > 1 && !homes.isEmpty ? homes.randomElement()
                 : Location.allCases.filter({ $0 != here }).randomElement() else { return }
@@ -129,10 +140,11 @@ final class ClawdWarsSaverView: ScreenSaverView {
                 wipeLayer.contents = frozen
                 wipeLayer.frame = roomLayer.frame
                 wipeMask.frame = wipeLayer.bounds
-                wipeMask.path = Wipe.remaining(0, clock: period % 2 == 0, in: wipeLayer.bounds)
+                wipeMask.path = Wipe.remaining(0, clock: trips % 2 == 0, in: wipeLayer.bounds)
                 wipeLayer.isHidden = false
                 CATransaction.commit()
-                wipe = (now, period % 2 == 0)
+                wipe = (now, trips % 2 == 0)
+                trips += 1
             }
         }
         visit = next
@@ -154,11 +166,15 @@ final class ClawdWarsSaverView: ScreenSaverView {
     private var u: CGFloat { max(0.3, bounds.height / 1080) }
     private var scale: CGFloat { window?.backingScaleFactor ?? 2 }
 
+    /// Fed by the app (the window's view), it's running by definition: during a live resize the app's timers pause
+    /// and the feed ages past `staleAfter`, which put up "isn't running" until the mouse let go.
+    private func running(_ now: Double) -> Bool {
+        feed.map { feedSource != nil || now - $0.at < SaverFeed.staleAfter } ?? false
+    }
+
     private func render(_ now: Double) {
         guard let root = host.layer else { return }
-        // Fed by the app (the window's view), it's running by definition: during a live resize the app's timers
-        // pause and the feed ages past `staleAfter`, which put up "isn't running" until the mouse let go.
-        let running = feed.map { feedSource != nil || now - $0.at < SaverFeed.staleAfter } ?? false
+        let running = running(now)
         // Stale or not, the feed says where the crew was last: the place stays when Clawd Wars quits.
         if let f = feed, let l = Location(rawValue: f.location) { lastLocation = l }
         let location = visit ?? lastLocation
@@ -209,9 +225,10 @@ final class ClawdWarsSaverView: ScreenSaverView {
         if running, let f = feed {
             items += crew(f.sessions, now: now, feet: feet)
         } else {
-            items += notRunning()
+            if demoPlace != location { demo = cast(for: location, now: now); demoPlace = location }
+            items += crew(demo, now: now, feet: feet, cards: false)
         }
-        items += hud(running ? feed : nil, location: location, now: now)
+        items += hud(running ? feed : nil, location: location, now: now, idle: !running)
         show(items, in: root)
         CATransaction.commit()
     }
@@ -257,7 +274,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
 
     /// The same pairing as the window: Claudes fight Claudes, agents fight agents (saber duels first), a leftover
     /// Claude and agent fight each other, anyone else left over cheers. Then the line is spread across the floor.
-    private func crew(_ sessions: [SaverFeed.Session], now t: Double, feet: CGFloat) -> [Item] {
+    private func crew(_ sessions: [SaverFeed.Session], now t: Double, feet: CGFloat, cards: Bool = true) -> [Item] {
         var members: [Member] = []
         for s in sessions {
             members.append(Member(key: "L:" + s.id, cast: Cast(id: s.cast), session: s, agent: nil))
@@ -362,7 +379,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
             }
         }
         // The System Settings thumbnail is too small for words: just the crew there.
-        if !isPreview { items += board(placed, ls: ls, cs: cs, base: base, now: t) }
+        if !isPreview { items += board(placed, ls: ls, cs: cs, base: base, now: t, cards: cards) }
         return items
     }
 
@@ -503,7 +520,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
     /// The board: a card per session floating over the crew, in the crew's order and at uneven heights, each with a
     /// beam down to the name over its character; the agents are named too. When the cards won't fit side by side they
     /// overlap by half and stack (each beam drops straight down between the lower cards); narrower, they lose the prompt.
-    private func board(_ placed: [Placed], ls: CGFloat, cs: CGFloat, base: CGFloat, now: Double) -> [Item] {
+    private func board(_ placed: [Placed], ls: CGFloat, cs: CGFloat, base: CGFloat, now: Double, cards show: Bool = true) -> [Item] {
         let crew = lineUp(placed)
         guard !crew.isEmpty else { return [] }
         let looks = crew.map { look($0.p.m.session, now: now) }
@@ -520,6 +537,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
                                 color: looks[i].accent, avoid: bodies, taken: &taken))
             }
         }
+        guard show else { return tags }      // the show's crew: names only, nothing to report
 
         let m = 40 * u, gap = 14 * u, full = 300 * u
         let n = CGFloat(crew.count), span = bounds.width - m * 2
@@ -659,7 +677,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
     private static let yellow = NSColor(srgbRed: 1, green: 0.91, blue: 0.12, alpha: 1)
 
     /// The place and a head count top left, a clock top right, and what happened lately crawling along the bottom.
-    private func hud(_ feed: SaverFeed?, location: Location, now: Double) -> [Item] {
+    private func hud(_ feed: SaverFeed?, location: Location, now: Double, idle: Bool = false) -> [Item] {
         var items: [Item] = []
         let m = 48 * u
         let sessions = feed?.sessions ?? []
@@ -668,7 +686,8 @@ final class ClawdWarsSaverView: ScreenSaverView {
         if agents > 0 { counts.append("\(agents) AGENT\(agents == 1 ? "" : "S")") }
         if waiting > 0 { counts.append("\(waiting) NEED\(waiting == 1 ? "S" : "") YOU") }
         let place = text([(location.name.uppercased(), inWindow ? 27 : 18, .heavy, NSColor(white: 0.88, alpha: 1), inWindow ? 6 : 4),
-                          (feed == nil ? "" : counts.joined(separator: "  ·  "), 14, .semibold, NSColor(white: 0.65, alpha: 1), 2)],
+                          (idle ? "CLAWD WARS ISN'T RUNNING  ·  OPEN IT TO BRING YOUR CREW"
+                                : feed == nil ? "" : counts.joined(separator: "  ·  "), 14, .semibold, NSColor(white: 0.65, alpha: 1), 2)],
                          right: shifted)
         let ps = sized(place)
         if !isPreview {
@@ -708,12 +727,35 @@ final class ClawdWarsSaverView: ScreenSaverView {
         return items
     }
 
-    private func notRunning() -> [Item] {
-        let panel = hologram([("CLAWD WARS ISN'T RUNNING", 26, .heavy, .white), ("Open it to bring the crew back.", 16, .medium, Self.soft)],
-                             color: NSColor(srgbRed: 0.45, green: 0.85, blue: 1, alpha: 1))
-        let size = CGSize(width: CGFloat(panel.width) / scale, height: CGFloat(panel.height) / scale)
-        return [Item(image: panel, rect: CGRect(x: (bounds.width - size.width) / 2, y: (bounds.height - size.height) / 2,
-                                                width: size.width, height: size.height), alpha: 0.9, smooth: true)]
+    /// The show's crew for `place`: four to six characters in all, light against dark where it can, a local or two
+    /// among them (whoever calls the place home), up to two of them agents at someone's side.
+    private func cast(for place: Location, now: Double) -> [SaverFeed.Session] {
+        let armed = (Array(0..<Leader.allCases.count) + Companion.allCases.map { StatusStore.heroBase + $0.rawValue })
+            .filter { Cast(id: $0).weapon != .none }
+        let locals = armed.filter { Cast(id: $0).home == place }.shuffled().prefix(2)
+        var dark = armed.filter { StatusStore.isDark($0) && !locals.contains($0) }.shuffled()
+        var light = armed.filter { !StatusStore.isDark($0) && !locals.contains($0) }.shuffled()
+        for id in locals.reversed() { if StatusStore.isDark(id) { dark.insert(id, at: 0) } else { light.insert(id, at: 0) } }
+        // Alternating sides, so each pair is a duel across them (the local first, whichever side it's on).
+        var darkTurn = locals.first.map(StatusStore.isDark) ?? Bool.random()
+        var leaders: [Int] = []
+        let everyone = Int.random(in: 4...6), helpers = Int.random(in: 0...2)
+        for _ in 0..<(everyone - helpers) {
+            if darkTurn, !dark.isEmpty { leaders.append(dark.removeFirst()) } else if !light.isEmpty { leaders.append(light.removeFirst()) }
+            darkTurn.toggle()
+        }
+        var spare = (dark + light).shuffled()
+        let palette: [UInt32] = [0xFF8A3D, 0x3DD6FF, 0xFF4FD8, 0x9BE84A, 0xFFD23D, 0xA57BFF, 0x2EE6B0, 0xFF6B6B].shuffled()
+        var owners = Array(leaders.indices.shuffled().prefix(helpers))
+        return leaders.enumerated().map { i, id in
+            var agents: [SaverFeed.Agent] = []
+            if let k = owners.firstIndex(of: i), !spare.isEmpty {
+                owners.remove(at: k)
+                agents.append(SaverFeed.Agent(id: "show-a\(i)", cast: spare.removeFirst(), task: ""))
+            }
+            return SaverFeed.Session(id: "show-\(i)", cast: id, assistant: "claude", project: "", accent: palette[i % palette.count],
+                                     mood: "working", since: now, agents: agents)
+        }
     }
 
     private func ticker(_ s: String) -> CGImage {

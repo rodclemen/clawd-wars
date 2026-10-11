@@ -122,7 +122,7 @@ Every 10 minutes it does a Star Wars wipe (a hard edge or a clock wipe) to somew
 
 Install it from the menu bar helmet: **Settings → Install Screen Saver…**. That copies it into your `~/Library/Screen Savers` and opens System Settings → **Wallpaper** (on macOS 14 and earlier, **Screen Saver**), where you pick **Clawd Wars** under **Other**. macOS shows a generic swirl for third-party screen savers in that list. After an app update, the installed copy is updated too.
 
-The screen saver shows what the running app sees, so Clawd Wars needs to be running. When it isn't, you get the empty location and a note saying so. **Settings → Remove Screen Saver** takes it out again.
+The screen saver shows what the running app sees, so your own sessions only appear while Clawd Wars is running. When it isn't, the screen saver puts on a show instead: a random crew of four to six duelling, light side against dark, with a local or two of the place among them, off somewhere new every 3 minutes. A quiet line under the place name says Clawd Wars isn't running. **Settings → Remove Screen Saver** takes it out again.
 
 The window can show the same view: **Settings → Screen Saver View in Window** (hover a card there to see it larger; the title bar button takes you back). The Location menu's **Random** moves the window somewhere new every 10 minutes, with the same wipe.
 

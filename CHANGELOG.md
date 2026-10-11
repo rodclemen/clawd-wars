@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.3 — 2026-10-11
+
+### Changed
+- **The screen saver puts on a show when Clawd Wars isn't running.** macOS starts a screen saver on idle time alone and gives it no way to decline, so with the app closed you used to get an empty location and a big "isn't running" card. Now a random crew of four to six fights there instead: light side against dark, one or two characters who call the place home among them (Luke at the Lars homestead, a Gamorrean Guard at Jabba's palace), up to two of them agents. Each wears a name tag; there are no cards, since there's no real status to show. Every 3 minutes it wipes to somewhere new with a new crew (`demoEvery`, `cast(for:)`). The clock and place name still swap corners every 10 minutes against burn-in, and a quiet line under the place name says Clawd Wars isn't running. The System Settings preview shows the show too, instead of the card. With the app running, and in the window's screen-saver view, nothing changes.
+
 ## 2.26.2 — 2026-10-11
 
 ### Changed
