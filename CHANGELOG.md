@@ -1,5 +1,18 @@
 # Changelog
 
+## 2.27.0 — 2026-10-11
+
+### Added
+- **23 new characters: the cast goes from 30 to 54.** All drawn in code on the same Clawd body, each with a weapon, a home location and its own little habit.
+  - **Dark side (9):** one of the **Emperor's Royal Guards** (crimson robe and helmet, a force pike; home: the throne room), **Sebulba** in his pod racer (two orange engines, hovering; its flame jet is his blaster), **Salacious Crumb** (cackling, unarmed), **General Grievous** (four arms, four sabers, two green and two blue), a **Tusken Raider** (gaffi stick; always angry, so when it isn't fighting it shakes the stick over its head and hops), **Cad Bane** (wide hat, red eyes, twin blasters), **Admiral Thrawn** (white uniform, blaster pistol), **Hammerhead** (the cantina's Ithorian, unarmed) and an **MSE-6 mouse droid**.
+  - **Light side (15):** **Jar Jar Binks** (eyestalks, flapping ears, arms everywhere), **Lando Calrissian** (cape lined in gold), **Zorii Bliss**, **Bo-Katan Kryze** (Nite Owl helmet), **Maz Kanata** (her goggles focus now and then), **Wedge Antilles** (X-wing pilot), **L3-37** (fist up for droid rights), **Mon Mothma**, **Padmé Amidala** (as at Geonosis), **Admiral Ackbar** (his eyes swivel), **Grogu** (lifts a hand to the Force), **Babu Frik** (on a crate, loupe out, sparks flying), **the Mandalorian** (beskar, cape, the long Amban rifle), **K-2SO** and a **GNK power droid**.
+  - Names that wouldn't fit a 16-character name tag are shortened: "Royal Guard", "Tusken Raider", "Salacious Crumb", "Admiral Thrawn".
+- **Agent-only characters.** The MSE-6 is never given to a session, only to agents (`StatusStore.agentOnly`; session picks use `leaderCast`). It's in the Playground's agent list, after the heroes.
+
+### Changed
+- New cast members are appended to `Leader` and `Companion`, so everyone's existing characters keep their ids. `leaderCount` is now 24 and `companionCount` 30.
+- `docs/roster.png` re-rendered with the whole cast; the README's cast lists and contributing notes updated. The newer sprites live in `Sources/App/Recruits.swift` (added to the screen saver's build and the `Tools/RenderDocs` command).
+
 ## 2.26.3 — 2026-10-11
 
 ### Changed

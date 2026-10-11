@@ -51,6 +51,13 @@ enum Location: String, CaseIterable {
         case .atat: return .hoth
         case .rancor: return .rancorPit
         case .greedo: return .cantina
+        case .royalGuard: return .emperorThrone
+        case .sebulba, .tusken: return .tuskenDesert
+        case .salacious: return .jabbasPalace
+        case .grievous: return .geonosis
+        case .cadBane, .hammerhead: return .cantina
+        case .thrawn: return .executor
+        case .mse6: return .deathStar
         }
     }
 
@@ -67,6 +74,19 @@ enum Location: String, CaseIterable {
         case .mace, .ahsoka: return .jediCouncil
         case .ewok: return .endor
         case .tauntaun: return .hoth
+        case .jarjar: return .naboo
+        case .padme: return .theed
+        case .lando, .l337: return .falcon
+        case .zorii: return .jakku
+        case .boKatan: return .geonosis
+        case .maz: return .cantina
+        case .wedge: return .hoth
+        case .monMothma: return .tantive
+        case .ackbar: return .endor
+        case .grogu: return .dagobah
+        case .babuFrik, .gonk: return .sandcrawler
+        case .mando: return .tuskenDesert
+        case .k2so: return .executor
         }
     }
 

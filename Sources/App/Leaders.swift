@@ -10,7 +10,9 @@ extension Companion {
         case .luke, .obiwan, .quigon, .mace, .yoda, .rey, .ahsoka: return .saber
         case .ewok: return .saber     // a spear — fights up close like a blade
         case .han, .leia, .jawa, .chewie: return .blaster
+        case .lando, .zorii, .boKatan, .wedge, .padme, .mando, .k2so: return .blaster
         case .r2d2, .c3po, .tauntaun: return .none
+        case .jarjar, .maz, .l337, .monMothma, .ackbar, .grogu, .babuFrik, .gonk: return .none
         }
     }
 
@@ -19,13 +21,17 @@ extension Companion {
         switch self {
         case .han: return (53, 32)
         case .chewie: return (54, 31)
+        case .lando, .zorii, .boKatan, .wedge, .padme: return (47, 32)
+        case .mando: return (58, 32)
+        case .k2so: return (52, 32)
         default: return (46, 32)
         }
     }
 }
 
 enum Leader: Int, CaseIterable {
-    case vader, kylo, maul, boba, trooper, emperor, rogr, dooku, gamorrean, jabba, ig88, atst, atat, rancor, greedo
+    case vader, kylo, maul, boba, trooper, emperor, rogr, dooku, gamorrean, jabba, ig88, atst, atat, rancor, greedo, royalGuard
+    case sebulba, salacious, grievous, tusken, cadBane, thrawn, hammerhead, mse6
 
     var name: String {
         switch self {
@@ -44,6 +50,15 @@ enum Leader: Int, CaseIterable {
         case .atat: return "AT-AT"
         case .rancor: return "Rancor"
         case .greedo: return "Greedo"
+        case .royalGuard: return "Royal Guard"
+        case .sebulba: return "Sebulba"
+        case .salacious: return "Salacious Crumb"
+        case .grievous: return "General Grievous"
+        case .tusken: return "Tusken Raider"
+        case .cadBane: return "Cad Bane"
+        case .thrawn: return "Admiral Thrawn"
+        case .hammerhead: return "Hammerhead"
+        case .mse6: return "MSE-6"
         }
     }
 
@@ -51,9 +66,11 @@ enum Leader: Int, CaseIterable {
         switch self {
         case .vader, .kylo, .maul: return .saber
         case .boba, .trooper, .rogr, .ig88, .atst, .atat, .greedo: return .blaster
-        case .dooku, .gamorrean, .rancor: return .saber   // vibro-axe and claws fight up close like a blade
-        case .jabba: return .none
+        case .dooku, .gamorrean, .rancor, .royalGuard: return .saber   // vibro-axe, claws and force pike fight up close like a blade
+        case .jabba, .salacious, .hammerhead, .mse6: return .none
         case .emperor: return .lightning
+        case .sebulba, .cadBane, .thrawn: return .blaster
+        case .grievous, .tusken: return .saber          // four sabers; the gaffi stick fights up close
         }
     }
 
@@ -61,7 +78,9 @@ enum Leader: Int, CaseIterable {
     var armoured: Bool {
         switch self {
         case .boba, .trooper, .rogr, .ig88, .atst, .atat: return true
-        case .vader, .kylo, .maul, .emperor, .dooku, .gamorrean, .jabba, .rancor, .greedo: return false
+        case .sebulba, .grievous, .mse6: return true
+        case .vader, .kylo, .maul, .emperor, .dooku, .gamorrean, .jabba, .rancor, .greedo, .royalGuard,
+             .salacious, .tusken, .cadBane, .thrawn, .hammerhead: return false
         }
     }
 
@@ -83,14 +102,24 @@ enum Leader: Int, CaseIterable {
         case .atat: return 11
         case .rancor: return 8
         case .greedo: return 19
+        case .royalGuard: return 13
+        case .sebulba: return 19
+        case .salacious: return 16
+        case .grievous: return 14
+        case .tusken: return 19
+        case .cadBane: return 15
+        case .thrawn: return 22
+        case .hammerhead: return 10
+        case .mse6: return 35
         }
     }
 
-    /// Whether it sits down when it's been idle a while (walkers, slugs, monsters and the Emperor don't).
+    /// Whether it sits down when it's been idle a while (walkers, slugs, monsters, the Emperor and his guard don't).
     var canSit: Bool {
         switch self {
-        case .atst, .atat, .jabba, .rancor, .emperor: return false
-        case .vader, .kylo, .maul, .boba, .trooper, .rogr, .dooku, .gamorrean, .ig88, .greedo: return true
+        case .atst, .atat, .jabba, .rancor, .emperor, .royalGuard, .sebulba, .salacious, .hammerhead, .mse6: return false
+        case .vader, .kylo, .maul, .boba, .trooper, .rogr, .dooku, .gamorrean, .ig88, .greedo,
+             .grievous, .tusken, .cadBane, .thrawn: return true
         }
     }
 
@@ -99,7 +128,8 @@ enum Leader: Int, CaseIterable {
         switch self {
         case .rancor: return rancorShoulder
         case .vader, .kylo, .maul, .boba, .trooper, .emperor, .rogr, .dooku, .gamorrean, .jabba, .ig88, .atst, .atat,
-             .greedo: return Sprite.hand
+             .greedo, .royalGuard, .sebulba, .salacious, .grievous, .tusken, .cadBane, .thrawn, .hammerhead,
+             .mse6: return Sprite.hand
         }
     }
 
@@ -108,7 +138,8 @@ enum Leader: Int, CaseIterable {
         switch self {
         case .atst: return (47, 22)
         case .atat: return (64, 21)
-        case .greedo: return (47, 32)
+        case .greedo, .cadBane, .thrawn: return (47, 32)
+        case .sebulba: return (70, 31)
         default: return (52, 32)
         }
     }
@@ -261,6 +292,10 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
             }
         }
     }
+    // The Tusken Raider is never calm: when it isn't fighting it shakes its gaffi stick over its head and hops.
+    if who == .tusken, !walking, saber == nil {
+        saber = -100 + 25 * sin(t * 9); hop = cheerHop(t * 0.8); breathe = 0
+    }
     if zap != nil { armRaise = 2 }
 
     if case .cheer = role, mode == .working, !walking { drawCheerSparkles(c, t: t) }
@@ -273,6 +308,8 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     case .vader, .kylo: drawCape(c, t: t, speed: capeSpeed, color: C(0x0E0E12), edge: C(0x2C2C36))
     case .dooku: drawCape(c, t: t, speed: capeSpeed, color: C(0x2A1A14), edge: C(0x4A3024))
     case .emperor: drawCape(c, t: t, speed: capeSpeed * 0.6, color: C(0x111116), edge: C(0x2A2A33), extra: 1.5)
+    case .royalGuard: drawCape(c, t: t, speed: capeSpeed * 0.5, color: C(0x6E0C10), edge: C(0x8E1418), extra: 0.5)
+    case .grievous: drawCape(c, t: t, speed: capeSpeed * 0.7, color: C(0x3A3028), edge: C(0x5A4A3A))
     case .boba: drawJetpack(c, t: t, burning: fire.map { frac($0.t / blasterPeriod) > 0.7 } ?? false)
     default: break
     }
@@ -293,6 +330,15 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     case .rancor: drawRancor(c, step: step, lift: breathe)
     case .greedo: drawGreedo(c, step: step, lift: breathe)
     case .emperor: drawEmperor(c, lift: breathe, armRaise: armRaise)
+    case .royalGuard: drawRoyalGuard(c, lift: breathe)
+    case .sebulba: drawSebulbaPod(c, t: t, lift: breathe)
+    case .salacious: drawSalacious(c, t: t, lift: breathe)
+    case .grievous: drawGrievous(c, step: step, lift: breathe)
+    case .tusken: drawTusken(c, step: step, lift: breathe)
+    case .cadBane: drawCadBane(c, step: step, lift: breathe)
+    case .thrawn: drawThrawn(c, step: step, lift: breathe)
+    case .hammerhead: drawHammerhead(c, lift: breathe)
+    case .mse6: drawMouseDroid(c, t: t)
     }
 
     // Weapon
@@ -319,6 +365,22 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
             drawAxe(c, angle: lit ? angle : -75)      // resting: axe shouldered, not through the floor
         case .rancor:
             drawClaw(c, angle: lit ? angle : 30)      // resting: arm hangs forward, claws above the floor
+        case .royalGuard:
+            drawPike(c, angle: lit ? angle : -84)     // resting: held upright at its side, as they stand guard
+        case .tusken:
+            drawGaffi(c, angle: lit ? angle : -75)
+        case .grievous:                               // four arms, four blades: two forward, two from the back hands
+            let blue = (core: C(0xE6F4FF), glow: C(0x3D9BFF)), green = (core: C(0xEAFFEA), glow: C(0x3FE85A))
+            if lit {
+                c.ox -= 22; c.oy -= 2
+                drawSaber(c, t: t, angle: 180 - angle * 0.6 + 40, core: blue.core, glow: blue.glow, lit: true, length: 17)
+                drawSaber(c, t: t, angle: 180 - angle * 0.6 + 75, core: green.core, glow: green.glow, lit: true, length: 17)
+                c.ox += 22; c.oy += 2
+                drawSaber(c, t: t, angle: angle + 30, core: blue.core, glow: blue.glow, lit: true)
+                drawSaber(c, t: t, angle: angle, core: green.core, glow: green.glow, lit: true, trail: trail)
+            } else {
+                c.rect(36, 37, 2, 5, C(0xB9BEC8)); c.rect(13, 34, 2, 5, C(0xB9BEC8))
+            }
         default:
             if lit {
                 drawSaber(c, t: t, angle: angle, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, trail: trail)
@@ -337,7 +399,8 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
         case .boba: drawEE3(c, x: 38, y: 30)
         case .rogr: drawE5(c, x: 39, y: 31)
         case .ig88: drawE11(c, x: 37, y: 30)
-        case .atst, .atat: break                       // chin guns are part of the walker
+        case .atst, .atat, .sebulba: break             // chin guns are part of the walker; the pod's flame jet too
+        case .cadBane, .thrawn: drawPistol(c, x: 40, y: 31)
         case .greedo:
             c.pattern(40, 31, [".KKKKK", "KKKKSK", "KK....", "KK...."], ["K": C(0x2A2A30), "S": C(0x8A8F9C)])
         default: drawE11(c, x: 37, y: 30)
@@ -358,7 +421,7 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     c.ox = 0; c.oy = 0
 }
 
-private func drawCape(_ c: PixelCanvas, t: Double, speed: Double, color: Px, edge: Px, extra: Double = 0) {
+func drawCape(_ c: PixelCanvas, t: Double, speed: Double, color: Px, edge: Px, extra: Double = 0) {
     for y in 27...43 where y + c.oy <= 43 {      // hem ends on the feet's row (43), never below
         let k = Double(y - 27) / 16
         let hw = 10.5 + k * (4.5 + extra)
@@ -541,6 +604,15 @@ private func drawAxe(_ c: PixelCanvas, angle: Double) {
     }
     c.glowLine(hx + ux * 12 + px * 4.5, hy + uy * 12 + py * 4.5, hx + ux * 17 + px * 4.5, hy + uy * 17 + py * 4.5,
                core: C(0xE4E8EE), glow: C(0, 0), coreR: 0.6, glowR: 0.7)
+}
+
+/// The Royal Guard's force pike: a long dark staff with a silver head, the tip crackling when it's swung.
+private func drawPike(_ c: PixelCanvas, angle: Double) {
+    let hx = Sprite.hand.x, hy = Sprite.hand.y
+    let r = angle * .pi / 180, ux = cos(r), uy = sin(r)
+    c.glowLine(hx - ux * 7, hy - uy * 7, hx + ux * 17, hy + uy * 17, core: C(0x8A8E99), glow: C(0, 0), coreR: 0.7, glowR: 0.8)
+    c.glowLine(hx + ux * 17, hy + uy * 17, hx + ux * 21, hy + uy * 21, core: C(0xC9CED8), glow: C(0, 0), coreR: 0.8, glowR: 0.9)
+    c.glowLine(hx + ux * 21, hy + uy * 21, hx + ux * 22.5, hy + uy * 22.5, core: C(0xFFF2C0), glow: C(0, 0), coreR: 0.6, glowR: 0.7)
 }
 
 private func drawDooku(_ c: PixelCanvas, step: Int, lift: Int) {
@@ -792,6 +864,41 @@ private func drawEmperor(_ c: PixelCanvas, lift: Int, armRaise: Int) {
     drawHood(c, robe, robeEdge)
     c.rect(18, 33, 20, 5, robe)
     c.rect(26, 33, 4, 1, C(0xA86A50))
+}
+
+/// The Emperor's Royal Guard: crimson from head to foot, a floor-length robe over a smooth, tall helmet with a
+/// black T-shaped visor slit.
+private func drawRoyalGuard(_ c: PixelCanvas, lift: Int) {
+    let red = C(0xB3161B), dark = C(0x7E0E12), shine = C(0xE0484C)
+    for y in 36...43 {
+        let k = (y - 36) / 2
+        c.rect(17 - k, y, 22 + k * 2, 1, red)
+        c.px(17 - k, y, dark); c.px(38 + k, y, dark)
+        if y > 38 { c.px(23, y, dark); c.px(32, y, dark) }       // folds
+    }
+    c.oy += lift
+    var look = Look(body: red, shade: dark, arm: red, eye: nil)
+    look.legs = false
+    drawBody(c, look)
+    c.pattern(16, 13, [
+        ".........RRRRRR.........",
+        ".......RRRRRRRRRR.......",
+        "......RRSSRRRRRRRR......",
+        "......RSSRRRRRRRRRD.....",
+        ".....RRSRRRRRRRRRRRD....",
+        ".....RSSRRRRRRRRRRRD....",
+        ".....RSRRRRRRRRRRRRD....",
+        ".....RSRRRRRRRRRRRRD....",
+        "....RRRRRRRRRRRRRRRRD...",
+        "....RRRRRRRRRRRRRRRRD...",
+        "...RRRRRRRRRRRRRRRRRRD..",
+        "..RRRRRRRRRRRRRRRRRRRRD.",
+        ".RRRRRRRRRRRRRRRRRRRRRRD",
+        "DDDDDDDDDDDDDDDDDDDDDDDD",
+    ], ["R": red, "S": shine, "D": dark])
+    c.rect(21, 29, 14, 1, ink)          // the visor: a narrow slit across…
+    c.rect(27, 29, 2, 4, ink)           // …and down the middle
+    c.rect(18, 35, 20, 1, dark)         // where the robe falls from the shoulders
 }
 
 // MARK: - Effects

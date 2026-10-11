@@ -1,7 +1,7 @@
 import AppKit
 
 // Renders the README's roster and locations images with the app's own sprite code.
-//   swiftc -swift-version 5 Sources/App/Pixel.swift Sources/App/Characters.swift Sources/App/Leaders.swift \
+//   swiftc -swift-version 5 Sources/App/Pixel.swift Sources/App/Characters.swift Sources/App/Recruits.swift Sources/App/Leaders.swift \
 //          Sources/App/Cantina.swift Sources/App/Locations.swift Sources/Shared/*.swift \
 //          Tools/RenderDocs/main.swift -o /tmp/renderdocs && /tmp/renderdocs docs
 

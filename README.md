@@ -59,9 +59,9 @@ Every character is Clawd — Claude Code's little pixel mascot — in costume, d
   <img src="docs/roster.png" alt="All villains and heroes" width="760">
 </p>
 
-Anyone can be a session (drawn large) or an agent (drawn small). **The dark side** (Vader and Kylo never spawn back to back): Darth Vader, Kylo Ren, Darth Maul, Boba Fett, a Stormtrooper, the Emperor, R0-GR the battle droid (*"Roger roger!"*), Count Dooku, a Gamorrean Guard, Jabba the Hutt (*"Ho ho ho!"*), IG-88, an AT-ST, an AT-AT, the Rancor and Greedo.
+Anyone can be a session (drawn large) or an agent (drawn small). **The dark side** (Vader and Kylo never spawn back to back): Darth Vader, Kylo Ren, Darth Maul, Boba Fett, a Stormtrooper, the Emperor, R0-GR the battle droid (*"Roger roger!"*), Count Dooku, a Gamorrean Guard, Jabba the Hutt (*"Ho ho ho!"*), IG-88, an AT-ST, an AT-AT, the Rancor, Greedo, one of the Emperor's Royal Guards, Sebulba in his pod racer, Salacious Crumb (cackling), General Grievous (four sabers), a Tusken Raider (always angry), Cad Bane, Admiral Thrawn and Hammerhead. An MSE-6 mouse droid scurries about as an agent only, never a session.
 
-**The light side**: Luke, Han, Leia, Obi-Wan, R2-D2, C-3PO, Qui-Gon, Mace Windu, Yoda, a Jawa, Chewbacca, Rey, Ahsoka, Wicket the Ewok and a tauntaun.
+**The light side**: Luke, Han, Leia, Obi-Wan, R2-D2, C-3PO, Qui-Gon, Mace Windu, Yoda, a Jawa, Chewbacca, Rey, Ahsoka, Wicket the Ewok, a tauntaun, Jar Jar Binks, Lando, Zorii Bliss, Bo-Katan Kryze, Maz Kanata, Wedge Antilles, L3-37 (fist up for droid rights), Mon Mothma, Padmé, Admiral Ackbar, Grogu, Babu Frik (sparks flying), the Mandalorian, K-2SO and a GNK power droid.
 
 Blasters are drawn from the film props — Han's DL-44, Leia's Defender, the Stormtrooper's E-11, Boba's EE-3 — and so are the fights:
 
@@ -214,8 +214,9 @@ rm -rf /Applications/"Clawd Wars.app" ~/.claude/vader-status
 
 New characters and locations are very welcome — everything is pixel art drawn in code, so there are no assets to wrangle:
 
-- **A villain:** add a case to `Leader` in `Sources/App/Leaders.swift` (name, weapon, head height) and a `draw…` costume function; give it a home in `Location.home(of:)`.
-- **A hero:** add a case to `Companion` in `Sources/App/Characters.swift` and its drawing; a home in `Location.home(of:)`.
+- **A villain:** add a case at the end of `Leader` in `Sources/App/Leaders.swift` (name, weapon, head height) and a `draw…` costume function (newer ones live in `Sources/App/Recruits.swift`); give it a home in `Location.home(of:)`.
+- **A hero:** add a case at the end of `Companion` in `Sources/App/Characters.swift` and its drawing; a home in `Location.home(of:)`.
+- Always add at the end: the ids are saved, so reordering would swap everyone's characters. A character that should only ever be an agent goes in `StatusStore.agentOnly`.
 - **A location:** add a case to `Location` and a scene in `Scenes` (`Sources/App/Locations.swift`), with an optional animated layer.
 - Bump `leaderCount` / `companionCount` in `Sources/Shared/StatusStore.swift`.
 - Check it: hold ⌘ and open the menu for the **Playground**, or run `CLAWD_SHOT=/tmp/shot.png` with `--playground=…` / `--agents=…`. Regenerate the README sheets with `Tools/RenderDocs`.

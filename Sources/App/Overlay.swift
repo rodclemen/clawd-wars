@@ -771,11 +771,16 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         }
     }
 
+    /// Playground agent tags from here up are villains that are only ever agents (the cast id added on).
+    private static let playgroundVillainAgent = 1000
+
     private func playgroundSessions(_ villains: [Int]) -> [SessionSnapshot] {
         let activities = ["Read Overlay.swift", "Grep fightRoles", "Bash: swift build", "Edit Leaders.swift",
                           "Fetch github.com", "Glob **/*.swift", "Bash: run the tests", "Read README.md"]
+        // Heroes by `Companion` index; the agent-only villains as `playgroundVillainAgent` + their cast id.
         let crew = playgroundAgents.enumerated().map { i, c in
-            AgentRecord(id: "pg-a\(c)", session: "pg", type: "playground", character: c, started: start - Double(30 + i * 47),
+            AgentRecord(id: "pg-a\(c)", session: "pg", type: "playground", character: c >= Self.playgroundVillainAgent ? 0 : c,
+                        cast: c >= Self.playgroundVillainAgent ? c - Self.playgroundVillainAgent : nil, started: start - Double(30 + i * 47),
                         lastSeen: 0, task: Self.sampleTasks[c % Self.sampleTasks.count],
                         activity: activities[(c + i) % activities.count], tools: 3 + (c * 7) % 23)
         }
@@ -1437,7 +1442,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         let moods: [Mood] = [.working, .working, .thinking, .waiting, .idle]
         if chaos.isEmpty || (chaos.count < 7 && roll(0.15)) {
             let used = Set(chaos.map(\.leader))
-            if let l = (StatusStore.darkCast + StatusStore.lightCast).filter({ !used.contains($0) }).randomElement() {
+            if let l = StatusStore.leaderCast.filter({ !used.contains($0) }).randomElement() {
                 chaos.append(SessionSnapshot(id: "chaos-\(l)-\(Int(now * 1000))", leader: l, project: "project-\(l)",
                                              mood: moods.randomElement()!, agents: []))
             }
@@ -2170,9 +2175,18 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             case .atat: return "heavy chin cannons"
             case .rancor: return "long clawed arms"
             case .greedo: return "blaster pistol"
+            case .royalGuard: return "force pike"
+            case .sebulba: return "pod racer flame jet"
+            case .salacious: return "unarmed — cackles"
+            case .grievous: return "four sabers"
+            case .tusken: return "gaffi stick"
+            case .cadBane: return "twin blasters"
+            case .thrawn: return "blaster pistol"
+            case .hammerhead: return "unarmed"
+            case .mse6: return "agent only"
             }
         }
-        for l in Leader.allCases {
+        for l in Leader.allCases where !StatusStore.agentOnly.contains(l.rawValue) {
             let order = picked.firstIndex(of: l.rawValue).map { "   #\($0 + 1)" } ?? ""
             let item = NSMenuItem(title: "\(l.name) (\(weaponLabel(l)))\(order)",
                                   action: #selector(togglePlaygroundVillain(_:)), keyEquivalent: "")
@@ -2188,6 +2202,14 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             item.target = self
             item.tag = c.rawValue
             item.state = playground != nil && playgroundAgents.contains(c.rawValue) ? .on : .off
+            pm.addItem(item)
+        }
+        for id in StatusStore.agentOnly.sorted() {
+            let tag = Self.playgroundVillainAgent + id
+            let item = NSMenuItem(title: Leader(index: id).name, action: #selector(togglePlaygroundAgent(_:)), keyEquivalent: "")
+            item.target = self
+            item.tag = tag
+            item.state = playground != nil && playgroundAgents.contains(tag) ? .on : .off
             pm.addItem(item)
         }
         pm.addItem(.separator())
@@ -2240,7 +2262,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
 
     @objc private func addAllVillains() {
         enterPlayground()
-        for l in Leader.allCases where !playground!.contains(l.rawValue) { playground!.append(l.rawValue) }
+        for l in Leader.allCases where !playground!.contains(l.rawValue) && !StatusStore.agentOnly.contains(l.rawValue) { playground!.append(l.rawValue) }
         refreshStatus()
     }
 

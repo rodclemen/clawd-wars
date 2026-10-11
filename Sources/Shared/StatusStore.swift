@@ -109,8 +109,8 @@ enum StatusPaths {
 }
 
 enum StatusStore {
-    static let companionCount = 15
-    static let leaderCount = 15
+    static let companionCount = 30
+    static let leaderCount = 24
 
     // Stale timeouts: Stop never fires when the user hits Esc, so states must decay on their own.
     static let thinkingTTL: Double = 10 * 60
@@ -393,6 +393,10 @@ enum StatusStore {
     static func isDark(_ cast: Int) -> Bool { cast < heroBase }
     static var darkCast: [Int] { Array(0..<leaderCount) }
     static var lightCast: [Int] { Array(heroBase..<(heroBase + companionCount)) }
+    /// Only ever an agent, never a session: the MSE-6 mouse droid.
+    static let agentOnly: Set<Int> = [23]
+    /// Who can lead a session (everyone but the agent-only).
+    static var leaderCast: [Int] { (darkCast + lightCast).filter { !agentOnly.contains($0) } }
 
     static func assistantOf(_ r: SessionRecord) -> String { r.assistant ?? "claude" }
 
@@ -419,7 +423,7 @@ enum StatusStore {
         switch side(for: assistant, in: sessions) {
         case .some(true): pool = darkCast.filter { !used.contains($0) }.isEmpty ? lightCast : darkCast
         case .some(false): pool = lightCast.filter { !used.contains($0) }.isEmpty ? darkCast : lightCast
-        case nil: pool = darkCast + lightCast
+        case nil: pool = leaderCast
         }
         return pickLeader(used: used, previous: latest?.leader, pool: pool)
     }
@@ -440,7 +444,7 @@ enum StatusStore {
 
     /// `seed` makes the choice deterministic (for sessions found by the process scan, re-evaluated every refresh).
     static func pickLeader(used: Set<Int>, previous: Int?, seed: UInt64? = nil, pool: [Int]? = nil) -> Int {
-        let pool = pool ?? darkCast
+        let pool = (pool ?? darkCast).filter { !agentOnly.contains($0) }
         var free = pool.filter { !used.contains($0) }
         if free.isEmpty { free = pool }                      // the whole pool is on screen: repeats are fine
         let rivals: Set<Int> = [0, 1]                        // Vader, Kylo
