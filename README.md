@@ -5,7 +5,7 @@
 <h1 align="center">Clawd Wars</h1>
 
 <p align="center">
-  <b>Your Claude Code, Codex, Qwen Code, Gemini CLI and Copilot CLI sessions, as a pixel-art Star Wars battle on your desktop.</b><br>
+  <b>Your Claude Code, Codex, Qwen Code, Gemini CLI and Github Copilot CLI sessions, as a pixel-art Star Wars battle on your desktop.</b><br>
   Every session is a hero or a villain, every subagent joins in, and they fight while they work.
 </p>
 
