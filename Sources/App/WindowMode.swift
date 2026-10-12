@@ -590,9 +590,19 @@ final class SceneView: NSView {
             roomView?.drawRect = g.drawRect
             roomView?.image = img
         }
-        // Dark rows along the top (row 0 is the top), minus whatever overhangs the view and is clipped.
+        // A dark band along the top (row 0 is the top) that reads as part of the title bar: about as dark as the
+        // bar, and ending within 8 rows on something clearly brighter (the cantina's beam, the Death Star's ceiling).
+        // A scene that's just dark all the way down (Endor's canopy, Theed at night) has no band: centring on it
+        // pushed the title and buttons low. Minus whatever overhangs the view and is clipped.
+        var barLum = 0.05
+        if let bar = location.panel.blended(withFraction: 0.45, of: .black)?.usingColorSpace(.sRGB) {
+            let r: Double = 0.2126 * Double(bar.redComponent), gr: Double = 0.7152 * Double(bar.greenComponent)
+            let b: Double = 0.0722 * Double(bar.blueComponent)
+            barLum = r + gr + b
+        }
         var rows = 0
-        while rows < min(g.ph, 8), c.rowLuminance(rows) < 0.24 { rows += 1 }
+        while rows < min(g.ph, 8), c.rowLuminance(rows) < barLum + 0.12 { rows += 1 }
+        if rows == 0 || rows >= min(g.ph, 8) || c.rowLuminance(rows) < c.rowLuminance(rows - 1) + 0.15 { rows = 0 }
         let dark = max(0, CGFloat(rows) * Cantina.pixel - (CGFloat(g.ph) * Cantina.pixel - bounds.height))
         if dark != darkTop { darkTop = dark; onDarkTopChange?() }
     }
