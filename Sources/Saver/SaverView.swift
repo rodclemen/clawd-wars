@@ -285,9 +285,9 @@ final class ClawdWarsSaverView: ScreenSaverView {
         var role: FightRole?
     }
 
-    /// The same pairing as the window: Han and Greedo face off whatever they are, Claudes fight Claudes, agents fight
-    /// agents (saber duels first), a leftover
-    /// Claude and agent fight each other, anyone else left over cheers. Then the line is spread across the floor.
+    /// The same pairing as the window: only Claudes that are working or thinking fight (idle ones and ones waiting for
+    /// you step aside). Han and Greedo face off, Claudes fight Claudes, agents fight agents (saber duels first), a
+    /// leftover Claude and agent fight each other, anyone else left over cheers. Then the line is spread across the floor.
     private func crew(_ sessions: [SaverFeed.Session], now t: Double, feet: CGFloat, cards: Bool = true) -> [Item] {
         var members: [Member] = []
         for s in sessions {
@@ -308,7 +308,8 @@ final class ClawdWarsSaverView: ScreenSaverView {
                 }
             }
         }
-        var leaders = members.filter { $0.isLeader && $0.weapon != .none }
+        let active = { (m: Member) in !m.isLeader || m.session.mood == "working" || m.session.mood == "thinking" }
+        var leaders = members.filter { $0.isLeader && $0.weapon != .none && active($0) }
         var agents = members.filter { !$0.isLeader && $0.weapon != .none }
         if let han = (leaders + agents).first(where: { $0.cast.isHan }),
            let greedo = (leaders + agents).first(where: { $0.cast.isGreedo }) {

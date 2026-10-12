@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.28.1 — 2026-10-12
+
+### Fixed
+- **Idle Claudes stop fighting.** Since 1.6.0 every armed Claude was paired off whatever it was doing, so two sessions that had both finished kept duelling for good, and a Claude in a fight never sat down or fell asleep, so the 2- and 5-minute idle cues never showed. Now only sessions that are working or thinking are paired. One that goes idle or waits for you steps out 5 seconds later (`OverlayController.fightLinger`), so a pause between tools doesn't send it walking in and out, then sits and sleeps on the usual schedule. Idle Claudes don't cheer either. Agents fight as long as they run. Han and Greedo still find each other first, but only when both are fighting. The screen saver pairs the same way (`SaverView.crew`).
+
 ## 2.28.0 — 2026-10-12
 
 ### Added

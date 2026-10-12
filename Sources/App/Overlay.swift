@@ -157,6 +157,8 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     private static let leaderReach: (fwd: CGFloat, back: CGFloat) = (105, 50)
     private static let agentReach: (fwd: CGFloat, back: CGFloat) = (72, 28)
     private static let gap: CGFloat = 8
+    /// How long a Claude keeps fighting after it stops working or thinking.
+    private static let fightLinger: Double = 5
     private static let duelDistance: CGFloat = 170
     private static let walkSpeed: CGFloat = 150
     /// Example agent tasks for the Playground and Demo Mode.
@@ -597,8 +599,9 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             }
         }
 
-        // Who fights whom:
-        //  1. Claudes always fight Claudes (saber duels first).
+        // Who fights whom. Only Claudes that are working or thinking fight (with a short linger, so one that pauses
+        // between tools doesn't walk in and out); idle ones and ones waiting for you step aside, to sit and sleep.
+        //  1. Claudes fight Claudes (saber duels first).
         //  2. Agents fight agents — their own or other Claudes' (saber duels first).
         //  3. A leftover Claude and a leftover agent fight each other (one Claude + one agent = Vader vs Luke).
         //  4. Anyone still left over cheers the fighters on. R2-D2 and C-3PO are unarmed bystanders.
@@ -615,10 +618,12 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 }
             }
         }
-        var villains = members.filter { $0.isLeader && $0.weapon != .none }
-        let unarmedVillains = members.filter { $0.isLeader && $0.weapon == .none }
+        for s in sessions where s.mood == .working || s.mood == .thinking { fightUntil["L:" + s.id] = now + Self.fightLinger }
+        let active = { (m: Member) in !m.isLeader || (self.fightUntil[m.unit.key] ?? 0) > now }
+        var villains = members.filter { $0.isLeader && $0.weapon != .none && active($0) }
+        let unarmedVillains = members.filter { $0.isLeader && $0.weapon == .none && active($0) }
         var agents = members.filter { !$0.isLeader && $0.weapon != .none }
-        // 0. Han and Greedo always face off, Claude or agent, wherever they are in the line: everyone between them
+        // 0. Han and Greedo always face off when both are fighting, Claude or agent, wherever they are in the line: everyone between them
         //    walks over to make room (and now and then Han shoots first, see `GreedoShot`).
         func cast(_ m: Member) -> Cast { switch m.unit.kind { case .leader(let c), .agent(let c): return c } }
         if let han = (villains + agents).first(where: { cast($0).isHan }),

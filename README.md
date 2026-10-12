@@ -87,10 +87,10 @@ Blasters are drawn from the film props — Han's DL-44, Leia's Defender, the Sto
 | Force lightning vs saber | the blade catches the lightning |
 | lightning vs blaster | the gunner gets zapped |
 | blaster vs blaster | a proper shoot-out — they duck, bolts collide mid-air, shields flash, and bolts ping off armour |
-| Han Solo vs Greedo | always paired, wherever they are in the line; now and then Han shoots first and Greedo hits the floor |
+| Han Solo vs Greedo | paired first whenever both are fighting, wherever they are in the line; now and then Han shoots first and Greedo hits the floor |
 | odd one out | cheers the others on, with sparkles |
 
-Han and Greedo find each other first. Then Claudes fight Claudes, agents fight agents, and leftovers pair up or cheer. R2-D2, C-3PO and the tauntaun stay out of it.
+Only Claudes that are working or thinking fight: one that goes idle or is waiting for you steps out a few seconds later, and sits down and falls asleep on the usual schedule. Agents fight as long as they run. Han and Greedo find each other first. Then Claudes fight Claudes, agents fight agents, and leftovers pair up or cheer. R2-D2, C-3PO and the tauntaun stay out of it.
 
 Two gunslingers never just shoot each other — most bolts get saved:
 
