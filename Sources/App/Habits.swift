@@ -31,7 +31,12 @@ enum IdleHabit {
 struct HabitPlay {
     let kind: IdleHabit
     let e: Double
-    var p: Double { min(1, e / kind.length) }
+    var length: Double
+    var p: Double { min(1, e / length) }
+
+    init(kind: IdleHabit, e: Double, length: Double? = nil) {
+        self.kind = kind; self.e = e; self.length = length ?? kind.length
+    }
 }
 
 var idleHabit: HabitPlay?
@@ -42,6 +47,7 @@ var forcedHabit: HabitPlay?
 extension Cast {
     /// What this character does when idle: its weapon habit (if it handles one by hand) comes up twice as often.
     var habits: [IdleHabit] {
+        if case .villain(.royalGuard) = self { return [] }     // the Emperor's guard doesn't fidget: it stands guard
         var weaponHabit: IdleHabit?
         switch self {
         case .villain(let l):
@@ -66,15 +72,31 @@ extension Cast {
         return list
     }
 
-    /// Characters with a move of their own:
-    /// Vader works the controls on his chest panel, Luke spins his unlit hilt, a stormtrooper bumps his head (and
-    /// sees stars), Boba swings his rangefinder down over his visor.
-    var hasSignature: Bool {
+    /// Characters with a move of their own, and how long it takes:
+    /// - Vader works the switches on his chest panel; Luke spins his unlit hilt; a stormtrooper bumps his head and
+    ///   sees stars; Boba swings his rangefinder down over his visor.
+    /// - R2-D2 projects Leia's message; C-3PO throws his arms up ("We're doomed"); Chewbacca roars; Han spins his
+    ///   blaster on a finger and holsters it; Obi-Wan strokes his beard; Yoda leans on his gimer stick, ears
+    ///   drooping; the tauntaun shakes its head and snorts; Maz adjusts her goggles; Grogu nibbles a cookie.
+    /// - Grievous has a coughing fit; Kylo has a tantrum; Phasma's chrome catches the light; Jabba licks his lips;
+    ///   IG-88's head lights spin; the Rancor roars.
+    var signatureLength: Double? {
         switch self {
-        case .villain(.vader), .villain(.trooper), .villain(.boba), .hero(.luke): return true
-        default: return false
+        case .villain(.vader), .villain(.trooper), .villain(.boba), .hero(.luke): return 2.6
+        case .hero(.r2d2): return 4
+        case .hero(.c3po), .hero(.chewie), .villain(.rancor): return 2
+        case .hero(.han): return 3
+        case .hero(.obiwan), .hero(.grogu): return 3.2
+        case .hero(.yoda): return 3.4
+        case .hero(.tauntaun), .hero(.maz), .villain(.jabba), .villain(.ig88): return 2.4
+        case .villain(.grievous): return 2.2
+        case .villain(.kylo): return 1.8
+        case .villain(.phasma): return 1.4
+        default: return nil
         }
     }
+
+    var hasSignature: Bool { signatureLength != nil }
 
     /// The signature move playing right now, 0…1 through it (nil: not playing).
     static var signatureProgress: Double? {
@@ -89,8 +111,10 @@ extension Cast {
         let lt = t + Double(id) * 3.1
         let cycle = floor(lt / period), e = lt - cycle * period
         let list = habits
+        guard !list.isEmpty else { return nil }
         let kind = list[min(list.count - 1, Int(noise(Int(cycle) * 31 + id) * Double(list.count)))]
-        return e < kind.length ? HabitPlay(kind: kind, e: e) : nil
+        let length = kind == .signature ? signatureLength ?? kind.length : kind.length
+        return e < length ? HabitPlay(kind: kind, e: e, length: length) : nil
     }
 }
 
@@ -126,5 +150,20 @@ func drawBarrelSmoke(_ c: PixelCanvas, x: Double, y: Double, _ k: Double) {
         let col = C(0xE0E0E0).alpha(0.85 * (1 - f))
         c.rect(px, py, 2, 2, col)
         c.px(px - 1, py, col.alpha(0.5))
+    }
+}
+
+/// A sweep of light across chrome: a diagonal band moving left to right, `p` 0…1, only over what's drawn left of
+/// `maxX` (so it catches the armour, not the gun).
+func drawGlint(_ c: PixelCanvas, p: Double, maxX: Int = 40) {
+    let (ox, oy, by) = (c.ox, c.oy, c.baseY)
+    c.ox = 0; c.oy = 0; c.baseY = 0
+    defer { c.ox = ox; c.oy = oy; c.baseY = by }
+    let k = -10 + p * 70
+    for y in 0..<c.h {
+        for x in 0...min(maxX, c.w - 1) where c.isDrawn(x, y) {
+            let d = abs(Double(x) + Double(y) * 0.5 - k)
+            if d < 2.5 { c.px(x, y, C(0xFFFFFF).alpha(d < 1 ? 0.8 : 0.4)) }
+        }
     }
 }

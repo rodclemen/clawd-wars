@@ -164,14 +164,26 @@ func drawMaz(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRole) {
         "WWWWWWWWWWWWWWWWWWWW",
     ], ["W": C(0x6A4A32), "w": C(0x8A6A4A)])
     // The goggles: brass rims, dark lenses, eyes swimming behind them (they focus now and then).
-    let focus = sin(t * 0.9) > 0.85
+    // Signature: she reaches up and twists the rims, and her eyes swim up huge behind the lenses: she sees you.
+    let adjust = Cast.signatureProgress.flatMap { $0 > 0.1 && $0 < 0.9 ? ($0 - 0.1) / 0.8 : nil }
+    let zoom = adjust.map { $0 > 0.3 } ?? false
+    let focus = !zoom && sin(t * 0.9) > 0.85
     for ex in [23, 33] {
-        c.circle(ex, 30, 3, C(0x8A6A3A))
-        c.circle(ex, 30, 2, C(0x2A3A4A))
-        c.rect(ex, 30, focus ? 1 : 2, focus ? 1 : 2, C(0x1A1008))
-        c.px(ex - 1, 29, C(0xBFE0F0))
+        c.circle(ex, 30, zoom ? 4 : 3, C(0x8A6A3A))
+        c.circle(ex, 30, zoom ? 3 : 2, C(0x2A3A4A))
+        if zoom {                                                    // magnified eyes
+            c.circle(ex, 30, 2, C(0xF4ECD8)); c.rect(ex - 1, 29, 2, 3, C(0x1A1008)); c.px(ex - 1, 29, C(0x6A4A2A))
+        } else {
+            c.rect(ex, 30, focus ? 1 : 2, focus ? 1 : 2, C(0x1A1008))
+        }
+        c.px(ex - (zoom ? 2 : 1), zoom ? 28 : 29, C(0xBFE0F0))
     }
     c.rect(26, 30, 4, 1, C(0x8A6A3A))
+    if let k = adjust {
+        let a = k * 8                                                // the rim turning: a bright notch going round
+        c.px(33 + Int((cos(a) * (zoom ? 4 : 3)).rounded()), 30 + Int((sin(a) * (zoom ? 4 : 3)).rounded()), C(0xF0D080))
+        c.rect(37, 32, 3, 4, skin); c.rect(36, 31, 2, 2, skin)       // her fingers on the rim
+    }
     c.rect(18, 34, 20, 4, C(0x8A6A4A))
     c.rect(22, 34, 12, 1, C(0xD8B040))           // beads
 }
@@ -320,6 +332,26 @@ func drawGrogu(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRole) {
         ".GGGGGGddGGGGG.",
         "..GGGGGGGGGGG..",
     ], ["G": green, "K": ink, "W": white, "d": C(0x7A9A5A)])
+    // Signature: a blue cookie (the macarons from Nevarro), both hands, nibbled down bite by bite, crumbs flying.
+    if let p = Cast.signatureProgress, p > 0.08, p < 0.92 {
+        let k = (p - 0.08) / 0.84
+        let bites = min(4, Int(k * 5)), chew = Int(k * 18) % 2
+        let y = 33 + chew
+        c.rect(27, 32, 3, 1, ink)                                    // mouth open, munching
+        if bites < 4 {
+            // The cookie: two blue shells and the cream between, a bite out of the top for every bite taken.
+            let blue = C(0x3E8CE8), blueDark = C(0x2A62B0)
+            c.rect(24, y, 8, 2, blue); c.rect(24, y + 2, 8, 1, C(0xF4ECD8)); c.rect(24, y + 3, 8, 2, blueDark)
+            c.px(24, y, C(0, 0)); c.px(31, y + 4, C(0, 0))
+            if bites > 0 { c.rect(32 - bites * 2, y, bites * 2, 2 + min(bites, 2), C(0x9BBF78)) }   // bitten: his chin shows
+        }
+        c.rect(22, y + 1, 3, 3, green); c.rect(31, y + 1, 3, 3, green)   // little hands either side
+        for i in 0..<2 {                                             // crumbs falling
+            let f = frac(k * 4 + Double(i) * 0.5)
+            c.px(25 + i * 5 + Int(f * 2), 35 + Int(f * 6), C(0x6FA8E8).alpha(1 - f))
+        }
+        return
+    }
     // The Force: a little hand up, and a shimmer in front of it.
     let force = !walking && sin(t * 0.7) > 0.5
     c.rect(36, force ? 31 : 36, 2, 2, green)
@@ -726,6 +758,17 @@ func drawGrievous(_ c: PixelCanvas, step: Int, lift: Int) {
         ".....BBBBBBBBBBB....",
         "......BBBBBBBBB.....",
     ], ["B": C(0xEDE6D2), "b": C(0x2A2418), "Y": C(0xF0D040), "d": C(0x8A8270)])
+    if let p = Cast.signatureProgress, p > 0.1, p < 0.95 {
+        // Signature: the famous cough, a wheezing hack with a little puff out of the mask on every beat.
+        let e = p * 2.2 * 3.2                                        // coughs at 3.2 a second
+        c.rect(23, 27, 4, 1, C(0xEDE6D2)); c.rect(31, 27, 4, 1, C(0xEDE6D2))   // eyes squeezed shut
+        if frac(e) < 0.6 {
+            let f = frac(e) / 0.6
+            c.rect(37 + Int(f * 6), 23 - Int(f * 3), 3, 2, C(0xE8E4DA).alpha(0.9 * (1 - f)))
+            c.rect(38 + Int(f * 4), 25 - Int(f * 2), 2, 2, C(0xC8C4BA).alpha(0.7 * (1 - f)))
+            if f < 0.3 { c.px(36, 24, C(0xFFFFFF)) }                 // the hack itself
+        }
+    }
 }
 
 /// The Tusken Raider's gaffi stick: a metal-capped club, flared at the head.
@@ -1318,6 +1361,8 @@ func drawPhasma(_ c: PixelCanvas, step: Int, lift: Int) {
     c.rect(19, 33, 18, 3, light)
     c.rect(19, 35, 18, 1, dark)
     c.rect(18, 36, 20, 1, C(0x2A2A30))
+    // Signature: a gleam of light runs across the chrome (she does keep it polished).
+    if let p = Cast.signatureProgress { drawGlint(c, p: p, maxX: 39) }
 }
 
 /// Director Krennic: the white uniform and white cape (`drawLeader`), grey-blond hair, a pistol.

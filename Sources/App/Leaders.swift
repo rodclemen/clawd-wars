@@ -268,7 +268,7 @@ let boltArrival = 0.4          // fraction of the period a bolt spends in flight
 private let rifleMuzzle = (x: 52, y: 32)
 private let deflectPeak = -15.0
 
-private func frac(_ v: Double) -> Double { v - floor(v) }
+func frac(_ v: Double) -> Double { v - floor(v) }
 
 func deflectAngle(_ t: Double) -> Double {
     let d = frac(t / blasterPeriod) - boltArrival
@@ -314,7 +314,7 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
                     saber = -60 + 900 * h.e * habitArc(h.p, hold: 0.6)    // a burst of the rotor spin
                 default:                                                 // lit, spun once, switched off
                     if h.p > 0.08 && h.p < 0.92 {
-                        let len = h.kind.length, start = t - h.e
+                        let len = h.length, start = t - h.e
                         let spin = { (u: Double) -> Double in
                             let s = min(1, max(0, ((u - start) / len - 0.25) / 0.5))
                             return -70 - 360 * (0.5 - 0.5 * cos(s * .pi))
@@ -328,6 +328,20 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
                 if h.p > 0.45 { smoke = (h.p - 0.45) / 0.55 }
             case .crackle:
                 zap = false; armRaise = 2
+            case .signature:
+                switch who {
+                case .kylo:                                     // a tantrum: wild slashes at nothing
+                    guard h.p > 0.06, h.p < 0.94 else { break }
+                    let slash = { (u: Double) -> Double in -150 + 200 * noise(Int(u * 7) + 11) }
+                    saber = slash(t); trail = saberTrail(t, pose: slash)
+                    dx = noise(Int(t * 14)) > 0.5 ? 1 : -1; hop = noise(Int(t * 7) + 5) > 0.7 ? -1 : 0
+                    breathe = 0
+                case .grievous:                                 // the cough: hunched, jerking on every hack
+                    if h.p > 0.1, h.p < 0.85 { hop = frac(h.e * 3.2) < 0.35 ? 1 : 0; breathe = 0 }
+                case .rancor:
+                    breathe = 0
+                default: break
+                }
             default: break
             }
         case .waiting:
@@ -867,6 +881,16 @@ private func drawJabba(_ c: PixelCanvas, t: Double, lift: Int) {
     c.rect(19, 31, 20, 1, C(0x4A4626))                          // the enormous mouth
     c.rect(20, 32, 18, 1, laugh < 0 ? C(0x7A3A3A) : dark)
     c.rect(38, 33, 4, 2, skin)                                  // tiny arm
+    if let p = Cast.signatureProgress, p > 0.1, p < 0.9 {
+        // Signature: his eyes narrow and the fat tongue slides out and licks along his lips.
+        let k = (p - 0.1) / 0.8
+        c.rect(21, 26, 3, 1, skin); c.rect(29, 26, 3, 1, skin)  // heavy lids
+        c.rect(20, 31, 18, 2, C(0x4A2A26))                      // mouth open
+        let tx = 21 + Int((0.5 - 0.5 * cos(k * 2 * .pi)) * 12)
+        c.rect(tx, 32, 5, 2, C(0xC86A72)); c.rect(tx + 1, 34, 3, 1, C(0xC86A72))
+        c.px(tx + 2, 32, C(0xA84A54))
+        if frac(k * 3) < 0.5 { c.px(tx + 4, 35, C(0xD8E8F0).alpha(0.8)) }   // a drip
+    }
 }
 
 private func drawIG88(_ c: PixelCanvas, step: Int, lift: Int) {
@@ -883,6 +907,18 @@ private func drawIG88(_ c: PixelCanvas, step: Int, lift: Int) {
     c.pattern(23, 9, ["..MMMMMM..", ".MMLMMMMM.", "MMLMMMMMMM", "MMLMMMMMMM", "RRRRRRRRRR", "MMLMMMMMMM",
                       "MMLMMMMMMM", "MMLMMMMMMM", "RRRRRRRRRR", "MMLMMMMMMM", "MMMMMMMMMM", ".MMMMMMMM.", "..MMMMMM.."],
               ["M": metal, "L": metalLight, "R": C(0xC0392B)])
+    if let p = Cast.signatureProgress, p > 0.08, p < 0.92 {
+        // Signature: the sensor bands light up and spin round his head, scanning.
+        for (row, phase) in [(13, 0), (17, 5)] {
+            c.rect(23, row, 10, 1, C(0x5A1A14))                      // the band dims…
+            let k = Int(p * 46) + phase
+            for j in 0..<4 {                                         // …and a bright segment runs round it
+                let x = 23 + (k + j) % 10
+                c.px(x, row, j == 1 || j == 2 ? C(0xFFF0E8) : C(0xFF4A30))
+                c.px(x, row - 1, C(0xFF6A50).alpha(0.5)); c.px(x, row + 1, C(0xFF6A50).alpha(0.5))   // glow
+            }
+        }
+    }
 }
 
 /// Greedo: a green Rodian Clawd — huge glossy black eyes, a tapir snout, spines on top, a vest and a pistol.
@@ -940,9 +976,20 @@ private func drawRancor(_ c: PixelCanvas, step: Int, lift: Int) {
     c.rect(34, 9, 13, 2, light)
     c.px(37, 11, spine); c.px(41, 10, spine)                        // brow ridges
     c.px(38, 12, C(0xFFD23D)); c.px(43, 12, C(0xFFD23D))            // tiny eyes
-    c.rect(35, 15, 12, 7, C(0x3A1A12))                              // the mouth
-    for k in 0..<6 { c.px(35 + k * 2, 15, claw); c.px(36 + k * 2, 21, claw) }   // fangs top and bottom
-    c.rect(35, 22, 12, 1, shade)                                    // jaw
+    // Signature: it throws its head up and roars, jaws gaping, the air shaking in front of it.
+    let roar = Cast.signatureProgress.map { habitArc($0, hold: 0.55) } ?? 0
+    let gape = Int((roar * 4).rounded())
+    if gape > 0 { c.rect(34, 22, 13, gape, hide) }                  // the jaw drops
+    c.rect(35, 15, 12, 7 + gape, C(0x3A1A12))                       // the mouth
+    for k in 0..<6 { c.px(35 + k * 2, 15, claw); c.px(36 + k * 2, 21 + gape, claw) }   // fangs top and bottom
+    c.rect(35, 22 + gape, 12, 1, shade)                             // jaw
+    if roar > 0.9, let p = Cast.signatureProgress {
+        for i in 0..<3 {                                             // the roar: arcs pushing out from the mouth
+            let f = frac(p * 4 + Double(i) / 3), x = 49 + Int(f * 10), col = C(0xF4EEE0).alpha(0.8 * (1 - f))
+            for dy in -2 - i...(2 + i) where abs(dy) > 0 || i == 0 { c.px(x + abs(dy) / 2, 18 + gape / 2 + dy, col) }
+        }
+        if frac(p * 14) < 0.5 { c.px(41, 12, C(0xFFF07A)) }         // a mad glint
+    }
 }
 
 /// The Rancor's shoulder, below the jaw: its claw arm pivots here (the fight effects need it too).

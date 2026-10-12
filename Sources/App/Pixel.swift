@@ -137,6 +137,24 @@ final class PixelCanvas {
         return true
     }
 
+    /// Draw `other` on top, its top-left corner at (`x`, `y`) (offsets apply as for any drawing).
+    func paste(_ other: PixelCanvas, x: Int = 0, y: Int = 0) {
+        for yy in 0..<other.h {
+            for xx in 0..<other.w {
+                let i = (yy * other.w + xx) * 4, a = other.buf[i + 3]
+                guard a > 0 else { continue }
+                let m = 255 / Double(a)                       // back from premultiplied
+                px(x + xx, y + yy, Px(r: UInt8(min(255, Double(other.buf[i]) * m)), g: UInt8(min(255, Double(other.buf[i + 1]) * m)),
+                                      b: UInt8(min(255, Double(other.buf[i + 2]) * m)), a: a))
+            }
+        }
+    }
+
+    /// Whether anything is drawn at (`x`, `y`) in canvas pixels, ignoring the offsets.
+    func isDrawn(_ x: Int, _ y: Int) -> Bool {
+        x >= 0 && y >= 0 && x < w && y < h && buf[(y * w + x) * 4 + 3] > 0
+    }
+
     /// Move everything drawn so far by whole pixels; what slides off the edge is lost.
     func shift(dx: Int, dy: Int) {
         guard dx != 0 || dy != 0 else { return }

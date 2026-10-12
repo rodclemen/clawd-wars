@@ -490,6 +490,15 @@ private func drawObiWan(_ c: PixelCanvas, t: Double, walking: Bool, role: FightR
         "...FFFFFF...",
     ], ["F": C(0xC9A27A), "f": C(0xA9825A)])
     c.rect(18, 37, 20, 1, C(0x5A3A22))
+    if case .rest = role, let s = Cast.signatureProgress, s > 0.1, s < 0.9 {
+        // Signature: thoughtfully stroking his beard. The sleeve comes up and the hand runs down the beard, again.
+        let stroke = frac((s - 0.1) / 0.8 * 3)
+        let hy = 31 + Int(stroke * 5)
+        c.rect(34, 30, 4, 5, robe)                                   // sleeve
+        c.rect(31, hy, 4, 2, C(0xE8B48A)); c.px(30, hy + 1, C(0xE8B48A))   // fingers on the beard
+        c.rect(20, 37, 4, 1, C(0xB9BEC8)); c.px(22, 37, C(0x2A2A2F))     // the hilt hangs on his belt meanwhile
+        return
+    }
     drawSaber(c, t: t, angle: p.angle, core: C(0xE6F4FF), glow: C(0x3D9BFF), lit: saberLit(role), trail: p.trail)
 }
 
@@ -553,6 +562,20 @@ private func drawHan(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRole
     let (recoil, shake) = agentFire(c, t: t, walking: walking, role: role, period: 0.95, phase: 0, muzzleX: 53)
     c.oy = bob - recoil
     c.ox = shake
+    if case .rest = role, let p = Cast.signatureProgress, p > 0.08, p < 0.9 {
+        // Signature: he spins the DL-44 on his trigger finger, twice round, and drops it into the holster, then
+        // draws it again, quick as you like.
+        if p < 0.52 {
+            let k = (p - 0.08) / 0.44
+            let gun = PixelCanvas(13, 6)
+            drawDL44(gun, x: 0, y: 0)
+            let spun = gun.rotated(-720 * (0.5 - 0.5 * cos(k * .pi)), about: (3, 3.5), into: 26, 26, at: (13, 13))
+            c.paste(spun, x: 40 - 13 + 3, y: 30 - 13 + 3)
+        } else {
+            c.rect(19, 36, 2, 3, C(0x4A3426)); c.px(21, 36, C(0x26262C))   // the grip in the holster
+        }
+        return
+    }
     drawDL44(c, x: 40, y: 30)
 }
 
@@ -610,8 +633,13 @@ private func drawR2(_ c: PixelCanvas, t: Double, walking: Bool) {
     c.rect(24, 32, 8, 1, blue)
     c.rect(26, 34, 4, 3, grey)
 
-    // Beep-boop: music notes drifting up
     c.ox = 0
+    if let p = Cast.signatureProgress {
+        // Signature: "Help me, Obi-Wan Kenobi…" A tiny blue Leia flickers up in the beam of his projector.
+        drawLeiaHologram(c, t: t, p: p, from: (26, 23))
+        return
+    }
+    // Beep-boop: music notes drifting up
     for i in 0..<2 {
         let f = (t / 1.4 + Double(i) * 0.5).truncatingRemainder(dividingBy: 1)
         c.pattern(42 + i * 6 + Int(sin(f * 6) * 2), 18 - Int(f * 16),
@@ -619,14 +647,80 @@ private func drawR2(_ c: PixelCanvas, t: Double, walking: Bool) {
     }
 }
 
+/// Leia's message as R2 plays it: a projector beam from `from` and a small, flickering, scan-lined blue Leia standing
+/// in it, kneeling slightly as she pleads. `p` 0…1 through the message: it flickers on, plays, and cuts out.
+private func drawLeiaHologram(_ c: PixelCanvas, t: Double, p: Double, from: (x: Int, y: Int)) {
+    guard p > 0.06, p < 0.94 else { return }
+    let on = min(1, (p - 0.06) / 0.08, (0.94 - p) / 0.08)
+    let flicker = noise(Int(t * 18)) > 0.85 ? 0.45 : 1.0
+    let a = on * flicker
+    let x0 = 45, y0 = 22                                           // the figure's top-left
+    // The beam: a faint cone from the projector to her feet and head.
+    for k in 0...10 {
+        let f = Double(k) / 10
+        let top = (x: Double(from.x) + (Double(x0) - Double(from.x)) * f, y: Double(from.y) + (Double(y0) - Double(from.y)) * f)
+        let bot = (x: top.x, y: Double(from.y) + (Double(y0 + 15) - Double(from.y)) * f)
+        for y in Int(top.y)...Int(bot.y) where (y + k) % 3 == 0 { c.px(Int(top.x), y, C(0x6FB8FF).alpha(0.18 * a)) }
+    }
+    let art = [
+        "..B...B..",
+        ".BBHHHBB.",
+        "..BHFHB..",
+        "...HFH...",
+        "...HHH...",
+        "..DDDDD..",
+        ".DDdDDDD.",
+        "DDDdDDDDD",
+        ".DDDDdDD.",
+        ".DDDDDDD.",
+        "DDDDDdDDD",
+        "DDDDDDDDD",
+        "DDDDDDDDD",
+        "DDDDDDDDD",
+        ".DDDDDDD.",
+    ]
+    let glitch = noise(Int(t * 9) + 3) > 0.8 ? Int(t * 9) % art.count : -1    // a row slips sideways now and then
+    for (r, row) in art.enumerated() {
+        let dim = r % 2 == 1 ? 0.6 : 1.0                           // scan lines
+        let dx = r == glitch ? 1 : 0
+        for (k, ch) in row.enumerated() {
+            let col: Px
+            switch ch {
+            case "B": col = C(0x7FC8FF)      // the buns
+            case "H": col = C(0x9AD4FF)      // hair
+            case "F": col = C(0xD8F0FF)      // face
+            case "D": col = C(0xB8E2FF)      // the white dress
+            case "d": col = C(0x7FC8FF)      // its folds
+            default: continue
+            }
+            c.px(x0 + k + dx, y0 + r, col.alpha(0.85 * a * dim))
+        }
+    }
+    c.rect(x0 - 1, y0 + 15, 11, 1, C(0x6FB8FF).alpha(0.35 * a))   // where the image meets the floor
+}
+
 private func drawC3PO(_ c: PixelCanvas, t: Double, walking: Bool) {
     let flail = Int(t * 6) % 2
     let step = walkStep(t, walking)
-    c.ox = walking ? 0 : (Int(t * 1.5) % 2 == 0 ? 0 : 1)
+    // Signature: "We're doomed!" Both arms thrown straight up, hands flapping, the whole droid rattling.
+    let doomed = Cast.signatureProgress.map { $0 > 0.08 && $0 < 0.92 } ?? false
+    c.ox = walking ? 0 : doomed ? (Int(t * 16) % 2 == 0 ? 0 : 1) : (Int(t * 1.5) % 2 == 0 ? 0 : 1)
     let gold = C(0xE2B33C), goldShade = C(0xB8862A)
     let look = Look(body: gold, shade: goldShade, leg: C(0xD4A436), arm: gold, eye: nil)
     drawLegs(c, look, step: step)
-    drawBody(c, look, armLeft: flail == 0 ? 4 : 0, armRight: flail == 0 ? 0 : 4)
+    drawBody(c, look, armLeft: doomed ? 0 : (flail == 0 ? 4 : 0), armRight: doomed ? 0 : (flail == 0 ? 0 : 4))
+    if doomed {
+        // Arms straight up from the shoulders, elbows locked, hands splayed and flapping out of step.
+        for (side, x) in [(0, 14), (1, 39)] {
+            let wave = Int(t * 12 + Double(side)) % 2
+            c.rect(x, 21 + wave, 3, 15 - wave, gold)
+            c.rect(x + (side == 0 ? 0 : 2), 22 + wave, 1, 13 - wave, goldShade)
+            c.rect(x, 28, 3, 1, C(0x8A6420))                        // the elbow joint
+            let hx = x + (side == 0 ? -1 : 1) * wave
+            c.rect(hx - 1, 18 + wave, 5, 3, gold)                   // splayed hand
+            c.px(hx - 1, 17 + wave, gold); c.px(hx + 1, 17 + wave, gold); c.px(hx + 3, 17 + wave, gold)
+        }
+    }
     c.pattern(20, 22, [
         "....GGGGGGGG....",
         "..GGGGGGGGGGGG..",
@@ -638,7 +732,7 @@ private func drawC3PO(_ c: PixelCanvas, t: Double, walking: Bool) {
         c.rect(ex, 28, 4, 4, eyeRim)
         c.rect(ex + 1, 29, 2, 2, eye)
     }
-    c.rect(26, 33, 4, 1, eyeRim)
+    c.rect(26, 33, 4, doomed ? 2 : 1, eyeRim)                     // the mouth, agape when he's doomed
     c.rect(23, 35, 10, 2, goldShade)
     c.px(25, 35, C(0xE0303A)); c.px(28, 36, C(0x3A7BEA)); c.px(31, 35, C(0x3BD15A))
     c.rect(19, 27, 2, 1, C(0xFFE08A))
@@ -695,8 +789,19 @@ private func drawJedi(_ c: PixelCanvas, _ who: Companion, t: Double, walking: Bo
         c.rect(18, 33, 20, 5, C(0x5A3A22)); c.rect(25, 33, 6, 5, cream); c.rect(18, 36, 20, 1, C(0x2A1C12))
     case .yoda:
         let ear = C(0x8DB360), earIn = C(0xC98F7A)
-        c.pattern(9, 26, ["EEEEEEEEE", ".EeeeEEEE", "...EEEEEE"], ["E": ear, "e": earIn])
-        c.pattern(38, 26, ["EEEEEEEEE", "EEEEeeeE.", "EEEEEE..."], ["E": ear, "e": earIn])
+        // Signature: he leans on his gimer stick, ears drooping as he ponders, then perking up again. Hmm.
+        var droop = 0
+        if case .rest = role, let s = Cast.signatureProgress, s > 0.05, s < 0.95 {
+            droop = Int((3 * habitArc((s - 0.05) / 0.9, hold: 0.5)).rounded())
+            c.glowLine(12, 30, 11, 43, core: C(0x6E5236), glow: C(0, 0), coreR: 0.8, glowR: 0.9)   // the stick
+            c.rect(11, 29, 3, 2, C(0x8A6A48))
+            c.rect(14, 31, 3, 2, C(0x8DB360))                        // his hand on it
+        }
+        c.pattern(9, 26 + droop, droop > 1 ? [".EEEEEEEE", "..EeeeEEE", "....EEEEE"] : ["EEEEEEEEE", ".EeeeEEEE", "...EEEEEE"],
+                  ["E": ear, "e": earIn])
+        c.pattern(38, 26 + droop, droop > 1 ? ["EEEEEEEE.", "EEEeeeE..", "EEEEE...."] : ["EEEEEEEEE", "EEEEeeeE.", "EEEEEE..."],
+                  ["E": ear, "e": earIn])
+        if droop > 1 { c.rect(21, 27, 4, 1, C(0x6E9148)); c.rect(31, 27, 4, 1, C(0x6E9148)) }   // eyes half shut
         c.pattern(22, 24, ["W..W..W.W..W", ".W..W...W.W."], ["W": C(0xEDEDED)])
         c.rect(18, 33, 20, 5, robe); c.rect(26, 33, 4, 5, cream)
     case .rey:
@@ -750,6 +855,22 @@ private func drawGunner(_ c: PixelCanvas, _ who: Companion, t: Double, walking: 
         for (x, y) in [(20, 33), (24, 35), (30, 34), (34, 33), (22, 30), (35, 29)] { c.px(x, y, furLight) }
         c.rect(25, 33, 6, 1, C(0x3A2412))                       // mouth
         for i in 0..<10 { c.rect(19 + i * 2, 36 - i, 2, 2, i % 3 == 0 ? C(0xB9BEC8) : C(0x4A3020)) }  // bandolier
+        if let s = Cast.signatureProgress, s > 0.08, s < 0.92 {
+            // Signature: head back, arms up, a full-throated Wookiee roar.
+            let k = habitArc((s - 0.08) / 0.84, hold: 0.6)
+            let open = Int((k * 3).rounded())
+            c.rect(24, 32 - open / 2, 8, 1 + open, C(0x2A140A))          // mouth wide
+            if open > 1 { for x in [24, 26, 29, 31] { c.px(x, 32 - open / 2, C(0xF0E8D8)) } }   // fangs
+            c.rect(15, 23, 3, 11, fur); c.rect(15, 23, 1, 11, furDark)    // the free arm thrown up…
+            c.rect(14, 20, 5, 3, fur)                                       // …a big hairy hand,
+            for x in [14, 16, 18] { c.px(x, 19, furLight) }                 // fingers splayed
+            if k > 0.8 {
+                for i in 0..<3 {                                     // the roar going up
+                    let f = frac(s * 5 + Double(i) / 3)
+                    c.rect(22 + i * 5, 17 - Int(f * 6), 1, 2, C(0xF4EEE0).alpha(0.8 * (1 - f)))
+                }
+            }
+        }
     } else {
         let robe = C(0x7A5A3A), robeDark = C(0x5A4028)
         var look = Look(body: robe, shade: robeDark, arm: robe, eye: nil)
@@ -837,8 +958,12 @@ private func drawTauntaun(_ c: PixelCanvas, t: Double, walking: Bool) {
     c.rect(18, 33, 18, 2, furShade)
     for (x, y) in [(20, 25), (24, 29), (29, 24), (33, 30), (22, 32), (31, 27)] { c.px(x, y, furShade) }
     c.rect(35, 28, 3, 2, furShade)
-    // Neck and head, bobbing; long snout forward, horns curling back
+    // Neck and head, bobbing; long snout forward, horns curling back.
+    // Signature: it shakes its head, then snorts out a great cloud of frosty breath.
+    let snort = Cast.signatureProgress
+    let shaking = snort.map { $0 > 0.08 && $0 < 0.45 } ?? false
     c.oy = bob
+    c.ox = shaking ? (Int(t * 14) % 2 == 0 ? 1 : -1) : 0
     c.rect(30, 16, 6, 7, fur)
     c.rect(32, 11, 10, 7, fur)
     c.rect(42, 13, 5, 4, fur)                    // snout
@@ -846,7 +971,18 @@ private func drawTauntaun(_ c: PixelCanvas, t: Double, walking: Bool) {
     c.px(46, 14, furDark)                         // nostril
     c.rect(36, 13, 2, 2, C(0x1A1612))             // eye
     c.pattern(30, 7, [".HHH.", "H...H", "H....", ".H..."], ["H": horn])   // curled horn
-    c.oy = 0
+    c.oy = 0; c.ox = 0
+    if let p = snort, p > 0.45 {
+        let k = (p - 0.45) / 0.55
+        for i in 0..<4 {                                            // a big two-nostril blast
+            let f = k * 1.3 - Double(i) * 0.15
+            guard f > 0, f < 1 else { continue }
+            let r = 2 + Int(f * 4)
+            c.circle(49 + Int(f * 12) + i * 2, 15 + bob + (i % 2) * 2 - Int(f * 3), r, white.alpha(0.8 * (1 - f)))
+            c.circle(48 + Int(f * 12) + i * 2, 14 + bob + (i % 2) * 2 - Int(f * 3), max(1, r - 2), C(0xFFFFFF).alpha(0.6 * (1 - f)))
+        }
+        return
+    }
     // Frosty breath
     let f = (t / 1.8).truncatingRemainder(dividingBy: 1)
     if f < 0.6 {
