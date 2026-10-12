@@ -403,16 +403,16 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 }
             }
             hookIssues = missingHooks.filter { !Self.ignoredHooks.contains($0) }.map {
-                HookIssue(text: "\(HookInstaller.displayName($0)) isn't connected — live status is off. Connect it from the menu.",
+                HookIssue(text: "\(HookInstaller.displayName($0)) isn't connected: live status is off. Connect it from the menu.",
                           install: $0, pid: nil)
             } + sessions.filter(\.hookSilent).map {
-                HookIssue(text: "\(HookInstaller.displayName($0.assistant))\($0.project.isEmpty ? "" : " (\($0.project))") isn't reporting — "
+                HookIssue(text: "\(HookInstaller.displayName($0.assistant))\($0.project.isEmpty ? "" : " (\($0.project))") isn't reporting: "
                               + HookInstaller.silentFix($0.assistant), install: nil, pid: $0.pid)
             }
             for s in sessions where s.hookSilent { if let pid = s.pid { notifySilent(pid: pid, assistant: s.assistant, project: s.project) } }
             offlineReason = nil
             if file == nil && FileManager.default.fileExists(atPath: StatusPaths.state.path) {
-                offlineReason = "OFFLINE — can't read the status file"
+                offlineReason = "OFFLINE: can't read the status file"
             }
             if now - lastFocusCheck >= 1 {
                 lastFocusCheck = now
@@ -950,7 +950,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     private func hoverDetail(_ s: SessionSnapshot?, _ a: AgentRecord?, now: Double) -> [String] {
         if let a {
             let who = Cast.of(a)
-            var lines = ["\(who.name) — \(a.label.isEmpty ? "Agent" : a.label)"]
+            var lines = ["\(who.name): \(a.label.isEmpty ? "Agent" : a.label)"]
             var info = [a.activity ?? "Starting…", Self.duration(now - a.started)]
             if let n = a.tools { info.append("\(n) tool call\(n == 1 ? "" : "s")") }
             lines.append(info.joined(separator: "  ·  "))
@@ -961,12 +961,12 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             return lines
         }
         guard let s else { return [] }
-        var lines = [Cast(id: s.leader).name + (s.project.isEmpty ? "" : " — " + s.project) + (s.id == "home" ? "" : " · " + s.aiLabel)]
+        var lines = [Cast(id: s.leader).name + (s.project.isEmpty ? "" : " · " + s.project) + (s.id == "home" ? "" : " · " + s.aiLabel)]
         let held = Self.duration(now - since(s, now: now))
         switch s.mood {
-        case _ where s.stalled: lines.append("Not reporting — restart this Claude session")
-        case _ where s.hookSilent: lines.append("Not reporting — " + HookInstaller.silentFix(s.assistant))
-        case _ where !s.live: lines.append(s.mood == .working ? "Busy (no live status — no hooks)" : "No live status — no hooks")
+        case _ where s.stalled: lines.append("Not reporting: restart this Claude session")
+        case _ where s.hookSilent: lines.append("Not reporting: " + HookInstaller.silentFix(s.assistant))
+        case _ where !s.live: lines.append(s.mood == .working ? "Busy (no live status, no hooks)" : "No live status (no hooks)")
         case .working: lines.append("Working · \(held)")
         case .thinking: lines.append("Thinking · \(held)")
         case .waiting: lines.append("Needs you · \(held)")
@@ -1671,7 +1671,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
         item.button?.image = statusIcon(mono: monoMenuBarIcon)
         item.button?.imageScaling = .scaleProportionallyDown
-        item.button?.toolTip = "Clawd Wars — double-click to hide or show"
+        item.button?.toolTip = "Clawd Wars: double-click to hide or show"
         statusMenu.delegate = self
         item.button?.target = self
         item.button?.action = #selector(statusItemClicked)
@@ -1996,7 +1996,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             } else if s.hookSilent {
                 lines.append(("The Clawd Wars hook isn't running in this session, so it can't report what it's doing.", soft))
                 let fix = HookInstaller.silentFix(s.assistant)
-                lines.append((fix.prefix(1).uppercased() + fix.dropFirst() + " — click this card to jump there.", dim))
+                lines.append((fix.prefix(1).uppercased() + fix.dropFirst() + ": click this card to jump there.", dim))
             } else if !s.live {
                 lines.append(("Started before the hooks were installed, so it can't report what it's doing.", soft))
                 lines.append((s.assistant == "claude" ? "Restart it for live status: /exit, then claude --continue"
@@ -2033,7 +2033,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             }
             lastAI = s.group
         }
-        let banner: String? = offlineReason.map { $0 + " — live status is off. Fix it from Settings in the menu." } ?? hookBanner
+        let banner: String? = offlineReason.map { $0 + ". Live status is off. Fix it from Settings in the menu." } ?? hookBanner
         // An AI that isn't connected can be waved off with the banner's ×; other problems can't.
         let dismissible = offlineReason == nil ? hookIssues.first?.install : nil
         w.cardsView.update(cards: cards, banner: banner, dismiss: dismissible.map { ai in { [weak self] in self?.ignoreHooks(for: ai) } })
@@ -2079,7 +2079,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         for issue in hookIssues {
             let title: String
             if let ai = issue.install { title = "⚠︎ Connect \(HookInstaller.displayName(ai))…" }
-            else { title = "⚠︎ " + issue.text.replacingOccurrences(of: " — ", with: ": ") }
+            else { title = "⚠︎ " + issue.text }
             let item = NSMenuItem(title: title, action: #selector(fixHookIssue(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = issue.install ?? issue.pid.map { "jump:\($0)" }
@@ -2262,7 +2262,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             + Companion.allCases.map { (Location.home(of: $0), $0.name) }, by: \.0).mapValues { $0.map(\.1) }
         for l in Location.allCases {
             let who = owners[l]?.joined(separator: ", ") ?? ""
-            let item = NSMenuItem(title: who.isEmpty ? l.name : "\(l.name)  —  \(who)", action: #selector(setLocation(_:)), keyEquivalent: "")
+            let item = NSMenuItem(title: who.isEmpty ? l.name : "\(l.name)  ·  \(who)", action: #selector(setLocation(_:)), keyEquivalent: "")
             item.target = self
             item.representedObject = l.rawValue
             item.state = picked == l.rawValue ? .on : .off
@@ -2288,7 +2288,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         let root = NSMenuItem(title: "Playground", action: nil, keyEquivalent: "")
         let pm = NSMenu()
         let picked = playground ?? []
-        pm.addItem(disabled: "Villains — they pair up in the order you add them")
+        pm.addItem(disabled: "Villains (they pair up in the order you add them)")
         func weaponLabel(_ l: Leader) -> String {
             switch l {
             case .vader: return "red saber"
@@ -2300,7 +2300,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             case .rogr: return "E-5 blaster"
             case .dooku: return "curved-hilt saber"
             case .gamorrean: return "vibro-axe"
-            case .jabba: return "unarmed — laughs"
+            case .jabba: return "unarmed, laughs"
             case .ig88: return "blaster rifle"
             case .atst: return "chin blasters"
             case .atat: return "heavy chin cannons"
@@ -2308,7 +2308,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             case .greedo: return "blaster pistol"
             case .royalGuard: return "force pike"
             case .sebulba: return "pod racer flame jet"
-            case .salacious: return "unarmed — cackles"
+            case .salacious: return "unarmed, cackles"
             case .grievous: return "four sabers"
             case .tusken: return "gaffi stick"
             case .cadBane: return "twin blasters"
@@ -2317,9 +2317,9 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             case .mse6, .id9: return "agent only"
             case .baylan, .shinHati: return "orange saber"
             case .grandInquisitor, .secondSister: return "spinning double saber"
-            case .bantha: return "unarmed — Tusken mount"
+            case .bantha: return "unarmed, Tusken mount"
             case .bibFortuna: return "unarmed"
-            case .watto: return "unarmed — haggles"
+            case .watto: return "unarmed, haggles"
             case .moffGideon: return "the Darksaber"
             case .deathTrooper: return "E-11D blaster"
             case .scoutTrooper: return "speeder bike cannon"
@@ -2331,7 +2331,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             case .droideka: return "twin blasters, shield"
             case .phasma: return "chrome blaster"
             case .krennic: return "blaster pistol"
-            case .tarkin: return "unarmed — fires when ready"
+            case .tarkin: return "unarmed, fires when ready"
             case .fifthBrother, .reva: return "spinning double saber"
             }
         }
@@ -2345,7 +2345,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             pm.addItem(item)
         }
         pm.addItem(.separator())
-        pm.addItem(disabled: "Agents — they join the first villain")
+        pm.addItem(disabled: "Agents (they join the first villain)")
         for c in Companion.allCases {
             let item = NSMenuItem(title: c.name, action: #selector(togglePlaygroundAgent(_:)), keyEquivalent: "")
             item.target = self

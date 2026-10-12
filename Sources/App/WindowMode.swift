@@ -989,7 +989,7 @@ final class CardsView: NSView {
                     let ax = chip.maxX + 6
                     let title = NSMutableAttributedString(string: a.name, attributes: [
                         .font: NSFont.systemFont(ofSize: 11.5, weight: .semibold), .foregroundColor: NSColor.white])
-                    title.append(NSAttributedString(string: "  —  " + a.task, attributes: [
+                    title.append(NSAttributedString(string: "  ·  " + a.task, attributes: [
                         .font: NSFont.systemFont(ofSize: 11.5), .foregroundColor: c.accent]))
                     title.draw(with: NSRect(x: ax, y: ty + 1, width: tx + tw - ax, height: 16),
                                options: [.usesLineFragmentOrigin, .truncatesLastVisibleLine])

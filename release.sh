@@ -64,7 +64,7 @@ else
 fi
 gh release create "$TAG" "$ZIP" --title "Clawd Wars $VERSION" --notes "$NOTES
 
-**Install:** \`brew install --cask rodclemen/tap/clawd-wars\` — or download the zip, unzip, and move *Clawd Wars.app* to Applications."
+**Install:** \`brew install --cask rodclemen/tap/clawd-wars\`, or download the zip, unzip, and move *Clawd Wars.app* to Applications."
 
 # Keep the newest $KEEP_RELEASES releases: older zips are never used (the cask names only the latest), and the one
 # before the latest stays as a quick rollback. Tags are kept, so every version's code is still marked in git.
@@ -128,4 +128,4 @@ git -C "$TAP" remote get-url origin >/dev/null 2>&1 || git -C "$TAP" remote add 
 git -C "$TAP" push -q -u origin main
 rm -rf "$TAP"
 
-echo "✓ released $TAG — brew install --cask rodclemen/tap/clawd-wars"
+echo "✓ released $TAG: brew install --cask rodclemen/tap/clawd-wars"

@@ -19,7 +19,7 @@
 
 https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 
-<p align="center"><sub>🔊 <b>Click the speaker in the player for sound</b> — GitHub starts videos muted. Full 1080p version: <a href="promo/clawd-wars-promo.mp4">promo/clawd-wars-promo.mp4</a></sub></p>
+<p align="center"><sub>🔊 <b>Click the speaker in the player for sound</b>: GitHub starts videos muted. Full 1080p version: <a href="promo/clawd-wars-promo.mp4">promo/clawd-wars-promo.mp4</a></sub></p>
 
 <p align="center">
   <img src="docs/desktop.png" alt="Three Claudes and eight agents fighting across the bottom of the screen">
@@ -46,13 +46,13 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 
 You run Claude Code in three terminals. One is thinking, one is waiting for your permission, one finished ten minutes ago and you didn't notice. You alt-tab around to find out.
 
-**Clawd Wars tells you at a glance — without switching windows.**
+**Clawd Wars tells you at a glance, without switching windows.**
 
 - 🗡️ **Working?** Your Claude swings a lightsaber.
 - 💭 **Thinking?** A thought bubble.
-- ❗ **Needs you?** A red `!` — and if you ignore it for a minute, it starts jumping up and down. It keeps asking until you answer, however long that takes; press Esc instead and it stands down.
+- ❗ **Needs you?** A red `!`, and if you ignore it for a minute, it starts jumping up and down. It keeps asking until you answer, however long that takes; press Esc instead and it stands down.
 - 😴 **Done and idle?** It stops fighting and stands about with habits of its own every 10–20 seconds: it looks over its shoulder, shifts its weight, lights and spins its saber, or raises its blaster and blows the smoke off. Some have a move all their own: R2-D2 plays Leia's message, C-3PO throws his arms up, Han spins his blaster and holsters it, Grogu eats a cookie, Vader works his chest panel, a stormtrooper bumps his head, Kylo throws a tantrum, the Rancor roars, and more. (The Royal Guard doesn't fidget at all.) After a couple of minutes it sits down; after five it's asleep (zZz).
-- 🧑‍🚀 **Spawned subagents?** Rebels march in one by one, each labelled with *what it's doing* — and they leave when they finish. (When Han's done, the Millennium Falcon lands, he walks up the ramp, and it flies off.)
+- 🧑‍🚀 **Spawned subagents?** Rebels march in one by one, each labelled with *what it's doing*, and they leave when they finish. (When Han's done, the Millennium Falcon lands, he walks up the ramp, and it flies off.)
 - 🔍 **Want details?** Hover any character: status, how long, the tool it's running right now, your last prompt.
 - 🖱️ **Click any of them** to jump straight to that session's terminal or VS Code tab.
 
@@ -62,13 +62,13 @@ And it's genuinely fun. Run two Claudes and they duel. Spawn a Han Solo and he s
 
 ## Claude vs Codex vs everyone
 
-Run **Claude Code** alongside **OpenAI Codex**, **Qwen Code**, **Gemini CLI** or **GitHub Copilot CLI** and they pick sides: whichever was there first keeps its side, the other takes the opposite — Claude has Vader, so Codex gets the heroes — and each one's agents fight for their own side. Light side versus dark side, literally. Close one and everyone's random again.
+Run **Claude Code** alongside **OpenAI Codex**, **Qwen Code**, **Gemini CLI** or **GitHub Copilot CLI** and they pick sides: whichever was there first keeps its side, the other takes the opposite (Claude has Vader, so Codex gets the heroes), and each one's agents fight for their own side. Light side versus dark side, literally. Close one and everyone's random again.
 
 You can tell the AIs apart at a glance: Claude's characters keep the white outline; Codex gets cyan, Qwen Code lavender, Gemini CLI gold and Copilot CLI mint. In the window's session list, each AI gets its own little section, and Claude Code sessions running inside the **Claude desktop app** are listed separately from the ones in your terminal, with a coral outline instead of white (VS Code ones say so too).
 
 ## The roster
 
-Every character is Clawd — Claude Code's little pixel mascot — in costume, drawn in code: no sprite sheets, no image assets (even the app icon is rendered by the same code).
+Every character is Clawd (Claude Code's little pixel mascot) in costume, drawn in code: no sprite sheets, no image assets (even the app icon is rendered by the same code).
 
 <p align="center">
   <img src="docs/roster.png" alt="All villains and heroes" width="760">
@@ -78,7 +78,7 @@ Anyone can be a session (drawn large) or an agent (drawn small). **The dark side
 
 **The light side**: Luke, Han, Leia, Obi-Wan, R2-D2, C-3PO, Qui-Gon, Mace Windu, Yoda, a Jawa, Chewbacca, Rey, Ahsoka, Wicket the Ewok, a tauntaun, Jar Jar Binks, Lando, Zorii Bliss, Bo-Katan Kryze, Maz Kanata, Wedge Antilles, L3-37 (fist up for droid rights), Mon Mothma, Padmé, Admiral Ackbar, Grogu, Babu Frik (sparks flying), the Mandalorian, K-2SO, a GNK power droid, Cassian Andor (always glancing over his shoulder), Bix Caleen, Cobb Vanth, a pit droid (folds up now and then) and Kuiil on his blurrg (*"I have spoken."*).
 
-Blasters are drawn from the film props — Han's DL-44, Leia's Defender, the Stormtrooper's E-11, Boba's EE-3 — and so are the fights:
+Blasters are drawn from the film props (Han's DL-44, Leia's Defender, the Stormtrooper's E-11, Boba's EE-3), and so are the fights:
 
 | Matchup | What happens |
 |---|---|
@@ -86,19 +86,19 @@ Blasters are drawn from the film props — Han's DL-44, Leia's Defender, the Sto
 | blaster vs saber | bolts fly, the saber deflects each one off into the sky |
 | Force lightning vs saber | the blade catches the lightning |
 | lightning vs blaster | the gunner gets zapped |
-| blaster vs blaster | a proper shoot-out — they duck, bolts collide mid-air, shields flash, and bolts ping off armour |
+| blaster vs blaster | a proper shoot-out: they duck, bolts collide mid-air, shields flash, and bolts ping off armour |
 | Han Solo vs Greedo | paired first whenever both are fighting, wherever they are in the line; now and then Han shoots first and Greedo hits the floor |
 | odd one out | cheers the others on, with sparkles |
 
 Only Claudes that are working or thinking fight: one that goes idle or is waiting for you steps out a few seconds later, and sits down and falls asleep on the usual schedule. Agents fight as long as they run. Han and Greedo find each other first. Then Claudes fight Claudes, agents fight agents, and leftovers pair up or cheer. R2-D2, C-3PO and the tauntaun stay out of it.
 
-Two gunslingers never just shoot each other — most bolts get saved:
+Two gunslingers never just shoot each other. Most bolts get saved:
 
 <p align="center">
   <img src="docs/shootout.png" alt="Blaster shoot-out: a shield flash, a duck, two bolts colliding mid-air, and a bolt ricocheting off Boba Fett's armour" width="900">
 </p>
 
-And when Han Solo's agent is done, he doesn't just fade away — the Millennium Falcon comes to pick him up:
+And when Han Solo's agent is done, he doesn't just fade away: the Millennium Falcon comes to pick him up:
 
 <p align="center">
   <img src="docs/falcon.png" alt="The Falcon swoops in, lands beside Han, he walks up the ramp, and it flies away" width="900">
@@ -106,25 +106,25 @@ And when Han Solo's agent is done, he doesn't just fade away — the Millennium 
 
 ## Window mode
 
-Clawd Wars opens in a window by default (switch to the desktop from the menu; the crew starts there at the Small size). **Show in Window** puts the whole crew in a scene and gives every session a card, titled with its project (the repo's name when it has a git remote, otherwise the folder's) and a pill saying where the repo lives (GitHub, GitLab, … or Local): what it's doing *right now*, your last prompt, its last reply, how long it's been at it — with its agents hanging underneath in a little tree, each with its task and current tool call. With more than one AI running, every AI gets its own section.
+Clawd Wars opens in a window by default (switch to the desktop from the menu; the crew starts there at the Small size). **Show in Window** puts the whole crew in a scene and gives every session a card, titled with its project (the repo's name when it has a git remote, otherwise the folder's) and a pill saying where the repo lives (GitHub, GitLab, … or Local): what it's doing *right now*, your last prompt, its last reply, how long it's been at it, with its agents hanging underneath in a little tree, each with its task and current tool call. With more than one AI running, every AI gets its own section.
 
 <p align="center">
   <img src="docs/window-cantina.png" alt="Window mode in the Mos Eisley Cantina" width="760">
 </p>
 
-The scene is set **where the first session's character belongs** — the Death Star for Vader, the sarlacc pit for Boba, Jabba's palace, Hoth for the AT-AT (with more of them marching on the horizon):
+The scene is set **where the first session's character belongs**: the Death Star for Vader, the sarlacc pit for Boba, Jabba's palace, Hoth for the AT-AT (with more of them marching on the horizon):
 
 <p align="center">
   <img src="docs/window-hoth.png" alt="Window mode on Hoth" width="760">
 </p>
 
-22 hand-built locations, each with its own little animation — Figrin D'an and the Modal Nodes (or, some nights, the Max Rebo Band) play in the cantina while Wuher polishes glasses and Dr. Evazan looks for trouble at the bar; Han hangs in carbonite in Jabba's throne room; Leia's "help me" hologram flickers in Obi-Wan's hut; Jawas' eyes glow over heaps of droid junk in the sandcrawler; Luke's X-wing sinks in Dagobah's bog; the Falcon jumps to hyperspace past its cockpit window; BB-8 rolls past a Star Destroyer buried in Jakku's sand; Ewok lanterns flicker on Endor; AT-ATs march across Hoth; and Jabba's court peers down into the rancor pit:
+22 hand-built locations, each with its own little animation: Figrin D'an and the Modal Nodes (or, some nights, the Max Rebo Band) play in the cantina while Wuher polishes glasses and Dr. Evazan looks for trouble at the bar; Han hangs in carbonite in Jabba's throne room; Leia's "help me" hologram flickers in Obi-Wan's hut; Jawas' eyes glow over heaps of droid junk in the sandcrawler; Luke's X-wing sinks in Dagobah's bog; the Falcon jumps to hyperspace past its cockpit window; BB-8 rolls past a Star Destroyer buried in Jakku's sand; Ewok lanterns flicker on Endor; AT-ATs march across Hoth; and Jabba's court peers down into the rancor pit:
 
 <p align="center">
   <img src="docs/locations.png" alt="All 22 locations" width="760">
 </p>
 
-Several sessions in the same project are grouped under one project header as a tree, and a card lists four agents with a chevron to unfold the rest (hover any agent in the scene for its details). The window sizes itself to the number of sessions, up to three (more scroll), or keeps your own height, opens as a **Compact Window**, 75% of the full size (a smaller scene and compact cards with normal-size text; turn it off in Settings for full size, and resizing it by hand turns it off too), can hide the session list to become just the scene strip (the button in its title bar), can show the screen saver instead (Settings → Screen Saver View in Window), runs the place right up to the top, under a see-through title bar with its own close and minimize buttons (drag the top strip to move the window), can stay on top, and can hide its Dock icon. Project names float over the Claudes on the desktop; in the window the cards carry them instead — each mode remembers your choice. The project you're in (its terminal or editor window in front) has its name 15% larger, there and in the screen saver.
+Several sessions in the same project are grouped under one project header as a tree, and a card lists four agents with a chevron to unfold the rest (hover any agent in the scene for its details). The window sizes itself to the number of sessions, up to three (more scroll), or keeps your own height, opens as a **Compact Window**, 75% of the full size (a smaller scene and compact cards with normal-size text; turn it off in Settings for full size, and resizing it by hand turns it off too), can hide the session list to become just the scene strip (the button in its title bar), can show the screen saver instead (Settings → Screen Saver View in Window), runs the place right up to the top, under a see-through title bar with its own close and minimize buttons (drag the top strip to move the window), can stay on top, and can hide its Dock icon. Project names float over the Claudes on the desktop; in the window the cards carry them instead, and each mode remembers your choice. The project you're in (its terminal or editor window in front) has its name 15% larger, there and in the screen saver.
 
 ## Screen saver
 
@@ -152,7 +152,7 @@ The window can show the same view: **Settings → Screen Saver View in Window** 
 
 ## The little things
 
-Hover over anyone for the details — what that session is doing right now, your last prompt, its agents (on the desktop, or in the window when its session list is hidden):
+Hover over anyone for the details: what that session is doing right now, your last prompt, its agents (on the desktop, or in the window when its session list is hidden):
 
 <p align="center">
   <img src="docs/hover.png" alt="Hover card over Darth Vader" width="640">
@@ -164,26 +164,26 @@ Forgot one? **Status Symbols** in the menu has the same key, drawn with the app'
 |---|---|
 | lightsaber kata | Claude is running tools |
 | 💭 thought bubble | thinking |
-| red `!` | waiting for your permission — **jumping** after a minute |
+| red `!` | waiting for your permission, **jumping** after a minute |
 | `?` | that session started before the hooks were installed; restart it for live status |
 | sitting on the floor | idle for 2+ minutes |
 | zZz | idle for 5+ minutes |
-| `?` and NOT REPORTING | the hooks stopped reporting for that session while it's clearly busy — restart it |
-| `?` and APPROVE IN /hooks | a Codex session is working but its hook hasn't been approved yet — type `/hooks` in Codex and approve Clawd Wars |
+| `?` and NOT REPORTING | the hooks stopped reporting for that session while it's clearly busy: restart it |
+| `?` and APPROVE IN /hooks | a Codex session is working but its hook hasn't been approved yet: type `/hooks` in Codex and approve Clawd Wars |
 | banner + ⚠︎ menu item | an AI on your Mac isn't connected, or one of its sessions isn't reporting; the menu item fixes it (connect, or jump to the session) |
-| red OFFLINE banner | the status file can't be read — never silently stale |
+| red OFFLINE banner | the status file can't be read, so nothing is silently stale |
 | bobbing yellow marker | the Claude whose terminal you're looking at right now |
 | matching label colours | a Claude and its agents share their project's colour |
 | label above the head | the project (Claudes) or the task (agents) |
 | GitHub / GitLab / Local pill | where the project's git remote lives, each host in its own colour (cards in the window); the project is named after the repo, or its folder when there's no remote |
 
-- **Several Claudes at once** — each gets its own villain and project label; sessions that predate the hooks are still found from the process table.
+- **Several Claudes at once:** each gets its own villain and project label; sessions that predate the hooks are still found from the process table.
 - **Double-click the menu bar helmet** to hide or show Clawd Wars; a single click opens the menu as usual.
 - **Settings → Monochrome Menu Bar Icon** swaps the colour helmet for a one-colour one that macOS tints to match the menu bar, like its own icons.
 - **Hover** any villain or agent for a details card; agents also show which Claude they work for.
 - **Newcomers walk in** from the side of the screen, one at a time, instead of popping up.
-- **Drag** the crew anywhere — they'll stand right on the bottom edge of either monitor. Bubbles and labels never go off-screen; if the line is too long, everyone walks over to make room.
-- **Click** a villain (or a card) to jump to the session: the exact tab in Terminal or iTerm2, or the right window — even the right *native tab* — in VS Code or Cursor.
+- **Drag** the crew anywhere: they'll stand right on the bottom edge of either monitor. Bubbles and labels never go off-screen; if the line is too long, everyone walks over to make room.
+- **Click** a villain (or a card) to jump to the session: the exact tab in Terminal or iTerm2, or the right window (even the right *native tab*) in VS Code or Cursor.
 - **Menu bar helmet** and right-click give you everything: status, Hide/Show Clawd Wars, Show in Window, Location, Settings. Hold **⌘** for the Playground (put any villains and heroes on stage and watch them fight) and Demo Mode.
 
 ## Install
@@ -192,7 +192,7 @@ Needs macOS 13+ (Apple Silicon or Intel) and at least one of [Claude Code](https
 
 > Google's newer **Antigravity CLI** (`agy`) isn't supported yet: its hooks have to answer some events with decisions, which needs testing against a real install first.
 
-> **Codex users:** Codex only runs hooks you've approved. After installing, run **`/hooks`** in Codex once and approve the Clawd Wars hook — until then your Codex sessions still show up, but with a `?` instead of live status. You don't have to remember: when a Codex session starts working without reporting, Clawd Wars sends a notification telling you to approve it (click it to jump to that session).
+> **Codex users:** Codex only runs hooks you've approved. After installing, run **`/hooks`** in Codex once and approve the Clawd Wars hook. Until then your Codex sessions still show up, but with a `?` instead of live status. You don't have to remember: when a Codex session starts working without reporting, Clawd Wars sends a notification telling you to approve it (click it to jump to that session).
 
 Clawd Wars only checks the AIs actually on your Mac. If one is installed but not connected (say you install Codex later), you get a banner and a **⚠︎ Connect Codex…** item at the top of the menu, and the app offers to connect it on next launch. Don't use it with Clawd Wars? Click the **×** on the banner (or **Don't Remind Me About …** in the menu) and it stops asking; you can still connect it later from Settings.
 
@@ -202,7 +202,7 @@ Clawd Wars only checks the AIs actually on your Mac. If one is installed but not
 brew install --cask rodclemen/tap/clawd-wars
 ```
 
-Or download the zip from [Releases](https://github.com/rodclemen/clawd-wars/releases), unzip it and drag **Clawd Wars** to Applications. On first launch it offers to connect every supported AI it finds — Claude Code, Codex, Qwen Code, Gemini CLI, Copilot CLI — adding a small hook to each one's settings and keeping a backup.
+Or download the zip from [Releases](https://github.com/rodclemen/clawd-wars/releases), unzip it and drag **Clawd Wars** to Applications. On first launch it offers to connect every supported AI it finds (Claude Code, Codex, Qwen Code, Gemini CLI, Copilot CLI), adding a small hook to each one's settings and keeping a backup.
 
 **From source:**
 
@@ -224,7 +224,7 @@ cd clawd-wars
 >
 > Nothing is installed and no AI's settings change until you connect one from the app's menu. If you do connect from the `build/` copy, the hooks point into `build/`: rebuilding replaces that folder (sessions miss a few seconds of updates), and deleting it leaves the hooks pointing at nothing (remove them first with Settings → Remove … Hooks). When you're happy with it, `./build.sh` installs it to /Applications and points the connected hooks there.
 
-Claude Code sessions that were already running pick up the hooks after a restart (`/exit`, then `claude --continue`). Until then they still show up — as a villain with a `?`.
+Claude Code sessions that were already running pick up the hooks after a restart (`/exit`, then `claude --continue`). Until then they still show up, as a villain with a `?`.
 
 Clicking to jump to a session in Terminal or iTerm2 asks once for **Automation** permission (Apple Events) to control that terminal; jumping to an editor (VS Code, Cursor) asks once for **Accessibility** permission.
 
@@ -234,10 +234,10 @@ There are no packages to install: no Homebrew, SwiftPM, CocoaPods or Xcode proje
 
 | Need | Why | Check | Get it |
 | --- | --- | --- | --- |
-| macOS 13 or later | the app's deployment target | `sw_vers` | — |
+| macOS 13 or later | the app's deployment target | `sw_vers` | |
 | Swift 6.2 or later (Swift 5 language mode) | compiles everything | `swiftc --version` | `xcode-select --install` (Command Line Tools) **or** Xcode from the App Store. Either works: Xcode isn't required. |
 | `lipo`, `codesign`, `sips`, `tiffutil`, `iconutil`, `security` | universal binaries, signing, icon and screen-saver thumbnail | `which lipo codesign` | `lipo` comes with the developer tools above; the others ship with macOS |
-| `zsh` | `build.sh` is a zsh script | — | macOS's default shell |
+| `zsh` | `build.sh` is a zsh script | | macOS's default shell |
 
 Tested with Swift 6.2.3 (Command Line Tools 26.2) and Swift 6.3.3 (Xcode 26.6) on macOS 26, on Apple Silicon. A local build compiles for your Mac's architecture only; `--release` builds a universal binary and needs a **Developer ID** certificate (only the maintainer needs that).
 
@@ -252,10 +252,10 @@ Tested with Swift 6.2.3 (Command Line Tools 26.2) and Swift 6.3.3 (Xcode 26.6) o
 
 ## How it works
 
-- A tiny Foundation-only binary, `clawd-wars-hook`, is registered in `~/.claude/settings.json` for Claude Code's hook events (session start/end, prompts, tool calls, permission requests, subagents, stop). It writes `~/.claude/vader-status/state.json` under a file lock and exits silently — it can never get in Claude's way.
+- A tiny Foundation-only binary, `clawd-wars-hook`, is registered in `~/.claude/settings.json` for Claude Code's hook events (session start/end, prompts, tool calls, permission requests, subagents, stop). It writes `~/.claude/vader-status/state.json` under a file lock and exits silently, so it can never get in Claude's way.
 - It records what each session is doing: its state and since when, the current tool call (`Edit Overlay.swift`, `Bash: swift build`), your last prompt and Claude's last reply, the model and session title, and each subagent's task.
 - The app reads that twice a second, finds sessions without hooks from the process table, and drops a session the moment its process exits.
-- Everything you see — characters, weapons, effects, 22 locations, the icon — is pixel art drawn in Swift at runtime. `Tools/RenderDocs` renders the roster and location sheets above; `CLAWD_SHOT=/path.png` makes the app dump its own frames.
+- Everything you see (characters, weapons, effects, 22 locations, the icon) is pixel art drawn in Swift at runtime. `Tools/RenderDocs` renders the roster and location sheets above; `CLAWD_SHOT=/path.png` makes the app dump its own frames.
 - The first install backs up your settings to `~/.claude/settings.json.before-vader` (other AIs get a `.before-clawd-wars` copy next to their file).
 - The hooks point at the app by its full path. Move the app and, the next time it launches, it re-points any hook whose binary is gone at its new location (Codex then asks you to approve it again in `/hooks`).
 
@@ -272,7 +272,7 @@ rm -rf /Applications/"Clawd Wars.app" ~/.claude/vader-status
 
 ## Contributing
 
-New characters and locations are very welcome — everything is pixel art drawn in code, so there are no assets to wrangle:
+New characters and locations are very welcome. Everything is pixel art drawn in code, so there are no assets to wrangle:
 
 - **A villain:** add a case at the end of `Leader` in `Sources/App/Leaders.swift` (name, weapon, head height) and a `draw…` costume function (newer ones live in `Sources/App/Recruits.swift`); give it a home in `Location.home(of:)`.
 - **A hero:** add a case at the end of `Companion` in `Sources/App/Characters.swift` and its drawing; a home in `Location.home(of:)`.
@@ -281,11 +281,11 @@ New characters and locations are very welcome — everything is pixel art drawn 
 - Bump `leaderCount` / `companionCount` in `Sources/Shared/StatusStore.swift`.
 - Check it: hold ⌘ and open the menu for the **Playground**, or run `CLAWD_SHOT=/tmp/shot.png` with `--playground=…` / `--agents=…`. Regenerate the README sheets with `Tools/RenderDocs`.
 
-Issues and pull requests are open — say which character you'd like next.
+Issues and pull requests are open: say which character you'd like next.
 
 ## License
 
-**Free to use.** The code is [MIT licensed](LICENSE): use it, change it, share it, ship it — just keep the license notice.
+**Free to use.** The code is [MIT licensed](LICENSE): use it, change it, share it, ship it. Just keep the license notice.
 
 ---
 
