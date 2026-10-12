@@ -121,6 +121,8 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     }
     private var notifiedSilent: Set<Int32> = []
     private var seenBusy: Set<Int32> = []            // pids seen working (a turn ran, so a working hook would have fired)
+    private var reported: Set<Int32> = []            // pids whose hooks have fired: their hooks work, even once SessionEnd drops the record
+    private var lastLive: [Int32: Double] = [:]      // when each pid last had a live record
     private let shotPath = ProcessInfo.processInfo.environment["CLAWD_SHOT"]     // "%d" in the path → numbered frames
     private let shotEvery = Double(ProcessInfo.processInfo.environment["CLAWD_SHOT_EVERY"] ?? "") ?? 5
     private var shotCount = 0
@@ -346,6 +348,11 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             }
             let file = StatusStore.load()   // read once: it also tells us whether the file is readable
             sessions = StatusStore.snapshot(file ?? StatusFile(), now: now, processes: processes)
+            // A session that quits drops its record at SessionEnd, but the process lingers a moment while it shuts down.
+            // Don't let it come back as a new character (a fresh villain walking in only to fade out): it has left.
+            for s in sessions where s.live { if let pid = s.pid { lastLive[pid] = now } }
+            sessions.removeAll { s in !s.live && s.pid.flatMap { lastLive[$0] }.map { now - $0 < 30 } ?? false }
+            lastLive = lastLive.filter { now - $0.value < 30 }
             // Sessions without hooks can't report status, but a busy Claude burns CPU (idle ≈ 0.3%,
             // working ≈ 5–10%), so treat sustained CPU as "working" for them.
             for i in sessions.indices where !sessions[i].live {
@@ -382,9 +389,12 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             }
             // A session that started after our hooks were in place and has run a turn, but never reported, has its
             // hook switched off — for Codex that means it hasn't been approved in /hooks yet.
+            // A session that quits drops its record at SessionEnd but lingers (busy) for a moment while it shuts down:
+            // having reported once, it isn't silent.
             let startedAt = Dictionary(processes.map { ($0.pid, $0.started) }, uniquingKeysWith: { a, _ in a })
+            reported.formUnion(sessions.filter(\.live).compactMap(\.pid))
             for i in sessions.indices where !sessions[i].live {
-                guard let pid = sessions[i].pid else { continue }
+                guard let pid = sessions[i].pid, !reported.contains(pid) else { continue }
                 if sessions[i].mood == .working { seenBusy.insert(pid) }
                 if let since = hooksSince[sessions[i].assistant], let st = startedAt[pid], st > since + 2, seenBusy.contains(pid) {
                     sessions[i].hookSilent = true

@@ -531,7 +531,7 @@ enum StatusStore {
         git?.name ?? cwd.map { ($0 as NSString).lastPathComponent }
     }
 
-    /// Every live session in spawn order (an idle Vader placeholder if there are none).
+    /// Every live session in spawn order (empty when none are running, unless stray agents need a placeholder Vader).
     /// `processes` (from `ClaudeProcesses.running()`) adds sessions whose hooks never fired and drops dead ones.
     static func snapshot(_ s: StatusFile, now: Double = Date().timeIntervalSince1970,
                          processes: [ClaudeProcesses.Info]? = nil) -> [SessionSnapshot] {
@@ -597,11 +597,11 @@ enum StatusStore {
                                               assistant: p.assistant, cwd: cwd, remote: git?.host, client: p.client))
             }
         }
-        if result.isEmpty {   // no Claude running: an idle Vader keeps the spot warm
+        let agents = s.agents.filter { now - $0.lastSeen <= agentTTL && !replaced.contains($0.session) }.sorted { $0.started < $1.started }
+        // No AI running: the stage stays empty. Only stray agents still reporting in get a placeholder Vader to stand with.
+        if result.isEmpty && !agents.isEmpty {
             result.append(SessionSnapshot(id: "home", leader: 0, project: "", mood: .idle, agents: []))
         }
-
-        let agents = s.agents.filter { now - $0.lastSeen <= agentTTL && !replaced.contains($0.session) }.sorted { $0.started < $1.started }
         for a in agents {
             // Agents whose session we never heard from stand with the first villain.
             let i = result.firstIndex { $0.id == a.session } ?? 0
