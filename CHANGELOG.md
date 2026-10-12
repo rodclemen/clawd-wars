@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.28.0 — 2026-10-12
+
+### Added
+- **27 new characters: the cast goes from 54 to 81** (46 villains, 35 heroes).
+  - **Dark side (5):** **Baylan Skoll** (*Ahsoka*: long grey hair and beard, a dark cloak, an orange saber; he strokes his beard when he isn't fighting), **Shin Hati** (*Ahsoka*: platinum hair with a braid, dark armour, an orange saber; now and then she lights it and runs through a few moves), an **ID9 seeker droid** (*Obi-Wan Kenobi*: a hovering black ball with one red eye and five dangling legs, sweeping the ground with a red scan; agent only, like the MSE-6), the **Grand Inquisitor** (*Obi-Wan Kenobi*: a Pau'an with the tall ridged skull and red face lines) and the **Second Sister** (Trilla Suduri: black helmet with a grey faceplate). The two Inquisitors carry double-bladed ring sabers and spin them like a rotor while they wait for you or stand guard.
+  - **More dark side (3):** a **bantha** (huge, shaggy, spiral horns; it chews and swishes its tail; unarmed), **Bib Fortuna** (Jabba's pale Twi'lek majordomo, head-tails swaying, pointed grin; unarmed) and **Watto** (*Episode I*: hovering on a buzz of wings, a hand out to haggle; unarmed, and as a session he now and then says "No money, no parts, no deal!").
+  - **And 14 more villains, most of them armed:** **Moff Gideon** (black uniform and cape, the Darksaber: a black blade with a white edge), a **death trooper**, a **scout trooper** on a speeder bike (it fires the bike's cannon), **Asajj Ventress** (twin red sabers), **Savage Opress** (horns, a double red saber), **Jango Fett** (jetpack, Westar pistol), **Bossk**, **Dengar** (bandaged head, long rifle), a **droideka** (rolls in as a wheel, unfolds, and keeps its shield up while it fights), **Captain Phasma** (chrome, a cape lined in red), **Director Krennic** (white uniform and cape), **Governor Tarkin** (unarmed; as a session he now and then says "You may fire when ready."), the **Fifth Brother** and **Reva** (the Inquisitors who appear in *Obi-Wan Kenobi*, spinning ring sabers like the other two).
+  - **Light side (2):** **Cassian Andor** (*Andor*: navy jacket, stubble, a blaster pistol; keeps glancing over his shoulder) and **Bix Caleen** (*Andor*: dark curls, a work jacket and tool belt; unarmed, and now and then she lifts her comm to call in).
+  - **More light side (3):** **Cobb Vanth** (*The Book of Boba Fett*: the marshal's duster, scarf and badge, smoke curling off his pistol), a **pit droid** (*Episodes I–III*: gangly, a flat dish of a head; now and then it folds itself up into a little package and springs back open; unarmed) and **Kuiil** (*The Mandalorian*: the Ugnaught riding his blurrg, a long rifle; as a session he now and then says "I have spoken.").
+  - Homes: Baylan and Shin on Jakku, the ID9 at Obi-Wan's hut, the Grand Inquisitor in the Jundland Wastes, the Second Sister and Cassian on the Executor bridge (with K-2SO), Bix and the pit droid at the sandcrawler, the bantha, Watto and Cobb Vanth in the Jundland Wastes, Bib Fortuna in Jabba's palace, Kuiil on Jakku; Gideon, Bossk and Dengar on the Executor bridge, the death trooper, Krennic and Tarkin on the Death Star, the scout trooper on Endor, Ventress and Jango on Geonosis, Savage and the droideka in Theed, Phasma on the Supremacy, the Fifth Brother in the Jundland Wastes, Reva at the Lars homestead.
+
+### Changed
+- **Any character can have a callout now**, not just villains: R0-GR's "Roger roger!" and Jabba's "Ho ho ho!" moved to `Cast.callout`, joined by Watto, Tarkin and Kuiil. Hero blasters can fire from any height (`agentFire`'s `muzzleY`), for Kuiil's rifle up on the blurrg.
+- `leaderCount` is now 46 and `companionCount` 35; the new cases are appended, so existing cast ids are unchanged. `StatusStore.agentOnly` is now the MSE-6 and the ID9.
+- `docs/roster.png` re-rendered; README cast lists updated.
+
 ## 2.27.1 — 2026-10-12
 
 ### Added

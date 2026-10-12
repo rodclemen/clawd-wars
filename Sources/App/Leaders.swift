@@ -10,9 +10,9 @@ extension Companion {
         case .luke, .obiwan, .quigon, .mace, .yoda, .rey, .ahsoka: return .saber
         case .ewok: return .saber     // a spear — fights up close like a blade
         case .han, .leia, .jawa, .chewie: return .blaster
-        case .lando, .zorii, .boKatan, .wedge, .padme, .mando, .k2so: return .blaster
+        case .lando, .zorii, .boKatan, .wedge, .padme, .mando, .k2so, .cassian, .cobbVanth, .kuiil: return .blaster
         case .r2d2, .c3po, .tauntaun: return .none
-        case .jarjar, .maz, .l337, .monMothma, .ackbar, .grogu, .babuFrik, .gonk: return .none
+        case .jarjar, .maz, .l337, .monMothma, .ackbar, .grogu, .babuFrik, .gonk, .bix, .pitDroid: return .none
         }
     }
 
@@ -21,7 +21,8 @@ extension Companion {
         switch self {
         case .han: return (53, 32)
         case .chewie: return (54, 31)
-        case .lando, .zorii, .boKatan, .wedge, .padme: return (47, 32)
+        case .lando, .zorii, .boKatan, .wedge, .padme, .cassian, .cobbVanth: return (47, 32)
+        case .kuiil: return (50, 18)
         case .mando: return (58, 32)
         case .k2so: return (52, 32)
         default: return (46, 32)
@@ -32,6 +33,10 @@ extension Companion {
 enum Leader: Int, CaseIterable {
     case vader, kylo, maul, boba, trooper, emperor, rogr, dooku, gamorrean, jabba, ig88, atst, atat, rancor, greedo, royalGuard
     case sebulba, salacious, grievous, tusken, cadBane, thrawn, hammerhead, mse6
+    case baylan, shinHati, id9, grandInquisitor, secondSister
+    case bantha, bibFortuna, watto
+    case moffGideon, deathTrooper, scoutTrooper, ventress, savageOpress, jangoFett, bossk, dengar, droideka, phasma
+    case krennic, tarkin, fifthBrother, reva
 
     var name: String {
         switch self {
@@ -59,6 +64,28 @@ enum Leader: Int, CaseIterable {
         case .thrawn: return "Admiral Thrawn"
         case .hammerhead: return "Hammerhead"
         case .mse6: return "MSE-6"
+        case .baylan: return "Baylan Skoll"
+        case .shinHati: return "Shin Hati"
+        case .id9: return "ID9 Seeker Droid"
+        case .grandInquisitor: return "Grand Inquisitor"
+        case .secondSister: return "Second Sister"
+        case .bantha: return "Bantha"
+        case .bibFortuna: return "Bib Fortuna"
+        case .watto: return "Watto"
+        case .moffGideon: return "Moff Gideon"
+        case .deathTrooper: return "Death Trooper"
+        case .scoutTrooper: return "Scout Trooper"
+        case .ventress: return "Asajj Ventress"
+        case .savageOpress: return "Savage Opress"
+        case .jangoFett: return "Jango Fett"
+        case .bossk: return "Bossk"
+        case .dengar: return "Dengar"
+        case .droideka: return "Droideka"
+        case .phasma: return "Captain Phasma"
+        case .krennic: return "Director Krennic"
+        case .tarkin: return "Governor Tarkin"
+        case .fifthBrother: return "Fifth Brother"
+        case .reva: return "Reva"
         }
     }
 
@@ -71,6 +98,10 @@ enum Leader: Int, CaseIterable {
         case .emperor: return .lightning
         case .sebulba, .cadBane, .thrawn: return .blaster
         case .grievous, .tusken: return .saber          // four sabers; the gaffi stick fights up close
+        case .baylan, .shinHati, .grandInquisitor, .secondSister: return .saber
+        case .id9, .bantha, .bibFortuna, .watto, .tarkin: return .none
+        case .moffGideon, .ventress, .savageOpress, .fifthBrother, .reva: return .saber
+        case .deathTrooper, .scoutTrooper, .jangoFett, .bossk, .dengar, .droideka, .phasma, .krennic: return .blaster
         }
     }
 
@@ -78,9 +109,12 @@ enum Leader: Int, CaseIterable {
     var armoured: Bool {
         switch self {
         case .boba, .trooper, .rogr, .ig88, .atst, .atat: return true
-        case .sebulba, .grievous, .mse6: return true
+        case .sebulba, .grievous, .mse6, .id9: return true
+        case .deathTrooper, .scoutTrooper, .jangoFett, .droideka, .phasma: return true
         case .vader, .kylo, .maul, .emperor, .dooku, .gamorrean, .jabba, .rancor, .greedo, .royalGuard,
-             .salacious, .tusken, .cadBane, .thrawn, .hammerhead: return false
+             .salacious, .tusken, .cadBane, .thrawn, .hammerhead, .baylan, .shinHati, .grandInquisitor, .secondSister,
+             .bantha, .bibFortuna, .watto, .moffGideon, .ventress, .savageOpress, .bossk, .dengar, .krennic, .tarkin,
+             .fifthBrother, .reva: return false
         }
     }
 
@@ -111,15 +145,34 @@ enum Leader: Int, CaseIterable {
         case .thrawn: return 22
         case .hammerhead: return 10
         case .mse6: return 35
+        case .baylan: return 21
+        case .shinHati: return 21
+        case .id9: return 17
+        case .grandInquisitor: return 17
+        case .secondSister: return 18
+        case .bantha: return 15
+        case .bibFortuna: return 21
+        case .watto: return 11
+        case .moffGideon, .krennic, .tarkin, .reva: return 22
+        case .deathTrooper, .phasma, .jangoFett: return 19
+        case .scoutTrooper: return 12
+        case .ventress, .fifthBrother: return 22
+        case .savageOpress: return 20
+        case .bossk: return 21
+        case .dengar: return 19
+        case .droideka: return 18
         }
     }
 
     /// Whether it sits down when it's been idle a while (walkers, slugs, monsters, the Emperor and his guard don't).
     var canSit: Bool {
         switch self {
-        case .atst, .atat, .jabba, .rancor, .emperor, .royalGuard, .sebulba, .salacious, .hammerhead, .mse6: return false
+        case .atst, .atat, .jabba, .rancor, .emperor, .royalGuard, .sebulba, .salacious, .hammerhead, .mse6, .id9,
+             .bantha, .bibFortuna, .watto, .scoutTrooper, .droideka: return false
         case .vader, .kylo, .maul, .boba, .trooper, .rogr, .dooku, .gamorrean, .ig88, .greedo,
-             .grievous, .tusken, .cadBane, .thrawn: return true
+             .grievous, .tusken, .cadBane, .thrawn, .baylan, .shinHati, .grandInquisitor, .secondSister,
+             .moffGideon, .deathTrooper, .ventress, .savageOpress, .jangoFett, .bossk, .dengar, .phasma, .krennic, .tarkin,
+             .fifthBrother, .reva: return true
         }
     }
 
@@ -129,7 +182,8 @@ enum Leader: Int, CaseIterable {
         case .rancor: return rancorShoulder
         case .vader, .kylo, .maul, .boba, .trooper, .emperor, .rogr, .dooku, .gamorrean, .jabba, .ig88, .atst, .atat,
              .greedo, .royalGuard, .sebulba, .salacious, .grievous, .tusken, .cadBane, .thrawn, .hammerhead,
-             .mse6: return Sprite.hand
+             .mse6, .baylan, .shinHati, .id9, .grandInquisitor, .secondSister, .bantha, .bibFortuna, .watto,
+             .moffGideon, .deathTrooper, .scoutTrooper, .ventress, .savageOpress, .jangoFett, .bossk, .dengar, .droideka, .phasma, .krennic, .tarkin, .fifthBrother, .reva: return Sprite.hand
         }
     }
 
@@ -138,7 +192,10 @@ enum Leader: Int, CaseIterable {
         switch self {
         case .atst: return (47, 22)
         case .atat: return (64, 21)
-        case .greedo, .cadBane, .thrawn: return (47, 32)
+        case .greedo, .cadBane, .thrawn, .jangoFett, .krennic: return (47, 32)
+        case .scoutTrooper: return (50, 33)
+        case .dengar: return (54, 32)
+        case .droideka: return (49, 31)
         case .sebulba: return (70, 31)
         default: return (52, 32)
         }
@@ -296,6 +353,14 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     if who == .tusken, !walking, saber == nil {
         saber = -100 + 25 * sin(t * 9); hop = cheerHop(t * 0.8); breathe = 0
     }
+    // Shin Hati can't keep still either: now and then she lights her saber and runs through a few moves.
+    if who == .shinHati, !walking, saber == nil, frac(lt / 7) < 0.3 {
+        let p = kataPose(lt); saber = p.angle; trail = saberTrail(lt)
+    }
+    // The Inquisitors spin their ring sabers like a rotor while they wait or stand guard.
+    if [.grandInquisitor, .secondSister, .fifthBrother, .reva].contains(who), !walking, mode == .waiting || mode == .standGuard {
+        saber = t * 900; trail = []
+    }
     if zap != nil { armRaise = 2 }
 
     if case .cheer = role, mode == .working, !walking { drawCheerSparkles(c, t: t) }
@@ -310,7 +375,13 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     case .emperor: drawCape(c, t: t, speed: capeSpeed * 0.6, color: C(0x111116), edge: C(0x2A2A33), extra: 1.5)
     case .royalGuard: drawCape(c, t: t, speed: capeSpeed * 0.5, color: C(0x6E0C10), edge: C(0x8E1418), extra: 0.5)
     case .grievous: drawCape(c, t: t, speed: capeSpeed * 0.7, color: C(0x3A3028), edge: C(0x5A4A3A))
+    case .baylan: drawCape(c, t: t, speed: capeSpeed * 0.6, color: C(0x2A2420), edge: C(0x4A3A2E), extra: 1)
     case .boba: drawJetpack(c, t: t, burning: fire.map { frac($0.t / blasterPeriod) > 0.7 } ?? false)
+    case .jangoFett: drawJetpack(c, t: t, burning: fire.map { frac($0.t / blasterPeriod) > 0.7 } ?? false,
+                                 pack: C(0x9AA8BC), shade: C(0x6E7C92))
+    case .moffGideon: drawCape(c, t: t, speed: capeSpeed, color: C(0x101014), edge: C(0x2A2A33))
+    case .phasma: drawCape(c, t: t, speed: capeSpeed, color: C(0x16161A), edge: C(0x8A1A1A))
+    case .krennic: drawCape(c, t: t, speed: capeSpeed, color: C(0xE6E6DE), edge: C(0xC0C0B8))
     default: break
     }
 
@@ -339,6 +410,28 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     case .thrawn: drawThrawn(c, step: step, lift: breathe)
     case .hammerhead: drawHammerhead(c, lift: breathe)
     case .mse6: drawMouseDroid(c, t: t)
+    case .baylan: drawBaylan(c, t: lt, step: step, lift: breathe, idle: saber == nil && !walking)
+    case .shinHati: drawShinHati(c, step: step, lift: breathe)
+    case .id9: drawSeekerDroid(c, t: t)
+    case .grandInquisitor: drawGrandInquisitor(c, step: step, lift: breathe)
+    case .secondSister: drawSecondSister(c, step: step, lift: breathe)
+    case .bantha: drawBantha(c, t: lt, step: step, lift: breathe)
+    case .bibFortuna: drawBibFortuna(c, t: lt, lift: breathe)
+    case .watto: drawWatto(c, t: lt, lift: breathe)
+    case .moffGideon: drawMoffGideon(c, step: step, lift: breathe)
+    case .deathTrooper: drawDeathTrooper(c, step: step, lift: breathe)
+    case .scoutTrooper: drawScoutBike(c, t: t, lift: breathe)
+    case .ventress: drawVentress(c, step: step, lift: breathe)
+    case .savageOpress: drawSavageOpress(c, step: step, lift: breathe)
+    case .jangoFett: drawJangoFett(c, step: step, lift: breathe)
+    case .bossk: drawBossk(c, step: step, lift: breathe)
+    case .dengar: drawDengar(c, step: step, lift: breathe)
+    case .droideka: drawDroideka(c, t: t, walking: walking, fighting: mode == .working, lift: breathe)
+    case .phasma: drawPhasma(c, step: step, lift: breathe)
+    case .krennic: drawKrennic(c, step: step, lift: breathe)
+    case .tarkin: drawTarkin(c, step: step, lift: breathe)
+    case .fifthBrother: drawFifthBrother(c, step: step, lift: breathe)
+    case .reva: drawReva(c, step: step, lift: breathe)
     }
 
     // Weapon
@@ -347,7 +440,7 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
         let lit = saber != nil
         let angle = saber ?? 0
         switch who {
-        case .maul:
+        case .maul, .savageOpress:
             if lit {
                 drawSaber(c, t: t, angle: angle + 180, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, length: 15)
                 drawSaber(c, t: t, angle: angle, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, trail: trail, length: 15)
@@ -369,6 +462,36 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
             drawPike(c, angle: lit ? angle : -84)     // resting: held upright at its side, as they stand guard
         case .tusken:
             drawGaffi(c, angle: lit ? angle : -75)
+        case .baylan, .shinHati:
+            if lit {
+                drawSaber(c, t: t, angle: angle, core: C(0xFFF0D8), glow: C(0xFF8A1E), lit: true, trail: trail,
+                          length: who == .shinHati ? 18 : 20)
+            } else {
+                c.rect(36, 37, 2, 5, C(0xB9BEC8)); c.rect(36, 39, 2, 1, C(0x2A2A2F))
+            }
+        case .moffGideon:                                 // the Darksaber: a black blade with a white edge
+            if lit {
+                drawSaber(c, t: t, angle: angle, core: C(0x16161C), glow: C(0xDDE8FF), lit: true, trail: trail, length: 17)
+            } else {
+                c.rect(36, 37, 2, 5, C(0x3A3A42)); c.rect(36, 37, 2, 1, C(0xB9BEC8))
+            }
+        case .ventress:                                   // twin red sabers, the second from her other hand
+            if lit {
+                c.ox -= 24; c.oy += 1
+                drawSaber(c, t: t, angle: 180 - angle * 0.6 + 40, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, length: 15)
+                c.ox += 24; c.oy -= 1
+                drawSaber(c, t: t, angle: angle, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, trail: trail, length: 17)
+            } else {
+                c.rect(36, 37, 2, 5, C(0xB9BEC8)); c.rect(14, 36, 2, 5, C(0xB9BEC8))
+            }
+        case .grandInquisitor, .secondSister, .fifthBrother, .reva:   // a double blade on a ring-shaped hilt
+            if lit {
+                drawSaber(c, t: t, angle: angle + 180, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, length: 14)
+                drawSaber(c, t: t, angle: angle, core: C(0xFFE3E3), glow: C(0xFF1E2D), lit: true, trail: trail, length: 14)
+                drawInquisitorRing(c, x: Int(Sprite.hand.x) - 2, y: Int(Sprite.hand.y) - 2)
+            } else {
+                drawInquisitorRing(c, x: 35, y: 36)
+            }
         case .grievous:                               // four arms, four blades: two forward, two from the back hands
             let blue = (core: C(0xE6F4FF), glow: C(0x3D9BFF)), green = (core: C(0xEAFFEA), glow: C(0x3FE85A))
             if lit {
@@ -399,8 +522,15 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
         case .boba: drawEE3(c, x: 38, y: 30)
         case .rogr: drawE5(c, x: 39, y: 31)
         case .ig88: drawE11(c, x: 37, y: 30)
-        case .atst, .atat, .sebulba: break             // chin guns are part of the walker; the pod's flame jet too
-        case .cadBane, .thrawn: drawPistol(c, x: 40, y: 31)
+        case .atst, .atat, .sebulba, .scoutTrooper, .droideka: break   // built in: chin guns, flame jet, bike cannon, arms
+        case .cadBane, .thrawn, .krennic: drawPistol(c, x: 40, y: 31)
+        case .jangoFett: drawPistol(c, x: 40, y: 31, body: C(0x3A3A42), trim: C(0xB8BCC4))
+        case .dengar:
+            c.pattern(37, 30, ["......SSS........", ".......K.........", "KKKKKKKKKKKKKKKKK", "KKKKWW...........", "..KK............."],
+                      ["K": C(0x2E2E32), "S": C(0x5A5A64), "W": C(0x6A4A2A)])
+        case .phasma:
+            c.pattern(37, 30, ["......SSSL.....", ".......K.K.....", "KK.KKKKKKKKKKKK", "KKKKKKkKkKkKKK.", "....KK..MM.....", "....KK..MM....."],
+                      ["S": C(0x8A8E98), "L": C(0x7FC8FF), "K": C(0xC8CCD4), "k": C(0x8A8E98), "M": C(0xA8ACB4)])
         case .greedo:
             c.pattern(40, 31, [".KKKKK", "KKKKSK", "KK....", "KK...."], ["K": C(0x2A2A30), "S": C(0x8A8F9C)])
         default: drawE11(c, x: 37, y: 30)
@@ -434,8 +564,7 @@ func drawCape(_ c: PixelCanvas, t: Double, speed: Double, color: Px, edge: Px, e
     }
 }
 
-private func drawJetpack(_ c: PixelCanvas, t: Double, burning: Bool) {
-    let pack = C(0x7D8A6E), packShade = C(0x5E6A52)
+private func drawJetpack(_ c: PixelCanvas, t: Double, burning: Bool, pack: Px = C(0x7D8A6E), shade packShade: Px = C(0x5E6A52)) {
     for x in [13, 38] {
         c.rect(x, 23, 5, 11, pack)
         c.rect(x + 4, 23, 1, 11, packShade)

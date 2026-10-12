@@ -58,6 +58,20 @@ enum Location: String, CaseIterable {
         case .cadBane, .hammerhead: return .cantina
         case .thrawn: return .executor
         case .mse6: return .deathStar
+        case .baylan, .shinHati: return .jakku
+        case .id9: return .obiWanHut
+        case .grandInquisitor: return .tuskenDesert
+        case .secondSister: return .executor
+        case .bantha, .watto: return .tuskenDesert
+        case .bibFortuna: return .jabbasPalace
+        case .moffGideon, .bossk, .dengar: return .executor
+        case .deathTrooper, .krennic, .tarkin: return .deathStar
+        case .scoutTrooper: return .endor
+        case .ventress, .jangoFett: return .geonosis
+        case .savageOpress, .droideka: return .theed
+        case .phasma: return .supremacy
+        case .fifthBrother: return .tuskenDesert
+        case .reva: return .larsFarm
         }
     }
 
@@ -86,7 +100,10 @@ enum Location: String, CaseIterable {
         case .grogu: return .dagobah
         case .babuFrik, .gonk: return .sandcrawler
         case .mando: return .tuskenDesert
-        case .k2so: return .executor
+        case .k2so, .cassian: return .executor
+        case .bix, .pitDroid: return .sandcrawler
+        case .cobbVanth: return .tuskenDesert
+        case .kuiil: return .jakku
         }
     }
 

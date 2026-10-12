@@ -59,6 +59,18 @@ enum Cast: Hashable {
     /// Bolts ricochet off it (armour or a metal shell).
     var armoured: Bool { if case .villain(let l) = self { return l.armoured } else { return false } }
 
+    /// What it says now and then while leading a session: R0-GR acknowledges orders, Jabba laughs, Watto haggles, Tarkin gives the order, Kuiil has spoken.
+    var callout: String? {
+        switch self {
+        case .villain(.rogr): return "Roger roger!"
+        case .villain(.jabba): return "Ho ho ho!"
+        case .villain(.watto): return "No money, no parts, no deal!"
+        case .villain(.tarkin): return "You may fire when ready."
+        case .hero(.kuiil): return "I have spoken."
+        default: return nil
+        }
+    }
+
     var isHan: Bool { if case .hero(.han) = self { return true } else { return false } }
     var isGreedo: Bool { if case .villain(.greedo) = self { return true } else { return false } }
 

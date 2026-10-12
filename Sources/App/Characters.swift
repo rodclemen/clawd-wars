@@ -15,6 +15,7 @@ enum Sprite {
 enum Companion: Int, CaseIterable {
     case luke, han, leia, obiwan, r2d2, c3po, quigon, mace, yoda, jawa, chewie, rey, ahsoka, ewok, tauntaun
     case jarjar, lando, zorii, boKatan, maz, wedge, l337, monMothma, padme, ackbar, grogu, babuFrik, mando, k2so, gonk
+    case cassian, bix, cobbVanth, pitDroid, kuiil
 
     var name: String {
         switch self {
@@ -48,6 +49,11 @@ enum Companion: Int, CaseIterable {
         case .mando: return "The Mandalorian"
         case .k2so: return "K-2SO"
         case .gonk: return "GNK Power Droid"
+        case .cassian: return "Cassian Andor"
+        case .bix: return "Bix Caleen"
+        case .cobbVanth: return "Cobb Vanth"
+        case .pitDroid: return "Pit Droid"
+        case .kuiil: return "Kuiil"
         }
     }
 
@@ -73,6 +79,11 @@ enum Companion: Int, CaseIterable {
         case .grogu: return 23
         case .k2so: return 14
         case .gonk: return 23
+        case .cassian: return 22
+        case .bix: return 19
+        case .cobbVanth: return 22
+        case .pitDroid: return 16
+        case .kuiil: return 7
         }
     }
 
@@ -80,9 +91,9 @@ enum Companion: Int, CaseIterable {
     /// or anyone whose gown or robe already reaches the floor).
     var canSit: Bool {
         switch self {
-        case .r2d2, .tauntaun, .leia, .jawa, .monMothma, .grogu, .babuFrik, .gonk: return false
+        case .r2d2, .tauntaun, .leia, .jawa, .monMothma, .grogu, .babuFrik, .gonk, .pitDroid, .kuiil: return false
         case .luke, .han, .obiwan, .c3po, .quigon, .mace, .yoda, .chewie, .rey, .ahsoka, .ewok,
-             .jarjar, .lando, .zorii, .boKatan, .maz, .wedge, .l337, .padme, .ackbar, .mando, .k2so: return true
+             .jarjar, .lando, .zorii, .boKatan, .maz, .wedge, .l337, .padme, .ackbar, .mando, .k2so, .cassian, .bix, .cobbVanth: return true
         }
     }
 }
@@ -344,6 +355,11 @@ func drawCompanion(_ c: PixelCanvas, _ who: Companion, t: Double, walking: Bool,
     case .mando: drawMando(c, t: t, walking: walking, role: role)
     case .k2so: drawK2SO(c, t: t, walking: walking, role: role)
     case .gonk: drawGonk(c, t: t, walking: walking, role: role)
+    case .cassian: drawCassian(c, t: t, walking: walking, role: role)
+    case .bix: drawBix(c, t: t, walking: walking, role: role)
+    case .cobbVanth: drawCobbVanth(c, t: t, walking: walking, role: role)
+    case .pitDroid: drawPitDroid(c, t: t, walking: walking, role: role)
+    case .kuiil: drawKuiil(c, t: t, walking: walking, role: role)
     }
 }
 
@@ -487,11 +503,11 @@ func drawHood(_ c: PixelCanvas, _ main: Px, _ dark: Px) {
 /// Blaster agents: own target practice, firing at / getting zapped by an opponent, or cheering.
 /// Returns how far to lift the gun (recoil or cheer) and a sideways shake.
 func agentFire(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRole,
-                       period: Double, phase: Double, muzzleX: Int) -> (recoil: Int, shake: Int) {
+                       period: Double, phase: Double, muzzleX: Int, muzzleY: Int = 32) -> (recoil: Int, shake: Int) {
     if walking { return (0, 0) }
     switch role {
     case .shoot(let offset):
-        return (fireBlaster(c, t: t + offset, period: blasterPeriod, muzzleX: muzzleX, muzzleY: 32, bolt: false), 0)
+        return (fireBlaster(c, t: t + offset, period: blasterPeriod, muzzleX: muzzleX, muzzleY: muzzleY, bolt: false), 0)
     case .hit:
         return (0, noise(Int(t * 30)) > 0.5 ? 1 : -1)
     case .cheer:
@@ -499,7 +515,7 @@ func agentFire(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRole,
     case .rest, .ready:
         return (0, 0)                        // blaster lowered, not firing
     default:
-        return (fireBlaster(c, t: t + phase, period: period, muzzleX: muzzleX, muzzleY: 32), 0)
+        return (fireBlaster(c, t: t + phase, period: period, muzzleX: muzzleX, muzzleY: muzzleY), 0)
     }
 }
 

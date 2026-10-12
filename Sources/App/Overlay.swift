@@ -1134,10 +1134,9 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 bubbles.append((actor.key, actor.x, by, kind, actor.urgent, onRight, CGFloat(alpha)))
             }
 
-            // R0-GR acknowledges orders and Jabba laughs, now and then. Han and Greedo have words after a shot.
-            let callouts: [Leader: String] = [.rogr: "Roger roger!", .jabba: "Ho ho ho!"]
+            // Some sessions have a line they say now and then (`Cast.callout`). Han and Greedo have words after a shot.
             var line: String?, overHead = false   // Han's and Greedo's lines go over their heads, clear of the fight
-            if case .leader(.villain(let who)) = actor.kind, let said = callouts[who], actor.walkDir == 0,
+            if case .leader(let who) = actor.kind, let said = who.callout, actor.walkDir == 0,
                (t / 5 + actor.phase).truncatingRemainder(dividingBy: 1) < 0.3 { line = said }
             if let s = shot {
                 if actor.key == s.han, s.e >= GreedoShot.hanLine.from, s.e < GreedoShot.hanLine.to { line = GreedoShot.hanSays; overHead = true }
@@ -2279,7 +2278,25 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             case .cadBane: return "twin blasters"
             case .thrawn: return "blaster pistol"
             case .hammerhead: return "unarmed"
-            case .mse6: return "agent only"
+            case .mse6, .id9: return "agent only"
+            case .baylan, .shinHati: return "orange saber"
+            case .grandInquisitor, .secondSister: return "spinning double saber"
+            case .bantha: return "unarmed — Tusken mount"
+            case .bibFortuna: return "unarmed"
+            case .watto: return "unarmed — haggles"
+            case .moffGideon: return "the Darksaber"
+            case .deathTrooper: return "E-11D blaster"
+            case .scoutTrooper: return "speeder bike cannon"
+            case .ventress: return "twin red sabers"
+            case .savageOpress: return "double saber"
+            case .jangoFett: return "twin pistols"
+            case .bossk: return "blaster rifle"
+            case .dengar: return "long blaster rifle"
+            case .droideka: return "twin blasters, shield"
+            case .phasma: return "chrome blaster"
+            case .krennic: return "blaster pistol"
+            case .tarkin: return "unarmed — fires when ready"
+            case .fifthBrother, .reva: return "spinning double saber"
             }
         }
         for l in Leader.allCases where !StatusStore.agentOnly.contains(l.rawValue) {

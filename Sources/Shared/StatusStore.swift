@@ -109,8 +109,8 @@ enum StatusPaths {
 }
 
 enum StatusStore {
-    static let companionCount = 30
-    static let leaderCount = 24
+    static let companionCount = 35
+    static let leaderCount = 46
 
     // Stale timeouts: Stop never fires when the user hits Esc, so states must decay on their own.
     static let thinkingTTL: Double = 10 * 60
@@ -393,8 +393,8 @@ enum StatusStore {
     static func isDark(_ cast: Int) -> Bool { cast < heroBase }
     static var darkCast: [Int] { Array(0..<leaderCount) }
     static var lightCast: [Int] { Array(heroBase..<(heroBase + companionCount)) }
-    /// Only ever an agent, never a session: the MSE-6 mouse droid.
-    static let agentOnly: Set<Int> = [23]
+    /// Only ever an agent, never a session: the MSE-6 mouse droid and the ID9 seeker droid.
+    static let agentOnly: Set<Int> = [23, 26]
     /// Who can lead a session (everyone but the agent-only).
     static var leaderCast: [Int] { (darkCast + lightCast).filter { !agentOnly.contains($0) } }
 
