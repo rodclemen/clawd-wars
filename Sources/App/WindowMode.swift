@@ -470,9 +470,9 @@ final class HeaderView: NSView, NSViewToolTipOwner {
             (base.blended(withFraction: 0.45, of: .black) ?? base).setFill()
             b.fill()
         } else {
-            // No bar: the scene shows through, with a soft shade at the very top so the title reads on bright places
-            // (Hoth, Jakku) without looking like a bar.
-            NSGradient(starting: NSColor(white: 0, alpha: 0.32), ending: NSColor(white: 0, alpha: 0))?.draw(in: b, angle: -90)
+            // The bar at 15% (85% see-through): the scene shows through, with just a hint of the bar behind the title.
+            (base.blended(withFraction: 0.45, of: .black) ?? base).withAlphaComponent(0.15).setFill()
+            b.fill()
         }
         // Title and buttons cast a soft shadow, so they stand off any background.
         let shadow = NSShadow()
