@@ -171,6 +171,7 @@ Forgot one? **Settings → Status Symbols** in the menu has the same key, drawn 
 
 - **Several Claudes at once** — each gets its own villain and project label; sessions that predate the hooks are still found from the process table.
 - **Double-click the menu bar helmet** to hide or show Clawd Wars; a single click opens the menu as usual.
+- **Settings → Monochrome Menu Bar Icon** swaps the colour helmet for a one-colour one that macOS tints to match the menu bar, like its own icons.
 - **Hover** any villain or agent for a details card; agents also show which Claude they work for.
 - **Newcomers walk in** from the side of the screen, one at a time, instead of popping up.
 - **Drag** the crew anywhere — they'll stand right on the bottom edge of either monitor. Bubbles and labels never go off-screen; if the line is too long, everyone walks over to make room.

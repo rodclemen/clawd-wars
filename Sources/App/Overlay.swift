@@ -1664,14 +1664,8 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     /// double-click time has passed; right-click (or ⌃-click) opens it straight away.
     private func installStatusItem() {
         let item = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        let c = PixelCanvas(Sprite.width, Sprite.height)
-        drawLeader(c, .vader, t: 0, mode: .idle, walking: false)
-        c.addOutline(C(0xFFFFFF, 0.92))   // the black helmet would vanish on a dark menu bar
-        if let cg = c.makeImage()?.cropping(to: CGRect(x: 14, y: 13, width: 28, height: 26)) {
-            let img = NSImage(cgImage: cg, size: NSSize(width: 19, height: 18))
-            item.button?.image = img
-            item.button?.imageScaling = .scaleProportionallyDown
-        }
+        item.button?.image = statusIcon(mono: monoMenuBarIcon)
+        item.button?.imageScaling = .scaleProportionallyDown
         item.button?.toolTip = "Clawd Wars — double-click to hide or show"
         statusMenu.delegate = self
         item.button?.target = self
@@ -1684,6 +1678,43 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 FileHandle.standardError.write("status item: visible=\(item.isVisible) window=\(w?.frame ?? .zero) onscreen=\(w?.isVisible ?? false)\n".data(using: .utf8)!)
             }
         }
+    }
+
+    /// Settings → Monochrome Menu Bar Icon: the helmet as a template image, tinted by macOS like the system icons.
+    private var monoMenuBarIcon: Bool {
+        get { UserDefaults.standard.bool(forKey: "menuBarMono") }
+        set { UserDefaults.standard.set(newValue, forKey: "menuBarMono") }
+    }
+
+    @objc private func toggleMonoMenuBarIcon() {
+        monoMenuBarIcon.toggle()
+        statusItem?.button?.image = statusIcon(mono: monoMenuBarIcon)
+    }
+
+    /// Vader's helmet for the menu bar. In colour it gets a white outline (the black helmet would vanish on a dark
+    /// menu bar); monochrome keeps only its dark pixels, so the face under the helmet is cut out with its eyes left
+    /// in, and macOS tints what's left to match the menu bar.
+    private func statusIcon(mono: Bool) -> NSImage? {
+        let c = PixelCanvas(Sprite.width, Sprite.height)
+        drawLeader(c, .vader, t: 0, mode: .idle, walking: false)
+        var icon = c
+        if mono {
+            icon = PixelCanvas(c.w, c.h)
+            let b = c.buf
+            for y in 0..<c.h {
+                for x in 0..<c.w {
+                    let i = (y * c.w + x) * 4
+                    let luma = (Int(b[i]) * 3 + Int(b[i + 1]) * 6 + Int(b[i + 2])) / 10
+                    if b[i + 3] > 0, luma < 60 { icon.px(x, y, Px(r: 0, g: 0, b: 0, a: b[i + 3])) }
+                }
+            }
+        } else {
+            c.addOutline(C(0xFFFFFF, 0.92))
+        }
+        guard let cg = icon.makeImage()?.cropping(to: CGRect(x: 14, y: 13, width: 28, height: 26)) else { return nil }
+        let img = NSImage(cgImage: cg, size: NSSize(width: 19, height: 18))
+        img.isTemplate = mono
+        return img
     }
 
     /// A click on the helmet this soon after the menu opened counts as a double-click. Our own, not the system's
@@ -2122,6 +2153,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                    on: UserDefaults.standard.object(forKey: "autoHeight") as? Bool ?? true)
         sm.addItem(.separator())
         sm.addItem(action: "Show Dock Icon", #selector(toggleDock), target: self, on: showInDock)
+        sm.addItem(action: "Monochrome Menu Bar Icon", #selector(toggleMonoMenuBarIcon), target: self, on: monoMenuBarIcon)
         sm.addItem(action: "Launch at Login", #selector(toggleLogin), target: self,
                    on: SMAppService.mainApp.status == .enabled)
         sm.addItem(.separator())
