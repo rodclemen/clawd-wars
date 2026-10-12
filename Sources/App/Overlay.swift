@@ -2024,6 +2024,8 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     private func settingsMenu(size: NSMenuItem) -> NSMenuItem {
         let root = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
         let sm = NSMenu()
+        sm.addItem(statusSymbolsMenu())
+        sm.addItem(.separator())
         // In the window the crew always fits the window, so Size only applies on the desktop.
         if windowMode { sm.addItem(disabled: "Size (desktop only)") } else { sm.addItem(size) }
         sm.addItem(action: windowMode ? "Show Project Names in Window" : "Show Project Names on Desktop",
@@ -2066,6 +2068,20 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
             }
         }
         root.submenu = sm
+        return root
+    }
+
+    /// Settings → Status Symbols: a key to the bubbles, poses and colours (`Legend`). Nothing to pick, so its rows are
+    /// enabled only to keep their text at full strength.
+    private func statusSymbolsMenu() -> NSMenuItem {
+        let root = NSMenuItem(title: "Status Symbols", action: nil, keyEquivalent: "")
+        let sub = NSMenu()
+        sub.autoenablesItems = false
+        for (i, section) in Legend.sections.enumerated() {
+            if i > 0 { sub.addItem(.separator()) }
+            section.forEach { sub.addItem(Legend.menuItem($0)) }
+        }
+        root.submenu = sub
         return root
     }
 
