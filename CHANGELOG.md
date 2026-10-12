@@ -1,5 +1,21 @@
 # Changelog
 
+## 2.27.1 — 2026-10-12
+
+### Added
+- **Han shoots first.** When Han Solo and Greedo are both on stage, sessions or agents, they always face off. They're paired before any other fight, so everyone between them walks over to make room. Their shoot-out runs as usual until, at random, Greedo doesn't duck (first 8–25 s after they meet, then every 30–75 s). Han's bolt knocks him into a backward somersault and onto his back, legs kicking in the air, dizzy stars circling and smoke rising from his vest. His own shot goes off into the sky. He stays down for three seconds while Han lowers his blaster and says "Sorry about the mess.", then rolls back onto his feet, says something ("That hurt!", "Ow! Maclunkey…", "Han shot first!"…) and walks back to his spot. On the desktop and in the window (`GreedoShot`, `Sources/App/Greedo.swift`). The screen saver pairs them too, but the shot doesn't play there. `CLAWD_GREEDO_EVERY=<seconds>` sets the interval for testing.
+- **Settings → Status Symbols:** a key to everything over a character's head and around the crew: working, thinking, needs you (the red “!”), idle, asleep (zZz), no live status (“?”), the yellow you're-here marker, outline colours per AI, label colours per project, the ⚠︎ banner and the red OFFLINE banner. Each row is drawn with the same code as the crew (`Legend`), so the key can't drift from what's on screen.
+- **`./build.sh --no-install`** builds and launches the copy in `build/` without copying anything to /Applications or touching any AI's hooks. It quits a running Clawd Wars first, since only one runs at a time. It's for people who'd rather run what they compiled themselves than a prebuilt app; a `build/` copy never takes over hooks that still point at a working app.
+
+### Fixed
+- **It builds again with Swift 6.2 and 6.3.** Two pixel-art expressions went over the type checker's limit: the accent palette (`Accents.palette`, a list of hex literals piped through `.map`) and the corner bounds of a ship sprite in `Locations.swift` (`.pi` arithmetic and a tuple-returning closure). The second one also produced nine knock-on errors (`cannot infer contextual base`, key paths, `Float16 * Double`). Both now state their types (`as [Int]`, `let a: Double`, a typed closure). The art is unchanged.
+
+### Docs
+- **The README says what you need to build from source, and what to do when it fails.** A new "Building from source: what you need" section lists the requirements: macOS 13+, Swift 6.2+ from the Command Line Tools or Xcode, the macOS tools `build.sh` uses, no third-party dependencies. It gives the toolchains it was tested with and explains ad-hoc signing (no developer account needed; macOS forgets the Accessibility grant on every rebuild). It covers the common failures: no developer path, the Xcode licence, the wrong `xcode-select` toolchain, and the "unable to type-check this expression" error (a bug in the code, not your setup; only the first error counts). `llms.txt` has the same requirements, plus how to write art code that stays under the limit.
+- **The README tells people who don't want a prebuilt app how to build it themselves**: Command Line Tools only (no Xcode), then `./build.sh --no-install`, including what happens to hooks connected from the `build/` copy.
+- **The README's symbol table points to Settings → Status Symbols**, and calls the focus marker what it looks like (a bobbing yellow marker, not a ◆).
+- **The README has a table of contents** after the intro, linking every section (and the new build-requirements section under Install).
+
 ## 2.27.0 — 2026-10-11
 
 ### Added

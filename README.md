@@ -27,6 +27,21 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 
 ---
 
+## Contents
+
+- [Why you want this](#why-you-want-this)
+- [Claude vs Codex vs everyone](#claude-vs-codex-vs-everyone)
+- [The roster](#the-roster)
+- [Window mode](#window-mode)
+- [Screen saver](#screen-saver)
+- [The little things](#the-little-things)
+- [Install](#install)
+  - [Building from source: what you need](#building-from-source-what-you-need)
+- [How it works](#how-it-works)
+- [Uninstall](#uninstall)
+- [Contributing](#contributing)
+- [License](#license)
+
 ## Why you want this
 
 You run Claude Code in three terminals. One is thinking, one is waiting for your permission, one finished ten minutes ago and you didn't notice. You alt-tab around to find out.
@@ -43,7 +58,7 @@ You run Claude Code in three terminals. One is thinking, one is waiting for your
 
 It sits on the bottom of your screen, above every window, and it's click-through everywhere except the characters. No dashboard to open, no tab to check. It's just… there, quietly having a war.
 
-And it's genuinely fun. Run two Claudes and they duel. Spawn a Han Solo and he shoots at Vader, who deflects every bolt into the sky. Put two gunslingers together and it's a proper shoot-out: they duck, bolts collide mid-air, shields flash, and Boba's armour sends shots pinging off into the sky. The Emperor catches Force lightning on Kylo's crossguard. Jabba laughs at all of it.
+And it's genuinely fun. Run two Claudes and they duel. Spawn a Han Solo and he shoots at Vader, who deflects every bolt into the sky. Put two gunslingers together and it's a proper shoot-out: they duck, bolts collide mid-air, shields flash, and Boba's armour sends shots pinging off into the sky. The Emperor catches Force lightning on Kylo's crossguard. And whenever Han Solo and Greedo are both on stage, everyone else shuffles aside so the two of them can face off. Every so often Greedo doesn't duck in time, and Han shoots first: Greedo goes head over heels, lies on his back with his legs in the air and stars round his head for three seconds while Han says *"Sorry about the mess."*, then picks himself up with something to say about it. Jabba laughs at all of it.
 
 ## Claude vs Codex vs everyone
 
@@ -72,9 +87,10 @@ Blasters are drawn from the film props — Han's DL-44, Leia's Defender, the Sto
 | Force lightning vs saber | the blade catches the lightning |
 | lightning vs blaster | the gunner gets zapped |
 | blaster vs blaster | a proper shoot-out — they duck, bolts collide mid-air, shields flash, and bolts ping off armour |
+| Han Solo vs Greedo | always paired, wherever they are in the line; now and then Han shoots first and Greedo hits the floor |
 | odd one out | cheers the others on, with sparkles |
 
-Claudes fight Claudes, agents fight agents, and leftovers pair up or cheer. R2-D2, C-3PO and the tauntaun stay out of it.
+Han and Greedo find each other first. Then Claudes fight Claudes, agents fight agents, and leftovers pair up or cheer. R2-D2, C-3PO and the tauntaun stay out of it.
 
 Two gunslingers never just shoot each other — most bolts get saved:
 
@@ -134,6 +150,8 @@ Hover over anyone for the details — what that session is doing right now, your
   <img src="docs/hover.png" alt="Hover card over Darth Vader" width="640">
 </p>
 
+Forgot one? **Settings → Status Symbols** in the menu has the same key, drawn with the app's own sprites.
+
 | You see | It means |
 |---|---|
 | lightsaber kata | Claude is running tools |
@@ -146,7 +164,7 @@ Hover over anyone for the details — what that session is doing right now, your
 | `?` and APPROVE IN /hooks | a Codex session is working but its hook hasn't been approved yet — type `/hooks` in Codex and approve Clawd Wars |
 | banner + ⚠︎ menu item | an AI on your Mac isn't connected, or one of its sessions isn't reporting; the menu item fixes it (connect, or jump to the session) |
 | red OFFLINE banner | the status file can't be read — never silently stale |
-| bobbing yellow ◆ | the Claude whose terminal you're looking at right now |
+| bobbing yellow marker | the Claude whose terminal you're looking at right now |
 | matching label colours | a Claude and its agents share their project's colour |
 | label above the head | the project (Claudes) or the task (agents) |
 | GitHub / GitLab / Local pill | where the project's git remote lives, each host in its own colour (cards in the window); the project is named after the repo, or its folder when there's no remote |
@@ -177,18 +195,51 @@ brew install --cask rodclemen/tap/clawd-wars
 
 Or download the zip from [Releases](https://github.com/rodclemen/clawd-wars/releases), unzip it and drag **Clawd Wars** to Applications. On first launch it offers to connect every supported AI it finds — Claude Code, Codex, Qwen Code, Gemini CLI, Copilot CLI — adding a small hook to each one's settings and keeping a backup.
 
-**From source** (needs Xcode Command Line Tools — `xcode-select --install`):
+**From source:**
 
 ```sh
 git clone https://github.com/rodclemen/clawd-wars.git
 cd clawd-wars
 ./build.sh            # build, install "Clawd Wars.app" to /Applications, refresh the hooks of AIs you've connected, launch
 ./build.sh --no-hooks # the same, but leave every AI's settings alone
+./build.sh --no-install # build and run the copy in build/: nothing goes into /Applications, no AI's settings change
 ```
+
+> **Don't want to run a prebuilt app?** Build it yourself. You don't need Xcode, only Apple's free Command Line Tools:
+>
+> ```sh
+> xcode-select --install     # one time: a macOS dialog installs the tools
+> git clone https://github.com/rodclemen/clawd-wars.git && cd clawd-wars
+> ./build.sh --no-install    # compiled on your Mac from the source you can read, and run from build/
+> ```
+>
+> Nothing is installed and no AI's settings change until you connect one from the app's menu. If you do connect from the `build/` copy, the hooks point into `build/`: rebuilding replaces that folder (sessions miss a few seconds of updates), and deleting it leaves the hooks pointing at nothing (remove them first with Settings → Remove … Hooks). When you're happy with it, `./build.sh` installs it to /Applications and points the connected hooks there.
 
 Claude Code sessions that were already running pick up the hooks after a restart (`/exit`, then `claude --continue`). Until then they still show up — as a villain with a `?`.
 
 Clicking to jump to a session in Terminal or iTerm2 asks once for **Automation** permission (Apple Events) to control that terminal; jumping to an editor (VS Code, Cursor) asks once for **Accessibility** permission.
+
+### Building from source: what you need
+
+There are no packages to install: no Homebrew, SwiftPM, CocoaPods or Xcode project. `build.sh` calls `swiftc` directly and uses only tools that come with macOS or Apple's developer tools.
+
+| Need | Why | Check | Get it |
+| --- | --- | --- | --- |
+| macOS 13 or later | the app's deployment target | `sw_vers` | — |
+| Swift 6.2 or later (Swift 5 language mode) | compiles everything | `swiftc --version` | `xcode-select --install` (Command Line Tools) **or** Xcode from the App Store. Either works: Xcode isn't required. |
+| `lipo`, `codesign`, `sips`, `tiffutil`, `iconutil`, `security` | universal binaries, signing, icon and screen-saver thumbnail | `which lipo codesign` | `lipo` comes with the developer tools above; the others ship with macOS |
+| `zsh` | `build.sh` is a zsh script | — | macOS's default shell |
+
+Tested with Swift 6.2.3 (Command Line Tools 26.2) and Swift 6.3.3 (Xcode 26.6) on macOS 26, on Apple Silicon. A local build compiles for your Mac's architecture only; `--release` builds a universal binary and needs a **Developer ID** certificate (only the maintainer needs that).
+
+**Signing.** You don't need an Apple developer account. `build.sh` signs with any `Apple Development` or `Developer ID` identity in your keychain, and falls back to ad-hoc signing (it prints `signed with: ad-hoc`). That works fine, with one catch: macOS forgets an ad-hoc app's **Accessibility** permission every time you rebuild, so jumping to VS Code or Cursor asks again after each `./build.sh`. Signing in to Xcode with a free Apple ID (Xcode → Settings → Accounts) creates an Apple Development identity and avoids this.
+
+**If the build fails:**
+
+- **`xcrun: error: invalid active developer path`** or **`swiftc: command not found`**: no developer tools are installed. Run `xcode-select --install`.
+- **`You have not agreed to the Xcode license agreements`**: you just installed or updated Xcode. Run `sudo xcodebuild -license accept`, or open Xcode once.
+- **The wrong toolchain is being used** (for example, an old Xcode after installing a new one): `xcode-select -p` shows which one is active and `swiftc --version` shows its Swift version. Switch with `sudo xcode-select -s /Applications/Xcode.app` or `sudo xcode-select -s /Library/Developer/CommandLineTools`.
+- **`the compiler is unable to type-check this expression in reasonable time`**, followed by a string of other errors in the same file (`cannot infer contextual base…`, `cannot infer key path type…`, `binary operator '*' cannot be applied to operands of type 'Float16' and 'Double'`): this is a bug in Clawd Wars, not in your setup. All the pixel art is written as long numeric expressions, and an expression whose types aren't stated can exceed the type checker's limits. That limit is fixed, not timed, so a faster Mac or a retry won't get past it. Only the first error matters; the rest follow from it. The fix is to state the type, for example `[0xFF8A3D, …] as [Int]` or `let a: Double = …`. Please open an issue with your `swiftc --version`.
 
 ## How it works
 
