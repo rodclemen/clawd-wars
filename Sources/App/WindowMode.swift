@@ -116,8 +116,6 @@ final class ClawdWindow: NSObject, NSWindowDelegate {
         content.addSubview(board)
         content.addSubview(header)
         header.controller = controller
-        header.scene = sceneView
-        sceneView.onDarkTopChange = { [weak self] in self?.header.needsDisplay = true }
         layout()
         applyPin()
     }
@@ -258,7 +256,8 @@ final class ClawdWindow: NSObject, NSWindowDelegate {
         let hh = Self.headerHeight * k, sh = sceneHeight * k
         header.frame = NSRect(x: 0, y: b.height - hh, width: b.width, height: hh)
         header.autoresizingMask = [.width, .minYMargin]
-        sceneView.frame = NSRect(x: 0, y: b.height - hh - sh, width: b.width, height: sh)
+        // The scene runs up under the header, which only draws its title and buttons on top: more of the place.
+        sceneView.frame = NSRect(x: 0, y: b.height - hh - sh, width: b.width, height: sh + hh)
         sceneView.autoresizingMask = [.width, .minYMargin]
         roomView.frame = sceneView.frame
         roomView.autoresizingMask = sceneView.autoresizingMask
@@ -273,7 +272,7 @@ final class ClawdWindow: NSObject, NSWindowDelegate {
     private func applyScale() {
         let k = Self.scale
         header.setBoundsSize(NSSize(width: header.frame.width / k, height: Self.headerHeight))
-        sceneView.setBoundsSize(NSSize(width: sceneView.frame.width / k, height: sceneHeight))
+        sceneView.setBoundsSize(NSSize(width: sceneView.frame.width / k, height: Self.headerHeight + sceneHeight))
         roomView.setBoundsSize(sceneView.bounds.size)
         cardsView.frame.size.width = scroll.contentView.bounds.width
         cardsView.relayout()   // always: the Compact Window changes the cards' heights, not just their width
@@ -409,7 +408,6 @@ final class ThemedScroller: NSScroller {
 /// The traffic lights sit on its left; drag anywhere else on it to move the window.
 final class HeaderView: NSView, NSViewToolTipOwner {
     weak var controller: OverlayController?
-    weak var scene: SceneView?
     var onClose: (() -> Void)?
     var onToggleList: (() -> Void)?
 
@@ -419,9 +417,7 @@ final class HeaderView: NSView, NSViewToolTipOwner {
     private var hovered: Button?
     private static let buttonSize: CGFloat = 20
 
-    /// The vertical centre of the bar as you see it. Some scenes start with a dark ceiling (the cantina's beam) that
-    /// reads as part of the bar, so centre on bar + that band rather than on the bar alone.
-    private var midY: CGFloat { (bounds.height - (ClawdWindow.view == .board ? 0 : min(scene?.darkTop ?? 0, 10))) / 2 }
+    private var midY: CGFloat { bounds.height / 2 }
 
     /// Our own buttons on the right (the system traffic lights are hidden): minimize, then close.
     private func rect(_ b: Button) -> NSRect {
@@ -469,16 +465,28 @@ final class HeaderView: NSView, NSViewToolTipOwner {
     override func draw(_ dirtyRect: NSRect) {
         let b = bounds
         let base = controller?.location.panel ?? NSColor(white: 0.12, alpha: 1)
-        (base.blended(withFraction: 0.45, of: .black) ?? base).setFill()
-        b.fill()
-        // a faint highlight of the location's tone along the top
-        (base.blended(withFraction: 0.15, of: .white) ?? base).withAlphaComponent(0.35).setFill()
-        NSRect(x: 0, y: b.height - 1, width: b.width, height: 1).fill()
+        if ClawdWindow.view == .board {
+            // Over the screen-saver view, which has its own place name and clock: a solid bar keeps them apart.
+            (base.blended(withFraction: 0.45, of: .black) ?? base).setFill()
+            b.fill()
+        } else {
+            // No bar: the scene shows through, with a soft shade at the very top so the title reads on bright places
+            // (Hoth, Jakku) without looking like a bar.
+            NSGradient(starting: NSColor(white: 0, alpha: 0.32), ending: NSColor(white: 0, alpha: 0))?.draw(in: b, angle: -90)
+        }
+        // Title and buttons cast a soft shadow, so they stand off any background.
+        let shadow = NSShadow()
+        shadow.shadowColor = NSColor(white: 0, alpha: 0.85)
+        shadow.shadowBlurRadius = 3
+        shadow.shadowOffset = NSSize(width: 0, height: -1)
+        NSGraphicsContext.saveGraphicsState()
+        shadow.set()
+        defer { NSGraphicsContext.restoreGraphicsState() }
 
         // Where the crew is, on the left.
         if let where_ = controller?.location.name {
             let label = NSAttributedString(string: where_.uppercased(), attributes: [
-                .font: NSFont.systemFont(ofSize: 10.5, weight: .semibold), .foregroundColor: NSColor(white: 0.78, alpha: 1),
+                .font: NSFont.systemFont(ofSize: 10.5, weight: .semibold), .foregroundColor: NSColor(white: 0.92, alpha: 1),
                 .kern: 1.2])
             label.draw(at: NSPoint(x: 14, y: (midY - label.size().height / 2).rounded()))
         }
@@ -511,7 +519,7 @@ final class HeaderView: NSView, NSViewToolTipOwner {
             path.lineWidth = 1.7
             path.lineCapStyle = .round
             path.lineJoinStyle = .round
-            NSColor(white: hovered == button ? 1 : 0.72, alpha: 1).setStroke()
+            NSColor(white: hovered == button ? 1 : 0.88, alpha: 1).setStroke()
             path.stroke()
         }
     }
@@ -545,9 +553,6 @@ final class RoomView: NSView {
 final class SceneView: NSView {
     weak var controller: OverlayController?
     weak var roomView: RoomView?
-    var onDarkTopChange: (() -> Void)?
-    /// How many points at the top of the scene are a dark band that looks like part of the title bar.
-    private(set) var darkTop: CGFloat = 0
     private var room: (size: NSSize, location: Location, image: CGImage)?
     /// The animated layer's canvas, reused every frame until the scene's pixel size changes.
     private var live: PixelCanvas?
@@ -590,21 +595,6 @@ final class SceneView: NSView {
             roomView?.drawRect = g.drawRect
             roomView?.image = img
         }
-        // A dark band along the top (row 0 is the top) that reads as part of the title bar: about as dark as the
-        // bar, and ending within 8 rows on something clearly brighter (the cantina's beam, the Death Star's ceiling).
-        // A scene that's just dark all the way down (Endor's canopy, Theed at night) has no band: centring on it
-        // pushed the title and buttons low. Minus whatever overhangs the view and is clipped.
-        var barLum = 0.05
-        if let bar = location.panel.blended(withFraction: 0.45, of: .black)?.usingColorSpace(.sRGB) {
-            let r: Double = 0.2126 * Double(bar.redComponent), gr: Double = 0.7152 * Double(bar.greenComponent)
-            let b: Double = 0.0722 * Double(bar.blueComponent)
-            barLum = r + gr + b
-        }
-        var rows = 0
-        while rows < min(g.ph, 8), c.rowLuminance(rows) < barLum + 0.12 { rows += 1 }
-        if rows == 0 || rows >= min(g.ph, 8) || c.rowLuminance(rows) < c.rowLuminance(rows - 1) + 0.15 { rows = 0 }
-        let dark = max(0, CGFloat(rows) * Cantina.pixel - (CGFloat(g.ph) * Cantina.pixel - bounds.height))
-        if dark != darkTop { darkTop = dark; onDarkTopChange?() }
     }
 
     /// What moves there (the cantina band, sarlacc tentacles, laser gates, fog…) and the crew, as one frame.
