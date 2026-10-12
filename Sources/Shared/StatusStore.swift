@@ -524,9 +524,20 @@ enum StatusStore {
         }
     }
 
-    static func mood(_ rec: SessionRecord, now: Double) -> Mood {
+    static func mood(_ rec: SessionRecord, id: String, now: Double) -> Mood {
         let age = now - rec.updated
         let m = Mood(rawValue: rec.state) ?? .idle
+        if m == .waiting, (rec.assistant ?? "claude") == "claude" {
+            // A question or permission prompt waits as long as it takes: the session's process is checked elsewhere,
+            // so a dead one is already gone. Pressing Esc fires no hook, but Claude Code writes the interruption
+            // to the transcript, which ends the wait at once. Can't read the transcript (the screen saver's
+            // sandbox): the old timeout.
+            switch interrupted(sessionID: id, since: rec.since ?? rec.updated) {
+            case true?: return .idle
+            case false?: return .waiting
+            case nil: break
+            }
+        }
         switch m {
         case .thinking where age > thinkingTTL, .working where age > workingTTL, .waiting where age > waitingTTL:
             return .idle
@@ -535,6 +546,43 @@ enum StatusStore {
         default:
             return m
         }
+    }
+
+    private static var transcripts: [String: URL] = [:]
+    private static var interruptCache: [String: (modified: Date, since: Double, result: Bool)] = [:]
+
+    /// Whether the user interrupted Claude Code session `sessionID` (Esc, "[Request interrupted by user…]" in its
+    /// transcript) after `since`; nil when the transcript can't be found or read. Re-read only when the file changes.
+    static func interrupted(sessionID: String, since: Double) -> Bool? {
+        let fm = FileManager.default
+        if transcripts[sessionID] == nil {
+            let root = fm.homeDirectoryForCurrentUser.appendingPathComponent(".claude/projects")
+            for dir in (try? fm.contentsOfDirectory(at: root, includingPropertiesForKeys: nil)) ?? [] {
+                let f = dir.appendingPathComponent(sessionID + ".jsonl")
+                if fm.fileExists(atPath: f.path) { transcripts[sessionID] = f; break }
+            }
+        }
+        guard let url = transcripts[sessionID],
+              let modified = (try? fm.attributesOfItem(atPath: url.path))?[.modificationDate] as? Date else { return nil }
+        if let hit = interruptCache[sessionID], hit.modified == modified, hit.since == since { return hit.result }
+        // Nothing written since the question: still waiting. Otherwise look at the newest interruption in the tail
+        // (the real entry, unescaped: a command that merely mentions it is stored with escaped quotes).
+        var result = false
+        if modified.timeIntervalSince1970 > since + 0.5, let h = try? FileHandle(forReadingFrom: url) {
+            defer { try? h.close() }
+            let size = (try? h.seekToEnd()) ?? 0
+            try? h.seek(toOffset: size > 32_768 ? size - 32_768 : 0)
+            let tail = String(decoding: h.readDataToEndOfFile(), as: UTF8.self)
+            if let line = tail.split(separator: "\n").last(where: { $0.contains(#""text":"[Request interrupted by user"#) }),
+               let r = line.range(of: #""timestamp":"([^"]+)""#, options: .regularExpression) {
+                let stamp = line[r].dropFirst(13).dropLast()
+                let iso = ISO8601DateFormatter()
+                iso.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+                if let when = iso.date(from: String(stamp)) { result = when.timeIntervalSince1970 > since }
+            }
+        }
+        interruptCache[sessionID] = (modified, since, result)
+        return result
     }
 
     /// A session's name: the repo's, when it has a remote; otherwise its folder's.
@@ -579,7 +627,7 @@ enum StatusStore {
             let git = cwd.flatMap { GitRemote.of($0, now: now) }
             result.append(SessionSnapshot(id: id, leader: leader,
                                           project: projectName(cwd: cwd, git: git) ?? rec.project ?? "",
-                                          mood: mood(rec, now: now), agents: [], pid: rec.pid, record: rec,
+                                          mood: mood(rec, id: id, now: now), agents: [], pid: rec.pid, record: rec,
                                           assistant: assistantOf(rec), cwd: cwd, remote: git?.host,
                                           client: rec.client ?? processes?.first { $0.pid == rec.pid }?.client))
         }

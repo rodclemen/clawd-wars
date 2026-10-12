@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.28.2 — 2026-10-12
+
+### Fixed
+- **"Needs you" no longer gives up after 15 minutes.** A Claude Code session waiting on a question or a permission prompt was treated as idle once the wait passed 15 minutes (`waitingTTL`): the red "!" went away and the character sat down and fell asleep, though it was still waiting for you. That timeout was there because pressing Esc fires no hook, so an abandoned prompt would otherwise say "needs you" for good. Now the app reads the session's transcript instead (`StatusStore.interrupted`): Claude Code writes "[Request interrupted by user…]" there on Esc, so an interrupted prompt stands down straight away (before, it lingered up to 15 minutes), and one that's still open keeps asking for as long as it takes. A dead session was already dropped by its process check. Where the transcript can't be read (Codex and the other AIs, the screen saver's sandbox) the 15-minute timeout still applies. The transcript is found once per session and re-read only when it changes, from its last 32 KB.
+
 ## 2.28.1 — 2026-10-12
 
 ### Added

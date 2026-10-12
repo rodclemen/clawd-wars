@@ -50,7 +50,7 @@ You run Claude Code in three terminals. One is thinking, one is waiting for your
 
 - 🗡️ **Working?** Your Claude swings a lightsaber.
 - 💭 **Thinking?** A thought bubble.
-- ❗ **Needs you?** A red `!` — and if you ignore it for a minute, it starts jumping up and down.
+- ❗ **Needs you?** A red `!` — and if you ignore it for a minute, it starts jumping up and down. It keeps asking until you answer, however long that takes; press Esc instead and it stands down.
 - 😴 **Done and idle?** It stops fighting and stands about with habits of its own every 10–20 seconds: it looks over its shoulder, shifts its weight, lights and spins its saber, or raises its blaster and blows the smoke off. Some have a move all their own: R2-D2 plays Leia's message, C-3PO throws his arms up, Han spins his blaster and holsters it, Grogu eats a cookie, Vader works his chest panel, a stormtrooper bumps his head, Kylo throws a tantrum, the Rancor roars, and more. (The Royal Guard doesn't fidget at all.) After a couple of minutes it sits down; after five it's asleep (zZz).
 - 🧑‍🚀 **Spawned subagents?** Rebels march in one by one, each labelled with *what it's doing* — and they leave when they finish. (When Han's done, the Millennium Falcon lands, he walks up the ramp, and it flies off.)
 - 🔍 **Want details?** Hover any character: status, how long, the tool it's running right now, your last prompt.
