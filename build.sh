@@ -3,6 +3,7 @@
 # It never connects a new AI: the app offers that, and Settings in its menu does it.
 #   ./build.sh                     build + install + refresh connected hooks + launch
 #   ./build.sh --no-hooks          build + install + launch (leave every AI's settings alone)
+#   ./build.sh --no-install        build + launch the copy in build/ (nothing copied to /Applications, hooks left alone)
 #   ./build.sh --release <version> universal (arm64 + x86_64) build into build/, signed for distribution;
 #                                  no install, no hooks (used by release.sh)
 set -euo pipefail
@@ -14,6 +15,7 @@ VERSION=""
 while [[ $# -gt 0 ]]; do
     case "$1" in
         --no-hooks) HOOKS=0 ;;
+        --no-install) MODE=local; HOOKS=0 ;;
         --release) MODE=release; VERSION="${2:?--release needs a version}"; shift ;;
         *) echo "unknown option: $1" >&2; exit 2 ;;
     esac
@@ -156,9 +158,18 @@ if [[ $MODE == release ]]; then
     exit 0
 fi
 
-echo "→ installing to $DEST"
+# Only one Clawd Wars runs at a time (a second copy quits at launch), so stop whichever one is running.
 pkill -x VaderClaude 2>/dev/null || true
 pkill -x ClawdWars 2>/dev/null || true
+
+if [[ $MODE == local ]]; then
+    # Not installed: the build/ copy never takes over hooks that still point at a working app (HookInstaller.repairMoved).
+    open "$APP"
+    echo "✓ Clawd Wars is running from $APP (not installed). Right-click any villain for options."
+    exit 0
+fi
+
+echo "→ installing to $DEST"
 rm -rf "$DEST" "${OLD_DESTS[@]}" && cp -R "$APP" "$DEST"
 
 if [[ $HOOKS == 1 ]]; then
