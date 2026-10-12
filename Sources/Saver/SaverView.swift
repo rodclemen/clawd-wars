@@ -117,7 +117,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
         let p = isPreview ? 0 : Int((now - started) / Self.shiftEvery)
         shifted = p % 2 == 1
         if p != period { period = p; travel(now) }
-        else if !isPreview, !running(now), now - lastTrip >= Self.demoEvery { travel(now) }
+        else if !isPreview, !crewed(now), now - lastTrip >= Self.demoEvery { travel(now) }
         render(now)
     }
 
@@ -172,6 +172,11 @@ final class ClawdWarsSaverView: ScreenSaverView {
         feed.map { feedSource != nil || now - $0.at < SaverFeed.staleAfter } ?? false
     }
 
+    /// The app is running and has a crew to show. With no AI running its stage is empty, so the demo cast fills in.
+    private func crewed(_ now: Double) -> Bool {
+        running(now) && !(feed?.sessions.isEmpty ?? true)
+    }
+
     private func render(_ now: Double) {
         guard let root = host.layer else { return }
         let running = running(now)
@@ -222,7 +227,7 @@ final class ClawdWarsSaverView: ScreenSaverView {
         var items: [Item] = [Item(image: shade(), rect: CGRect(x: 0, y: bounds.height * 0.6, width: bounds.width,
                                                                height: bounds.height * 0.4), smooth: true)]
         let feet = CGFloat(floorRows) * P * 0.55
-        if running, let f = feed {
+        if crewed(now), let f = feed {
             items += crew(f.sessions, now: now, feet: feet)
         } else {
             if demoPlace != location { demo = cast(for: location, now: now); demoPlace = location }
