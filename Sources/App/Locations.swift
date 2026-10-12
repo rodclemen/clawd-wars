@@ -961,9 +961,9 @@ enum Scenes {
             }
             return hit
         }
-        let a = tilt * .pi / 180, ca = cos(a), sa = sin(a)
+        let a: Double = tilt * .pi / 180, ca = cos(a), sa = sin(a)
         // Every corner, turned and scaled, bounds the pixels to look at.
-        let corners = shapes.flatMap(\.0).map { (x, y) in
+        let corners: [(Double, Double)] = shapes.flatMap(\.0).map { (x: Double, y: Double) -> (Double, Double) in
             (stern.x + scale * (x * ca - y * sa), stern.y - scale * (x * sa + y * ca))
         }
         let x0 = Int(corners.map(\.0).min()!.rounded(.down)), x1 = Int(corners.map(\.0).max()!.rounded(.up))
