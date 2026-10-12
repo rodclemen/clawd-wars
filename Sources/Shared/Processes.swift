@@ -89,6 +89,17 @@ enum ClaudeProcesses {
     private struct Kind { let started: Double; let comm: String; let assistant: String?; let client: String? }
     private static var kinds: [Int32: Kind] = [:]
 
+    /// Codex's terminal UI runs its turns in a shared background server (`codex app-server --managed-daemon`) that
+    /// outlives it, and the hooks run under that server. A session recorded on the server's pid would never end, so
+    /// the hook records the Codex session in the same folder instead (the newest, if there are several).
+    static func codexSession(server pid: Int32, cwd: String?) -> Int32? {
+        guard let cwd, arguments(pid).contains("--managed-daemon") else { return nil }
+        let folder = URL(fileURLWithPath: cwd).standardizedFileURL.path
+        return running().filter { p in
+            p.assistant == "codex" && self.cwd(p.pid).map { URL(fileURLWithPath: $0).standardizedFileURL.path } == folder
+        }.max { $0.started < $1.started }?.pid
+    }
+
     /// Interactive `claude` sessions (not `claude -p` one-shots, MCP servers or the Chrome bridge).
     /// Empty if the process table can't be read; see `runningOrNil`.
     static func running() -> [Info] { runningOrNil() ?? [] }

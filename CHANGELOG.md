@@ -16,6 +16,13 @@
 - **Any character can have a callout now**, not just villains: R0-GR's "Roger roger!" and Jabba's "Ho ho ho!" moved to `Cast.callout`, joined by Watto, Tarkin and Kuiil. Hero blasters can fire from any height (`agentFire`'s `muzzleY`), for Kuiil's rifle up on the blurrg.
 - `leaderCount` is now 46 and `companionCount` 35; the new cases are appended, so existing cast ids are unchanged. `StatusStore.agentOnly` is now the MSE-6 and the ID9.
 - `docs/roster.png` re-rendered; README cast lists updated.
+- **The hook binary is now `clawd-wars-hook`** (it was `vader-hook`, from the project's old name), so Codex's `/hooks` list says whose hooks they are. On first launch the app re-points the hooks it finds, old name included, at the new binary. Codex asks you to approve them once more.
+
+### Fixed
+- **The screen saver shows your sessions with Clawd Wars closed.** It used to put on the demo whenever the app wasn't running. The hooks keep writing `~/.claude/vader-status/state.json` either way, so the saver now reads it (`SaverFeed.fromHooks`) and shows the sessions running, updated every second. It's rougher than the app's feed: sessions without hooks don't show (the saver's sandbox can't scan processes), one that died without saying goodbye stays until its state times out, and there's no ticker. The demo plays only when no session is running at all.
+- **A lone idle session gets the demo in the screen saver.** One character standing still all night isn't much to watch, so with just one session, idle and without agents, the saver puts on the demo instead. Once it gets busy or needs you, it's back. The app's window still shows it.
+- **Codex sessions leave when you close them.** Codex's terminal now runs its turns in a background server (`codex app-server --managed-daemon`) that keeps running after you quit, and the hooks run under it, so a session was recorded on that server's process and never seemed to end. With the app open it was dropped anyway, but the screen saver kept it on stage. Two Codex sessions also overwrote each other, sharing that one process. The hook now records the Codex session running in the same folder instead (`ClaudeProcesses.codexSession`).
+- **The screen saver no longer shows an empty place when no AI runs.** Since the stage went empty with nothing running, the saver drew the place with nobody in it; it brings on the demo crew again.
 
 ## 2.27.1 — 2026-10-12
 

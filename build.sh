@@ -52,7 +52,7 @@ echo "→ compiling app"
 # The app carries the screen saver's view too: the window's third view is the screen saver itself.
 compile "$APP/Contents/MacOS/ClawdWars" -framework ScreenSaver Sources/Shared/*.swift Sources/App/*.swift Sources/Saver/*.swift
 echo "→ compiling hook"
-compile "$APP/Contents/MacOS/vader-hook" Sources/Shared/*.swift Sources/Hook/main.swift
+compile "$APP/Contents/MacOS/clawd-wars-hook" Sources/Shared/*.swift Sources/Hook/main.swift
 
 # The screen saver: a plug-in bundle macOS's screen saver host loads, carried inside the app, which installs it
 # (Settings → Install Screen Saver) and keeps the installed copy up to date. It shares the sprite and location code.
@@ -135,14 +135,14 @@ if [[ $MODE == release ]]; then
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict><key>com.apple.security.automation.apple-events</key><true/></dict></plist>
 ENT
-    codesign --force --options runtime --timestamp --sign "$IDENTITY" "$APP/Contents/MacOS/vader-hook"
+    codesign --force --options runtime --timestamp --sign "$IDENTITY" "$APP/Contents/MacOS/clawd-wars-hook"
     codesign --force --options runtime --timestamp --sign "$IDENTITY" "$SAVER"
     codesign --force --options runtime --timestamp --entitlements build/entitlements.plist \
         --sign "$IDENTITY" "$APP"
 else
     IDENTITY=$(echo "$IDENTITIES" | grep -m1 -oE '"(Developer ID Application|Apple Development)[^"]*"' | tr -d '"' || true)
     sign_local() {
-        codesign --force --timestamp=none --sign "$1" "$APP/Contents/MacOS/vader-hook" \
+        codesign --force --timestamp=none --sign "$1" "$APP/Contents/MacOS/clawd-wars-hook" \
             && codesign --force --timestamp=none --sign "$1" "$SAVER" \
             && codesign --force --timestamp=none --sign "$1" "$APP"
     }

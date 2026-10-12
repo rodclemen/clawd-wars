@@ -1,20 +1,22 @@
 import Foundation
 
-/// Adds/removes the vader-hook entries in ~/.claude/settings.json, leaving everything else untouched.
+/// Adds/removes the clawd-wars-hook entries in ~/.claude/settings.json, leaving everything else untouched.
 enum HookInstaller {
     static let events = [
         "SessionStart", "SessionEnd", "UserPromptSubmit", "PreToolUse", "PostToolUse", "PostToolUseFailure",
         "PermissionRequest", "Notification", "Stop", "StopFailure", "SubagentStart", "SubagentStop",
     ]
     static let toolEvents: Set<String> = ["PreToolUse", "PostToolUse", "PostToolUseFailure", "PermissionRequest"]
-    static let marker = "vader-hook"
+    /// The hook binary's name. Commands running the one before it (`vader-hook`) are ours too, so they get replaced.
+    static let binaryName = "clawd-wars-hook"
+    static func isOurs(command: String) -> Bool { command.contains(binaryName) || command.contains("vader-hook") }
 
     static var settingsURL: URL {
         FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent(".claude/settings.json")
     }
 
     static var hookBinary: String {
-        Bundle.main.bundleURL.appendingPathComponent("Contents/MacOS/vader-hook").path
+        Bundle.main.bundleURL.appendingPathComponent("Contents/MacOS/" + binaryName).path
     }
 
     /// The hook command's executable, single-quoted for the shell (a `'` in the path becomes `'\''`).
@@ -80,7 +82,7 @@ enum HookInstaller {
         groups.compactMap { group in
             var g = group
             let hooks = (g["hooks"] as? [[String: Any]] ?? []).filter {
-                !(($0["command"] as? String) ?? "").contains(marker)
+                !isOurs(command: ($0["command"] as? String) ?? "")
             }
             if hooks.isEmpty { return nil }
             g["hooks"] = hooks
@@ -94,7 +96,7 @@ enum HookInstaller {
             let groups = hooks[e] as? [[String: Any]] ?? []
             return groups.contains { g in
                 (g["hooks"] as? [[String: Any]] ?? []).contains {
-                    (($0["command"] as? String) ?? "").contains(marker)
+                    isOurs(command: ($0["command"] as? String) ?? "")
                 }
             }
         }
@@ -243,7 +245,7 @@ enum HookInstaller {
     /// An entry (group or flat handler) is ours if any command in it runs our hook.
     private static func isOurs(_ entry: [String: Any]) -> Bool {
         let handlers = (entry["hooks"] as? [[String: Any]] ?? []) + [entry]
-        return handlers.contains { h in ["command", "bash"].contains { ((h[$0] as? String) ?? "").contains(marker) } }
+        return handlers.contains { h in ["command", "bash"].contains { isOurs(command: (h[$0] as? String) ?? "") } }
     }
 
     private static func withoutOurs(_ ai: OtherAI, _ entries: [[String: Any]]) -> [[String: Any]] {
@@ -303,7 +305,7 @@ enum HookInstaller {
     // MARK: Moved app
     //
     // Hooks remember the absolute path of the hook binary. If the app is moved (or reinstalled somewhere else) they
-    // point at nothing and every event fails, yet `isInstalled` still sees our marker. Only a missing binary counts
+    // point at nothing and every event fails, yet `isInstalled` still sees our command. Only a missing binary counts
     // as stale, so a dev copy run from build/ never steals hooks that still work.
 
     /// The hook binaries our registered commands run, in any of the shapes above.
@@ -312,7 +314,7 @@ enum HookInstaller {
         let entries: [[String: Any]] = hooks.values.flatMap { $0 as? [[String: Any]] ?? [] }
         let handlers: [[String: Any]] = entries.flatMap { ($0["hooks"] as? [[String: Any]] ?? []) + [$0] }
         let commands: [String] = handlers.flatMap { h in ["command", "bash"].compactMap { h[$0] as? String } }
-        return commands.filter { $0.contains(marker) }.map(binary)
+        return commands.filter { isOurs(command: $0) }.map(binary)
     }
 
     /// The executable a command runs: the quoted path we write ('…' now, "…" before), or the first word.

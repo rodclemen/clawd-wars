@@ -35,6 +35,16 @@ struct AgentRecord: Codable {
     var task: String?      // the Agent tool's short description, e.g. "Find hook events"
     var activity: String?  // the agent's current tool call
     var tools: Int?
+
+    /// What it's doing: its task description, else a readable version of its type.
+    var label: String {
+        if let task, !task.isEmpty { return task }
+        switch type {
+        case "general-purpose", "agent", "claude": return "Agent"
+        case "playground", "demo": return ""
+        default: return type.replacingOccurrences(of: "-", with: " ").capitalized
+        }
+    }
 }
 
 /// An Agent tool call seen in PreToolUse, waiting for its SubagentStart (which only carries the type).
@@ -102,8 +112,8 @@ struct SessionSnapshot {
 }
 
 enum StatusPaths {
-    static let dir = FileManager.default.homeDirectoryForCurrentUser
-        .appendingPathComponent(".claude/vader-status", isDirectory: true)
+    /// The real home (`SaverFeed.home`): the screen saver reads this too, and in its sandbox the usual home is its container.
+    static let dir = URL(fileURLWithPath: SaverFeed.home).appendingPathComponent(".claude/vader-status", isDirectory: true)
     static let state = dir.appendingPathComponent("state.json")
     static let lock = dir.appendingPathComponent("state.lock")
 }
@@ -186,7 +196,8 @@ enum StatusStore {
         let session = json["session_id"] as? String ?? "default"
         let agentId = json["agent_id"] as? String
         let project = (json["cwd"] as? String).map { URL(fileURLWithPath: $0).lastPathComponent }
-        let owner = agentId == nil ? ClaudeProcesses.hookOwner() : nil
+        let hookOwner = agentId == nil ? ClaudeProcesses.hookOwner() : nil
+        let owner = assistant == "codex" ? hookOwner.map { ClaudeProcesses.codexSession(server: $0, cwd: json["cwd"] as? String) ?? $0 } : hookOwner
         let ownerStart = owner.flatMap(ClaudeProcesses.startTime)
 
         withLock { s in

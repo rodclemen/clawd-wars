@@ -3,9 +3,9 @@ import AppKit
 import QuartzCore
 
 /// The Clawd Wars screen saver: the window's location at full screen, the crew fighting on its floor, and each
-/// session's state as a hologram over its head. It only shows what the running app publishes (`SaverFeed`); with
-/// Clawd Wars not running it puts on a show instead (a made-up crew duelling, somewhere new every few minutes) and
-/// says, quietly, that the app isn't running.
+/// session's state as a hologram over its head. It shows what the running app publishes (`SaverFeed`); with
+/// Clawd Wars not running, what the hooks last wrote (`SaverFeed.fromHooks`). With no session running at all it puts
+/// on a show instead (a made-up crew duelling, somewhere new every few minutes).
 ///
 /// Runs inside macOS's sandboxed screen saver host, one instance per display (and one for the System Settings
 /// preview). Everything is Core Animation layers: the location's picture and pixel art scaled on the GPU with
@@ -112,7 +112,11 @@ final class ClawdWarsSaverView: ScreenSaverView {
         let now = Date().timeIntervalSince1970
         if now - lastRead >= 1 {
             lastRead = now
-            feed = feedSource.map { $0() } ?? SaverFeed.load()
+            if let feedSource { feed = feedSource() } else {
+                // Clawd Wars closed (its feed gone stale): the hooks still say who's running.
+                let app = SaverFeed.load()
+                feed = app.flatMap { now - $0.at < SaverFeed.staleAfter ? $0 : nil } ?? SaverFeed.fromHooks(now: now, last: app) ?? app
+            }
         }
         let p = isPreview ? 0 : Int((now - started) / Self.shiftEvery)
         shifted = p % 2 == 1
@@ -172,9 +176,13 @@ final class ClawdWarsSaverView: ScreenSaverView {
         feed.map { feedSource != nil || now - $0.at < SaverFeed.staleAfter } ?? false
     }
 
-    /// The app is running and has a crew to show. With no AI running its stage is empty, so the demo cast fills in.
+    /// There's a crew worth showing. With no AI running the stage is empty, so the demo cast fills in; as the screen
+    /// saver it also does for a lone session sitting idle (one still figure all night), but not one at work or waiting
+    /// on you. The app's window always shows its crew.
     private func crewed(_ now: Double) -> Bool {
-        running(now) && !(feed?.sessions.isEmpty ?? true)
+        guard running(now), let sessions = feed?.sessions, !sessions.isEmpty else { return false }
+        if feedSource == nil, sessions.count == 1, let lone = sessions.first, lone.mood == "idle", lone.agents.isEmpty { return false }
+        return true
     }
 
     private func render(_ now: Double) {

@@ -138,7 +138,15 @@ Every 10 minutes it does a Star Wars wipe (a hard edge or a clock wipe) to somew
 
 Install it from the menu bar helmet: **Settings → Install Screen Saver…**. That copies it into your `~/Library/Screen Savers` and opens System Settings → **Wallpaper** (on macOS 14 and earlier, **Screen Saver**), where you pick **Clawd Wars** under **Other**. macOS shows a generic swirl for third-party screen savers in that list. After an app update, the installed copy is updated too.
 
-The screen saver shows what the running app sees, so your own sessions only appear while Clawd Wars is running. When it isn't, the screen saver puts on a show instead: a random crew of four to six duelling, light side against dark, with a local or two of the place among them, off somewhere new every 3 minutes. A quiet line under the place name says Clawd Wars isn't running. **Settings → Remove Screen Saver** takes it out again.
+Your sessions show up in the screen saver whether Clawd Wars is open or not: each AI tells Clawd Wars what it's up to as it works, and the screen saver listens in too. With the app open you get everything; with it closed you get nearly everything, minus the news crawl along the bottom.
+
+When there's nothing much to watch, the screen saver puts on a show instead: a random crew of four to six duelling, light side against dark, with a local or two of the place among them, off somewhere new every 3 minutes. That happens when no AI is running, and also when there's just one session sitting idle (one character standing still all night isn't much of a screen saver). As soon as that session gets busy, or needs you, it's back on stage.
+
+**Why a session might not show up with the app closed.** The screen saver only knows about a session once that session has said something. Claude Code checks in the moment you open it. Some AIs stay quiet until you send them a first message; Codex does, for example, and others may too. So a freshly opened Codex appears once you've given it something to do. The same goes for an AI whose connection to Clawd Wars isn't switched on (Codex asks you to approve it once, under `/hooks`). Clawd Wars itself, when it's open, spots every AI as soon as it starts, quiet or not, so with the app running you'll see them all.
+
+And the other way round: when an AI is closed normally it leaves the stage straight away. If it crashes or is force-quit, the screen saver can't always tell right away, so it may linger for a while before it times out.
+
+**Settings → Remove Screen Saver** takes it out again.
 
 The window can show the same view: **Settings → Screen Saver View in Window** (hover a card there to see it larger; the title bar button takes you back). The Location menu's **Random** moves the window somewhere new every 10 minutes, with the same wipe.
 
@@ -244,7 +252,7 @@ Tested with Swift 6.2.3 (Command Line Tools 26.2) and Swift 6.3.3 (Xcode 26.6) o
 
 ## How it works
 
-- A tiny Foundation-only binary, `vader-hook`, is registered in `~/.claude/settings.json` for Claude Code's hook events (session start/end, prompts, tool calls, permission requests, subagents, stop). It writes `~/.claude/vader-status/state.json` under a file lock and exits silently — it can never get in Claude's way.
+- A tiny Foundation-only binary, `clawd-wars-hook`, is registered in `~/.claude/settings.json` for Claude Code's hook events (session start/end, prompts, tool calls, permission requests, subagents, stop). It writes `~/.claude/vader-status/state.json` under a file lock and exits silently — it can never get in Claude's way.
 - It records what each session is doing: its state and since when, the current tool call (`Edit Overlay.swift`, `Bash: swift build`), your last prompt and Claude's last reply, the model and session title, and each subagent's task.
 - The app reads that twice a second, finds sessions without hooks from the process table, and drops a session the moment its process exits.
 - Everything you see — characters, weapons, effects, 22 locations, the icon — is pixel art drawn in Swift at runtime. `Tools/RenderDocs` renders the roster and location sheets above; `CLAWD_SHOT=/path.png` makes the app dump its own frames.

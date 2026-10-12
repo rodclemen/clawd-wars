@@ -471,7 +471,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 UInt32($0.redComponent * 255) << 16 | UInt32($0.greenComponent * 255) << 8 | UInt32($0.blueComponent * 255)
             }
             let agents = s.agents.map { a in
-                SaverFeed.Agent(id: a.id, cast: Cast.of(a).id, task: Self.agentLabel(a).isEmpty ? "Agent" : Self.agentLabel(a))
+                SaverFeed.Agent(id: a.id, cast: Cast.of(a).id, task: a.label.isEmpty ? "Agent" : a.label)
             }
             out.append(SaverFeed.Session(
                 id: s.id, cast: cast.id, assistant: s.group, project: s.project, remote: s.pid == nil ? nil : (s.remote ?? "Local"),
@@ -738,7 +738,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 accent = Accents.color(for: s.project)
             }
             if let a = u.agent {
-                label = Self.agentLabel(a)
+                label = a.label
                 accent = Accents.color(for: projectOf[a.session] ?? "")
                 pid = pidOf[a.session] ?? nil
                 assistant = aiOf[a.session] ?? "claude"
@@ -945,7 +945,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     private func hoverDetail(_ s: SessionSnapshot?, _ a: AgentRecord?, now: Double) -> [String] {
         if let a {
             let who = Cast.of(a)
-            var lines = ["\(who.name) — \(Self.agentLabel(a).isEmpty ? "Agent" : Self.agentLabel(a))"]
+            var lines = ["\(who.name) — \(a.label.isEmpty ? "Agent" : a.label)"]
             var info = [a.activity ?? "Starting…", Self.duration(now - a.started)]
             if let n = a.tools { info.append("\(n) tool call\(n == 1 ? "" : "s")") }
             lines.append(info.joined(separator: "  ·  "))
@@ -1365,16 +1365,6 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         let w = 66 * s, h = 29 * s
         return DrawItem(image: c.makeImage(), rect: NSRect(x: (x - w / 2).rounded(), y: (feet - 1 * s + lift).rounded(), width: w, height: h),
                         mirrored: exit.dir < 0, alpha: 1)
-    }
-
-    /// What an agent is doing: its task description, else a readable version of its type.
-    static func agentLabel(_ a: AgentRecord) -> String {
-        if let task = a.task, !task.isEmpty { return task }
-        switch a.type {
-        case "general-purpose", "agent", "claude": return "Agent"
-        case "playground", "demo": return ""
-        default: return a.type.replacingOccurrences(of: "-", with: " ").capitalized
-        }
     }
 
     /// Word-wrap a project name onto at most two lines of `maxWidth`; whatever still doesn't fit gets "…".
@@ -2014,7 +2004,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
                 var detail = [a.activity ?? "Starting…", Self.duration(now - a.started)]
                 if let n = a.tools { detail.append("\(n) tool call\(n == 1 ? "" : "s")") }
                 if a.type != "general-purpose" && a.type != "playground" && a.type != "demo" { detail.append(a.type) }
-                return CardModel.Agent(name: who.name, task: Self.agentLabel(a).isEmpty ? "Agent" : Self.agentLabel(a),
+                return CardModel.Agent(name: who.name, task: a.label.isEmpty ? "Agent" : a.label,
                                        detail: detail.joined(separator: "  ·  "),
                                        portrait: portrait("a\(who.id)", assistant: s.group) { who.draw($0, t: 0.3, mode: .idle, walking: false, role: .rest, asSession: true) })
             }
