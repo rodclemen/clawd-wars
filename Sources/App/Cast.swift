@@ -78,6 +78,21 @@ enum Cast: Hashable {
     /// waiting…); agents are always at work.
     func draw(_ c: PixelCanvas, t: Double, mode: VaderMode, walking: Bool, role: FightRole,
               urgent: Bool = false, sitting: Bool = false, asSession: Bool) {
+        // Idle habits (`Habits.swift`): only an idle session standing about, not fighting, walking or sitting.
+        var idle = asSession && mode == .idle && !walking && !sitting
+        if case .none = role {} else { idle = false }
+        let play = idle ? habit(at: t) : nil
+        idleHabit = play
+        defer {
+            idleHabit = nil
+            if let play {
+                // Heroes' blasters don't come up much when held ready, so the smoke shows what they're doing.
+                if case .hero = self, play.kind == .checkWeapon, play.p > 0.4 {
+                    drawBarrelSmoke(c, x: muzzle.x, y: muzzle.y, (play.p - 0.4) / 0.6)
+                }
+                applyHabitTransform(c, play)
+            }
+        }
         switch self {
         case .villain(let l):
             drawLeader(c, l, t: t, mode: asSession ? mode : .working, walking: walking, role: role,

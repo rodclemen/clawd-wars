@@ -3,7 +3,7 @@ import AppKit
 // Renders Resources/AppIcon.png (1024²): Vader Clawd and Luke crossing sabers on a starfield,
 // drawn with the app's own sprite code. build.sh turns it into AppIcon.icns.
 //   swiftc Sources/App/Pixel.swift Sources/App/Characters.swift Sources/App/Leaders.swift \
-//          Sources/App/Locations.swift Sources/App/Cantina.swift \
+//          Sources/App/Locations.swift Sources/App/Cantina.swift Sources/App/Cast.swift Sources/App/Habits.swift \
 //          Sources/Shared/*.swift Tools/MakeIcon/main.swift -o /tmp/makeicon && /tmp/makeicon Resources/AppIcon.png
 
 let size: CGFloat = 1024

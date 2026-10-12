@@ -322,6 +322,11 @@ func drawCompanion(_ c: PixelCanvas, _ who: Companion, t: Double, walking: Bool,
                    mode: VaderMode = .working, urgent: Bool = false, sitting: Bool = false) {
     var role = role
     if case .none = role, mode != .working { role = mode == .waiting ? .ready(urgent: urgent) : .rest }
+    // Idle habits: a saber hero runs through a few moves, a gunner raises its weapon to check it.
+    if mode == .idle, case .rest = role, let h = idleHabit {
+        if h.kind == .flourish, h.p > 0.1, h.p < 0.9 { role = .none }
+        if h.kind == .checkWeapon, h.p < 0.75 { role = .ready(urgent: false) }
+    }
     var resting = false
     if case .rest = role { resting = true }
     let seated = sitting && who.canSit && !walking && resting && (mode == .idle || mode == .standGuard)

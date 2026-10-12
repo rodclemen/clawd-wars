@@ -61,7 +61,7 @@ SAVER="$APP/Contents/Resources/Clawd Wars.saver"
 mkdir -p "$SAVER/Contents/MacOS"
 compile "$SAVER/Contents/MacOS/ClawdWarsSaver" -module-name ClawdWarsSaver -emit-library -framework ScreenSaver \
     -Xlinker -install_name -Xlinker @rpath/ClawdWarsSaver \
-    Sources/Shared/*.swift Sources/App/{Pixel,Characters,Recruits,Leaders,Cantina,Locations,Cast,Accents}.swift Sources/Saver/*.swift
+    Sources/Shared/*.swift Sources/App/{Pixel,Characters,Recruits,Leaders,Cantina,Locations,Cast,Accents,Habits}.swift Sources/Saver/*.swift
 # Its picture under "Other" in System Settings: the title card at 0:04 of promo/clawd-wars-promo.mp4, cropped to 180×116.
 mkdir -p "$SAVER/Contents/Resources"
 cp Resources/SaverThumbnail.png "$SAVER/Contents/Resources/thumbnail@2x.png"

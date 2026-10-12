@@ -51,7 +51,7 @@ You run Claude Code in three terminals. One is thinking, one is waiting for your
 - 🗡️ **Working?** Your Claude swings a lightsaber.
 - 💭 **Thinking?** A thought bubble.
 - ❗ **Needs you?** A red `!` — and if you ignore it for a minute, it starts jumping up and down.
-- 😴 **Done and idle?** After a couple of minutes it sits down; after five it's asleep (zZz).
+- 😴 **Done and idle?** It stands about with habits of its own every 10–20 seconds: it looks over its shoulder, shifts its weight, lights and spins its saber, or raises its blaster and blows the smoke off. After a couple of minutes it sits down; after five it's asleep (zZz).
 - 🧑‍🚀 **Spawned subagents?** Rebels march in one by one, each labelled with *what it's doing* — and they leave when they finish. (When Han's done, the Millennium Falcon lands, he walks up the ramp, and it flies off.)
 - 🔍 **Want details?** Hover any character: status, how long, the tool it's running right now, your last prompt.
 - 🖱️ **Click any of them** to jump straight to that session's terminal or VS Code tab.

@@ -296,13 +296,40 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
     var zap: Bool?                    // true = draw the arc in-canvas
     var capeSpeed = 1.6
     var armRaise = 0
+    var gunLift = 0                   // idle habit: blaster raised to eye level
+    var smoke: Double?                // idle habit: 0…1 through blowing the smoke off the barrel
 
     if walking {
         if mode != .idle && mode != .thinking { saber = -60 }
     } else {
         switch mode {
         case .idle, .thinking:
-            break
+            guard mode == .idle, let h = idleHabit else { break }
+            switch h.kind {
+            case .flourish:
+                switch who {
+                case .gamorrean, .rancor, .royalGuard, .tusken:     // axe, claw, pike, gaffi: swung up and back
+                    saber = (who == .rancor ? 30 : -78) - 70 * habitArc(h.p, hold: 0.1)
+                case .grandInquisitor, .secondSister, .fifthBrother, .reva:
+                    saber = -60 + 900 * h.e * habitArc(h.p, hold: 0.6)    // a burst of the rotor spin
+                default:                                                 // lit, spun once, switched off
+                    if h.p > 0.08 && h.p < 0.92 {
+                        let len = h.kind.length, start = t - h.e
+                        let spin = { (u: Double) -> Double in
+                            let s = min(1, max(0, ((u - start) / len - 0.25) / 0.5))
+                            return -70 - 360 * (0.5 - 0.5 * cos(s * .pi))
+                        }
+                        saber = spin(t)
+                        if h.p > 0.25 && h.p < 0.75 { trail = saberTrail(t, pose: spin) }
+                    }
+                }
+            case .checkWeapon:
+                gunLift = Int((2 * habitArc(min(1, h.p / 0.55), hold: 0.5)).rounded())
+                if h.p > 0.45 { smoke = (h.p - 0.45) / 0.55 }
+            case .crackle:
+                zap = false; armRaise = 2
+            default: break
+            }
         case .waiting:
             saber = urgent ? -90 + 25 * sin(t * 12) : -90 + 2 * sin(t * 3)
             if urgent { hop = cheerHop(t * 1.5); breathe = 0 }
@@ -517,7 +544,8 @@ func drawLeader(_ c: PixelCanvas, _ who: Leader, t: Double, mode: VaderMode, wal
             recoil = fireBlaster(c, t: fire.t, period: blasterPeriod, muzzleX: who.muzzle.x, muzzleY: who.muzzle.y,
                                  bolt: fire.bolt)
         }
-        c.oy = hop + breathe - recoil
+        c.oy = hop + breathe - recoil - gunLift
+        if let smoke { drawBarrelSmoke(c, x: Double(who.muzzle.x), y: Double(who.muzzle.y), smoke) }
         switch who {
         case .boba: drawEE3(c, x: 38, y: 30)
         case .rogr: drawE5(c, x: 39, y: 31)

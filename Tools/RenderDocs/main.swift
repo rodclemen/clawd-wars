@@ -2,7 +2,7 @@ import AppKit
 
 // Renders the README's roster and locations images with the app's own sprite code.
 //   swiftc -swift-version 5 Sources/App/Pixel.swift Sources/App/Characters.swift Sources/App/Recruits.swift Sources/App/Leaders.swift \
-//          Sources/App/Cantina.swift Sources/App/Locations.swift Sources/Shared/*.swift \
+//          Sources/App/Cantina.swift Sources/App/Locations.swift Sources/App/Cast.swift Sources/App/Habits.swift Sources/Shared/*.swift \
 //          Tools/RenderDocs/main.swift -o /tmp/renderdocs && /tmp/renderdocs docs
 
 let out = CommandLine.arguments.count > 1 ? CommandLine.arguments[1] : "docs"

@@ -4,7 +4,7 @@ import AVFoundation
 // Renders the promo with the app's own sprite code: a storyboard sheet of key frames, or the video
 // (1920×1080, 30 fps). Build it, then run it from the repo root (it reads docs/icon.png):
 //   swiftc -O -swift-version 5 Sources/App/Pixel.swift Sources/App/Characters.swift Sources/App/Leaders.swift \
-//          Sources/App/Cast.swift Sources/App/Cantina.swift Sources/App/Locations.swift Sources/Shared/*.swift \
+//          Sources/App/Cast.swift Sources/App/Habits.swift Sources/App/Cantina.swift Sources/App/Locations.swift Sources/Shared/*.swift \
 //          Tools/RenderPromo/main.swift -o /tmp/renderpromo
 //   /tmp/renderpromo storyboard promo     → storyboard.png + one PNG per key frame
 //   /tmp/renderpromo video promo          → clawd-wars-promo.mp4 (H.264 + AAC soundtrack)

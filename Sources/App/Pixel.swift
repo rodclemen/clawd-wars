@@ -118,6 +118,42 @@ final class PixelCanvas {
         buf = out
     }
 
+    /// Mirror everything drawn so far about the vertical line `x` (canvas units), unless something drawn would end up
+    /// off the canvas. Returns whether it mirrored.
+    @discardableResult
+    func mirror(aboutX x: Double) -> Bool {
+        let axis = Int((2 * x).rounded()) - 1          // column k lands on axis - k
+        for y in 0..<h {
+            for k in 0..<w where buf[(y * w + k) * 4 + 3] > 0 && (axis - k < 0 || axis - k >= w) { return false }
+        }
+        var out = [UInt8](repeating: 0, count: buf.count)
+        for y in 0..<h {
+            for k in 0..<w where buf[(y * w + k) * 4 + 3] > 0 {
+                let src = (y * w + k) * 4, dst = (y * w + axis - k) * 4
+                for n in 0..<4 { out[dst + n] = buf[src + n] }
+            }
+        }
+        buf = out
+        return true
+    }
+
+    /// Move everything drawn so far by whole pixels; what slides off the edge is lost.
+    func shift(dx: Int, dy: Int) {
+        guard dx != 0 || dy != 0 else { return }
+        var out = [UInt8](repeating: 0, count: buf.count)
+        for y in 0..<h {
+            let ty = y + dy
+            guard ty >= 0, ty < h else { continue }
+            for x in 0..<w {
+                let tx = x + dx
+                guard tx >= 0, tx < w else { continue }
+                let src = (y * w + x) * 4, dst = (ty * w + tx) * 4
+                for n in 0..<4 { out[dst + n] = buf[src + n] }
+            }
+        }
+        buf = out
+    }
+
     /// 1px outline around every solid pixel, so dark sprites still read on a dark desktop.
     /// Only fully opaque pixels count as solid, so saber glows and bolts don't get outlined.
     func addOutline(_ c: Px) {
