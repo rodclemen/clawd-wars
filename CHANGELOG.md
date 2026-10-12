@@ -3,7 +3,7 @@
 ## 2.28.3 (2026-10-12)
 
 ### Changed
-- **No more em-dashes in the app's text or its docs.** Menu items, hover details, banners, the menu bar tooltip and the Playground menu now use a colon, a middle dot or parentheses instead: "OFFLINE: can't read the status file", "Not reporting: restart this Claude session", "No live status (no hooks)", an agent as "Luke Skywalker: Find hook events", a session as "Darth Vader · project · Claude Code", Playground headers as "Villains (they pair up in the order you add them)". The same goes for the README, `llms.txt`, this changelog (version headings now read `## 2.28.3 (2026-10-12)`; `release.sh` and `build.sh` still find them) and the install line `release.sh` adds to every GitHub release. The only ones left are in `Jump.swift`, which matches the " — " that VS Code puts in its own window titles to find the right window.
+- **No more em-dashes in the app's text or its docs.** Menu items, hover details, banners, the menu bar tooltip and the Playground menu now use a colon, a middle dot or parentheses instead: "OFFLINE: can't read the status file", "Not reporting: restart this Claude session", "No live status (no hooks)", an agent as "Luke Skywalker: Find hook events", a session as "Darth Vader · project · Claude Code", Playground headers as "Villains (they pair up in the order you add them)". The same goes for the README, `llms.txt`, this changelog (version headings now read `## 2.28.3 (2026-10-12)`; `release.sh` and `build.sh` still find them) and the install line `release.sh` adds to every GitHub release. The only ones left are in `Jump.swift`, which matches the dash separator VS Code puts in its own window titles to find the right window.
 
 ## 2.28.2 (2026-10-12)
 
