@@ -60,6 +60,7 @@ enum Cast: Hashable {
     var armoured: Bool { if case .villain(let l) = self { return l.armoured } else { return false } }
 
     var isHan: Bool { if case .hero(.han) = self { return true } else { return false } }
+    var isGreedo: Bool { if case .villain(.greedo) = self { return true } else { return false } }
 
     /// Draw this character. `asSession` = it's a whole Claude/Codex session (it has moods: idle, thinking,
     /// waiting…); agents are always at work.

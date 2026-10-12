@@ -88,6 +88,24 @@ final class PixelCanvas {
         return maxX < 0 ? nil : CGRect(x: minX, y: minY, width: maxX - minX + 1, height: maxY - minY + 1)
     }
 
+    /// A copy turned by `degrees` about `pivot` (negative turns anticlockwise on screen: a right-facing sprite falls on
+    /// its back), with `pivot` landing on `at` in a new `w` × `h` canvas. Nearest-neighbour, so it stays pixel art.
+    func rotated(_ degrees: Double, about pivot: (x: Double, y: Double), into w: Int, _ h: Int,
+                 at: (x: Double, y: Double)) -> PixelCanvas {
+        let out = PixelCanvas(w, h)
+        let r = degrees * .pi / 180, cs = cos(r), sn = sin(r)
+        for y in 0..<h {
+            for x in 0..<w {
+                let dx = Double(x) + 0.5 - at.x, dy = Double(y) + 0.5 - at.y
+                let sx = Int(floor(pivot.x + dx * cs + dy * sn)), sy = Int(floor(pivot.y - dx * sn + dy * cs))
+                guard sx >= 0, sy >= 0, sx < self.w, sy < self.h else { continue }
+                let si = (sy * self.w + sx) * 4, di = (y * w + x) * 4
+                for k in 0..<4 { out.buf[di + k] = buf[si + k] }
+            }
+        }
+        return out
+    }
+
     /// Mirror everything drawn so far, left to right.
     func flipHorizontally() {
         var out = buf

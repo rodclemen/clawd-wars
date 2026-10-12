@@ -207,7 +207,7 @@ func duckAmount(t: Double, shooterOffset: Double, armoured: Bool) -> Double {
     let down = min(max((f - 0.12) / 0.12, 0), 1), up = min(max((f - 0.55) / 0.15, 0), 1)
     return down * (1 - up)
 }
-private let boltArrival = 0.4          // fraction of the period a bolt spends in flight
+let boltArrival = 0.4          // fraction of the period a bolt spends in flight
 private let rifleMuzzle = (x: 52, y: 32)
 private let deflectPeak = -15.0
 
