@@ -158,7 +158,7 @@ Hover over anyone for the details — what that session is doing right now, your
   <img src="docs/hover.png" alt="Hover card over Darth Vader" width="640">
 </p>
 
-Forgot one? **Settings → Status Symbols** in the menu has the same key, drawn with the app's own sprites.
+Forgot one? **Status Symbols** in the menu has the same key, drawn with the app's own sprites.
 
 | You see | It means |
 |---|---|

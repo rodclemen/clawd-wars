@@ -2113,6 +2113,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         m.addItem(action: windowMode ? "Show on Desktop" : "Show in Window", #selector(toggleWindowMode), target: self)
         if windowMode { m.addItem(locationMenu()) }
         m.addItem(settingsMenu(size: size))
+        m.addItem(statusSymbolsMenu())
         m.addItem(.separator())
         // Developer toys: only with ⌘ held while opening the menu (or while one is running, so you can leave it).
         if NSEvent.modifierFlags.contains(.command) || playground != nil || demo {
@@ -2139,8 +2140,6 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
     private func settingsMenu(size: NSMenuItem) -> NSMenuItem {
         let root = NSMenuItem(title: "Settings", action: nil, keyEquivalent: "")
         let sm = NSMenu()
-        sm.addItem(statusSymbolsMenu())
-        sm.addItem(.separator())
         // In the window the crew always fits the window, so Size only applies on the desktop.
         if windowMode { sm.addItem(disabled: "Size (desktop only)") } else { sm.addItem(size) }
         sm.addItem(action: windowMode ? "Show Project Names in Window" : "Show Project Names on Desktop",
@@ -2187,7 +2186,7 @@ final class OverlayController: NSObject, NSMenuDelegate, NSApplicationDelegate, 
         return root
     }
 
-    /// Settings → Status Symbols: a key to the bubbles, poses and colours (`Legend`). Nothing to pick, so its rows are
+    /// Status Symbols: a key to the bubbles, poses and colours (`Legend`). Nothing to pick, so its rows are
     /// enabled only to keep their text at full strength.
     private func statusSymbolsMenu() -> NSMenuItem {
         let root = NSMenuItem(title: "Status Symbols", action: nil, keyEquivalent: "")

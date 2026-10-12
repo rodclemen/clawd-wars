@@ -1,6 +1,6 @@
 import AppKit
 
-/// Settings → Status Symbols: what each thing over a character's head means, drawn with the same code as the crew
+/// Status Symbols (top level of the menu): what each thing over a character's head means, drawn with the same code as the crew
 /// so the key always matches what's on screen.
 enum Legend {
     struct Entry {
@@ -51,18 +51,32 @@ enum Legend {
     }
 
     /// A row of the submenu: the icon, the name in bold and what it means underneath in the secondary colour.
+    /// macOS 27 menus don't draw `NSMenuItem.image` at all, so the row is a view of its own.
     static func menuItem(_ e: Entry) -> NSMenuItem {
         let item = NSMenuItem(title: e.title, action: nil, keyEquivalent: "")
         let text = NSMutableAttributedString(string: e.title + "\n", attributes: [
             .font: NSFont.menuFont(ofSize: 0).bold, .foregroundColor: NSColor.labelColor])
-        let wrap = NSMutableParagraphStyle()
-        wrap.lineBreakMode = .byWordWrapping
         text.append(NSAttributedString(string: wrapped(e.detail, width: 52), attributes: [
-            .font: NSFont.menuFont(ofSize: NSFont.smallSystemFontSize), .foregroundColor: NSColor.secondaryLabelColor,
-            .paragraphStyle: wrap]))
-        item.attributedTitle = text
-        item.image = e.icon
+            .font: NSFont.menuFont(ofSize: NSFont.smallSystemFontSize), .foregroundColor: NSColor.secondaryLabelColor]))
+        item.view = row(icon: e.icon, text: text)
         return item
+    }
+
+    /// The icon in its box on the left, the text beside it, padded like a standard menu row.
+    private static func row(icon: NSImage?, text: NSAttributedString) -> NSView {
+        let label = NSTextField(labelWithAttributedString: text)
+        label.maximumNumberOfLines = 0
+        let pad: (left: CGFloat, gap: CGFloat, right: CGFloat, v: CGFloat) = (14, 8, 16, 4)
+        let ts = label.fittingSize
+        let height = max(box.height, ts.height) + 2 * pad.v
+        let view = NSView(frame: NSRect(x: 0, y: 0, width: pad.left + box.width + pad.gap + ts.width + pad.right, height: height))
+        let image = NSImageView(frame: NSRect(x: pad.left, y: ((height - box.height) / 2).rounded(), width: box.width, height: box.height))
+        image.image = icon
+        image.imageScaling = .scaleNone
+        label.frame = NSRect(x: pad.left + box.width + pad.gap, y: ((height - ts.height) / 2).rounded(), width: ts.width, height: ts.height)
+        view.addSubview(image)
+        view.addSubview(label)
+        return view
     }
 
     /// Menus don't wrap long titles, so break the explanation into lines of about `width` characters.
