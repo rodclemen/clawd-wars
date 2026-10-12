@@ -639,8 +639,20 @@ private func drawVaderCostume(_ c: PixelCanvas, step: Int, lift: Int) {
         "K........................K",
     ], ["K": ink, "H": C(0x5C6070), "G": C(0x3A3D46)])
     c.pattern(25, 32, [".GGGG.", "GSGGSG", ".GSSG."], ["G": C(0x3A3D46), "S": C(0x9AA0AE)])
-    c.pattern(31, 34, ["GGGGG", "GRgBG", "GGGGG"],
-              ["G": C(0x3A3D46), "R": C(0xE0303A), "g": C(0x3BD15A), "B": C(0x3A7BEA)])
+    if let p = Cast.signatureProgress, p > 0.12, p < 0.88 {
+        // Signature: his gloved hand goes to the chest panel and works the switches; the lights flicker through.
+        let lights = [C(0xE0303A), C(0x3BD15A), C(0x3A7BEA), C(0x2A2B31)]
+        let k = Int(p * 20)
+        c.pattern(31, 34, ["GGGGG", "G...G", "GGGGG"], ["G": C(0x3A3D46)])
+        for i in 0..<3 { c.px(32 + i, 35, lights[(k + i * 3 + (k / 3)) % lights.count]) }
+        c.rect(37, 33, 3, 3, C(0x0E0E12))                   // the arm swings in…
+        c.rect(34, 33, 3, 2, ink)                            // …the glove on the panel's top edge
+        c.rect(34, 33, 3, 1, C(0x5C6070))                    // knuckles catching the light
+        c.px(34 + (k % 2), 34, C(0x5C6070))                  // a finger pressing, pressing
+    } else {
+        c.pattern(31, 34, ["GGGGG", "GRgBG", "GGGGG"],
+                  ["G": C(0x3A3D46), "R": C(0xE0303A), "g": C(0x3BD15A), "B": C(0x3A7BEA)])
+    }
     c.rect(18, 37, 20, 1, C(0x2A2B31))
     c.rect(26, 37, 4, 1, C(0x9AA0AE))
 }
@@ -709,8 +721,18 @@ private func drawBoba(_ c: PixelCanvas, step: Int, lift: Int) {
     ], ["G": armor, "R": C(0xA8442E)])
     c.rect(20, 28, 16, 2, ink)       // T visor
     c.rect(27, 30, 2, 5, ink)
-    c.rect(38, 11, 1, 8, C(0x9AA0AE)) // rangefinder antenna
+    // Rangefinder antenna, up beside the helmet. Signature: it swings down in front of the visor and blinks red.
+    let swing = Cast.signatureProgress.map { habitArc($0, hold: 0.5) } ?? 0
+    let a = (-90 + 207 * swing) * .pi / 180, len = 8 + 3 * swing   // lowered, it ends over the visor's eye slot
+    for k in 0..<Int(len) {
+        c.px(38 + Int((cos(a) * Double(k)).rounded()), 18 + Int((sin(a) * Double(k)).rounded()), C(0x9AA0AE))
+    }
     c.rect(37, 17, 2, 2, C(0x9AA0AE))
+    if swing > 0.95, let p = Cast.signatureProgress {
+        let end = (x: 38 + Int((cos(a) * (len - 1)).rounded()), y: 18 + Int((sin(a) * (len - 1)).rounded()))
+        c.rect(end.x - 1, end.y, 2, 2, C(0x5A5E68))         // the scope
+        if Int(p * 14) % 2 == 0 { c.px(end.x - 1, end.y, C(0xFF3A2A)) }
+    }
     c.rect(18, 35, 20, 1, armorShade)
     c.rect(18, 37, 20, 1, C(0x6B4A2B))
     c.rect(21, 37, 2, 1, C(0xB08D57)); c.rect(32, 37, 2, 1, C(0xB08D57))
@@ -719,6 +741,9 @@ private func drawBoba(_ c: PixelCanvas, step: Int, lift: Int) {
 private func drawTrooper(_ c: PixelCanvas, step: Int, lift: Int) {
     let base = c.oy
     let armor = C(0xF2F3F5), edge = C(0x8C93A0)
+    // Signature: he bumps his head (on a door that isn't there): a jolt back, stars round the helmet, a rub.
+    let bump = Cast.signatureProgress
+    if let p = bump, p > 0.1, p < 0.2 { c.ox -= 1 }
     // Faint outline so the white armour still reads on a white window.
     c.rect(18, 36, 2, 1, edge)
     drawLegs(c, Look(leg: C(0xC3C9D2)), step: step)
@@ -744,6 +769,20 @@ private func drawTrooper(_ c: PixelCanvas, step: Int, lift: Int) {
     c.px(26, 32, ink); c.px(28, 32, ink); c.px(30, 32, ink)
     c.rect(18, 36, 20, 1, ink)
     c.rect(27, 36, 2, 1, armor)
+    if let p = bump, p > 0.15, p < 0.92 {
+        for i in 0..<3 {                                   // stars circling the helmet
+            let a = p * 14 + Double(i) * 2.1
+            let x = 28 + Int((cos(a) * 9).rounded()), y = 13 + Int((sin(a) * 2).rounded())
+            let col = (i == 1 ? C(0xFFF2A0) : C(0xFFD25A)).alpha(p > 0.8 ? (0.92 - p) / 0.12 : 1)
+            c.px(x, y, col); c.px(x - 1, y, col.alpha(0.5)); c.px(x + 1, y, col.alpha(0.5))
+            c.px(x, y - 1, col.alpha(0.5)); c.px(x, y + 1, col.alpha(0.5))
+        }
+        if p > 0.3 {                                       // a hand up to rub the side of the helmet
+            let rub = Int(p * 16) % 2
+            c.rect(38, 24 + rub, 3, 10 - rub, edge)        // the forearm bent up from the elbow
+            c.rect(39, 25 + rub, 1, 8 - rub, armor)
+        }
+    }
 }
 
 /// The Gamorrean guard's vibro-axe: a long haft with a heavy blade at the end.

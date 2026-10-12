@@ -12,6 +12,7 @@ enum IdleHabit {
     case flourish      // saber: lit, spun once, switched off; axes, pikes and claws swing up and back
     case checkWeapon   // blaster raised to eye level, then the smoke blown off the barrel
     case crackle       // lightning flickering between the fingers, hand raised
+    case signature     // its own thing, drawn by its own drawing code (`Cast.hasSignature`)
 
     var length: Double {
         switch self {
@@ -21,6 +22,7 @@ enum IdleHabit {
         case .flourish: return 1.8
         case .checkWeapon: return 2.2
         case .crackle: return 1.4
+        case .signature: return 2.6
         }
     }
 }
@@ -58,8 +60,26 @@ extension Cast {
             case .none: break
             }
         }
-        if let w = weaponHabit { return [.glance, .shuffle, w, w] }
-        return [.glance, .shuffle, .bounce]
+        var list: [IdleHabit] = [.glance, .shuffle]
+        list += weaponHabit.map { [$0, $0] } ?? [.bounce]
+        if hasSignature { list += [.signature, .signature] }
+        return list
+    }
+
+    /// Characters with a move of their own:
+    /// Vader works the controls on his chest panel, Luke spins his unlit hilt, a stormtrooper bumps his head (and
+    /// sees stars), Boba swings his rangefinder down over his visor.
+    var hasSignature: Bool {
+        switch self {
+        case .villain(.vader), .villain(.trooper), .villain(.boba), .hero(.luke): return true
+        default: return false
+        }
+    }
+
+    /// The signature move playing right now, 0…1 through it (nil: not playing).
+    static var signatureProgress: Double? {
+        guard let h = idleHabit, h.kind == .signature else { return nil }
+        return h.p
     }
 
     /// The habit playing at `t`, if any: one per cycle, picked afresh each cycle.

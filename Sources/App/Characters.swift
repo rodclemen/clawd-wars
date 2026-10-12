@@ -461,7 +461,13 @@ private func drawLuke(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRol
     c.rect(18, 33, 19, 5, C(0xEFE9DA))
     c.rect(26, 33, 4, 1, clawdOrange)
     c.rect(18, 36, 19, 1, C(0x6B4A2B))
-    drawSaber(c, t: t, angle: p.angle, core: C(0xEAFFEA), glow: C(0x3FE85A), lit: saberLit(role), trail: p.trail)
+    // Signature: idle, he spins his father's hilt in his hand, switched off.
+    var angle = p.angle
+    if case .rest = role, let s = Cast.signatureProgress, s > 0.1, s < 0.9 {
+        let k = (s - 0.1) / 0.8
+        angle = 75 - 720 * (0.5 - 0.5 * cos(k * .pi))
+    }
+    drawSaber(c, t: t, angle: angle, core: C(0xEAFFEA), glow: C(0x3FE85A), lit: saberLit(role), trail: p.trail)
 }
 
 private func drawObiWan(_ c: PixelCanvas, t: Double, walking: Bool, role: FightRole) {
