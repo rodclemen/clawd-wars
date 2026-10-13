@@ -5,12 +5,12 @@ The changes you'd notice in the Star Clawds universe, newest first. The full, de
 ## 3.0.0: Clawd Wars joins Clawd Clash
 
 - **One app, three universes.** Clawd Wars is now part of Clawd Clash. Star Clawds keeps the whole cast (81 characters) and all 22 places, and you can switch to **Marvelous Clawds** or **Detective Clawds** in Settings. Switching recasts everyone on screen and moves the scene to the new universe.
-- **Parody names.** The universe is now called **Star Clawds**, and every character and place has a new name: Darth Vapor, Luke Skyclawer, Han Yolo, Princess Laya, the Millennial Falcon, the Mos Easy Cantina and the rest. The swords are laser swords now, and the lightning is dark lightning.
+- **Parody names.** The universe is now called **Star Clawds**, and every character and place has a new name: Darth Vapor, Luke Skyclawder, Han Yolo, Princess Laya, the Millennial Falcon, the Mos Easy Cantina and the rest. The swords are laser swords now, and the lightning is dark lightning.
 - **Random universe.** Pick **Random** and the app changes universe on its own every 1 to 60 minutes, with a wipe across the whole window.
 - **A Settings window.** Every option in one place (universe, window, desktop, connected AIs, screen saver), and a much shorter menu.
 - **The window steps aside** when no AI is running, and comes back when one starts.
 - **Keep Characters on Top** can be switched off, so the desktop crew lives behind your windows instead of over them.
-- **Everyone looks the same as before.** The Star Clawds crew was carried over frame by frame, and Sebulbous now fires a flame jet and the Clawa a blue ion bolt instead of the usual red.
+- **Everyone looks the same as before.** The Star Clawds crew was carried over frame by frame, and Sebulbous now fires a flame jet and the Clawda a blue ion bolt instead of the usual red.
 - **The screen saver picks its own universe** in its Options, and a few screen saver glitches were fixed (it no longer disappears from System Settings' list).
 - **Upgrading takes care of itself.** Clawd Clash takes over the AIs the old app had connected, quits the old app and starts in Star Clawds, keeping your sessions' characters.
 - A new icon: a comic cover with one panel per universe.

@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/icon.png" width="180" alt="Clawd Wars icon: Darth Vapor and Luke Skyclawer crossing red and green laser swords over a starfield">
+  <img src="docs/icon.png" width="180" alt="Clawd Wars icon: Darth Vapor and Luke Skyclawder crossing red and green laser swords over a starfield">
 </p>
 
 <h1 align="center">Clawd Wars</h1>
@@ -91,7 +91,7 @@ Two gunslingers never just shoot each other. Most bolts get saved:
 
 **The dark side** (Darth Vapor and Kylo Rant never lead back to back): Darth Vapor, Kylo Rant, Darth Mall, Boba Feta, a Stormtrouper, the Emperor, R0-DG3R (*"Roger roger!"*), Count Duku, a Gamoink Guard, Jabbo the Glutt (*"Ho ho ho!"*), IG-Ate-Ate, a Chicken Walker, an AT-ACK, the Rancor, Greedy-O, a Royal Guard, Sebulbous in his pod racer, Salacious Crumble (cackling), General Grievance (four swords), a Tuskin' Raider (always angry), Cad Pain, Admiral Thrown, Hammerhead, Baylan Scowl, Shin Haughty, the Grand Inquisitor and the Second Sister (spinning ring swords), a Banthum, Bib Fortunate, Whatto (*"No credits, no bolts, no bargain!"*), Moff Giddyup (the Dark Blade), a Dearth Trooper, a Scoot Trooper on a speeder bike, Asaj Vengress, Savage Distress, Django Feta, Boss-K, Dangar, a Rolladeka (shield up), Captain Plasma, Director Crankic, Governor Tarquin (*"Fire at will, whenever you like."*), the Fifth Brother and Rava. Mouse-6 and the ID-10T Seeker Bot only ever turn up as agents.
 
-**The light side**: Luke Skyclawer, Han Yolo, Princess Laya, Obi-Juan Kanoobie, Ahh2-De2, C-3P-Uh-Oh, Qui-Gone Tonic, Mace Window, Yodle, a Clawa, Chewbarka, Ray, Asoka Tango, Wicker the Furwok, a Snowtaunt, J.J Blinks, Lando Coolrissian, Zori Blitz, Bo-Kitan Krays, Maz Kanapé, Wedge Antlers, LE-ET (fist up for bot rights), Mon Mothball, Padmé Amidrama, Admiral Snackbar, Grogoo, Babu Flick (sparks flying), the Mandoclawrian, Kay-2-Snark, Gonky the Power Box, Cassius Andoor (always glancing over his shoulder), Bix Caffeine, Cobb Vance, a Pit Bot (folds up now and then) and Kwill (*"I have spoken."*).
+**The light side**: Luke Skyclawder, Han Yolo, Princess Laya, Obi-Juan Kanoobie, Ahh2-De2, C-3P-Uh-Oh, Qui-Gone Tonic, Mace Window, Yodle, a Clawda, Chewbarka, Ray, Asoka Tango, Wicker the Furwok, a Snowtaunt, J.J Blinks, Lando Coolrissian, Zori Blitz, Bo-Kitan Krays, Maz Kanapé, Wedge Antlers, LE-ET (fist up for bot rights), Mon Mothball, Padmé Amidrama, Admiral Snackbar, Grogoo, Babu Flick (sparks flying), the Mandoclawdrian, Kay-2-Snark, Gonky the Power Box, Cassius Andoor (always glancing over his shoulder), Bix Caffeine, Cobb Vance, a Pit Bot (folds up now and then) and Kwill (*"I have spoken."*).
 
 <p align="center">
   <img src="docs/roster.png" alt="The whole Star Clawds cast, dark side and light side" width="760">
@@ -111,7 +111,7 @@ The scene is set **where the first session's character belongs**: the Doom Moon 
   <img src="docs/window-froth.png" alt="Window mode at the Battle of Froth" width="760">
 </p>
 
-22 hand-built places, each with its own little animation: the band plays in the Mos Easy Cantina while the bartender polishes glasses; Princess Laya's hologram flickers in Obi-Juan's Hut; Clawas' eyes glow over heaps of junk in the Clawa Sandcrawler; fog drifts over Dagobog; the Millennial Falcon jumps to hyperspace past its cockpit window; a Star Wrecker lies buried in the sand of Jakkuzzi; Furwok lanterns flicker on the Forest Moon of Ender; and Jabbo's court peers down into the Rancor Pit.
+22 hand-built places, each with its own little animation: the band plays in the Mos Easy Cantina while the bartender polishes glasses; Princess Laya's hologram flickers in Obi-Juan's Hut; Clawdas' eyes glow over heaps of junk in the Clawda Sandcrawler; fog drifts over Dagobog; the Millennial Falcon jumps to hyperspace past its cockpit window; a Star Wrecker lies buried in the sand of Jakkuzzi; Furwok lanterns flicker on the Forest Moon of Ender; and Jabbo's court peers down into the Rancor Pit.
 
 <p align="center">
   <img src="docs/locations.png" alt="All 22 Star Clawds places" width="760">

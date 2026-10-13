@@ -2,7 +2,7 @@
 
 > The Star Clawds showcase page for Clawd Clash, a free macOS app that shows Claude Code, Codex, Qwen Code, Gemini CLI and GitHub Copilot CLI sessions as a pixel-art battle on the desktop or in a window. Every session is a hero or a villain, every subagent joins in, and they fight while they work. This repo holds no code: it only shows off the Star Clawds universe (pictures, a promo video and a plain-language changelog).
 
-- Star Clawds is the space-opera parody universe of Clawd Clash: 46 villains and 35 heroes (Darth Vapor, Kylo Rant, Boba Feta, Luke Skyclawer, Han Yolo, Princess Laya, Obi-Juan Kanoobie, Ahh2-De2 and the rest) and 22 places (the Mos Easy Cantina, the Doom Moon, Jabbo's Palace, the Battle of Froth, the Millennial Falcon and more).
+- Star Clawds is the space-opera parody universe of Clawd Clash: 46 villains and 35 heroes (Darth Vapor, Kylo Rant, Boba Feta, Luke Skyclawder, Han Yolo, Princess Laya, Obi-Juan Kanoobie, Ahh2-De2 and the rest) and 22 places (the Mos Easy Cantina, the Doom Moon, Jabbo's Palace, the Battle of Froth, the Millennial Falcon and more).
 - Set pieces: Han Yolo and Greedy-O face off and Han shoots first; the Millennial Falcon picks Han up; laser swords deflect blaster bolts; with two AIs running they take the light and dark sides.
 - Install: `brew install --cask rodclemen/tap/clawd-wars` (Clawd Clash, starting in Star Clawds) or `brew install --cask rodclemen/tap/clawd-clash`.
 - The app, its source, docs and full history: https://github.com/rodclemen/clawd-clash
