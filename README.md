@@ -5,7 +5,7 @@
 <h1 align="center">Clawd Wars</h1>
 
 <p align="center">
-  <b>Your AI coding sessions, as a pixel-art Star Claws battle on your desktop.</b><br>
+  <b>Your AI coding sessions, as a pixel-art Star Clawds battle on your desktop.</b><br>
   Every session is a hero or a villain, every subagent joins in, and they fight while they work.
 </p>
 
@@ -21,7 +21,7 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 
 <p align="center"><sub>🔊 <b>Click the speaker in the player for sound</b>: GitHub starts videos muted. Full 1080p version: <a href="promo/clawd-wars-promo.mp4">promo/clawd-wars-promo.mp4</a></sub></p>
 
-> **Clawd Wars is now part of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with two more universes to switch to. This page shows off the Star Claws universe; see [Get it](#get-it) to install.
+> **Clawd Wars is now part of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with two more universes to switch to. This page shows off the Star Clawds universe; see [Get it](#get-it) to install.
 
 <p align="center">
   <img src="docs/desktop.png" alt="Three Claudes and seven agents fighting across the bottom of the screen: Boba Feta, Obi-Juan Kanoobie and Darth Vapor leading">
@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 ## Contents
 
 - [What it is](#what-it-is)
-- [The Star Claws universe](#the-star-claws-universe)
+- [The Star Clawds universe](#the-star-claws-universe)
 - [The cast](#the-cast)
 - [Window mode](#window-mode)
 - [Screen saver](#screen-saver)
@@ -44,7 +44,7 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 
 You run Claude Code in three terminals. One is thinking, one is waiting for your permission, one finished ten minutes ago and you didn't notice. You alt-tab around to find out.
 
-**Clawd Wars tells you at a glance, without switching windows.** Every Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI session becomes a character in a pixel-art Star Claws battle, along the bottom of your screen or in a window of its own.
+**Clawd Wars tells you at a glance, without switching windows.** Every Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI session becomes a character in a pixel-art Star Clawds battle, along the bottom of your screen or in a window of its own.
 
 - 🗡️ **Working?** Your Claude swings a laser sword (or fires a blaster, or throws dark lightning).
 - 💭 **Thinking?** A thought bubble.
@@ -56,7 +56,7 @@ You run Claude Code in three terminals. One is thinking, one is waiting for your
 
 No dashboard to open, no tab to check. It's just… there, quietly having a war.
 
-## The Star Claws universe
+## The Star Clawds universe
 
 Run two Claudes and they duel. Every character is Clawd (Claude Code's little pixel mascot) in costume, and the fights follow the weapons:
 
@@ -94,7 +94,7 @@ Two gunslingers never just shoot each other. Most bolts get saved:
 **The light side**: Luke Skyclawer, Han Yolo, Princess Laya, Obi-Juan Kanoobie, Ahh2-De2, C-3P-Uh-Oh, Qui-Gone Tonic, Mace Window, Yodle, a Clawa, Chewbarka, Ray, Asoka Tango, Wicker the Furwok, a Snowtaunt, J.J Blinks, Lando Coolrissian, Zori Blitz, Bo-Kitan Krays, Maz Kanapé, Wedge Antlers, LE-ET (fist up for bot rights), Mon Mothball, Padmé Amidrama, Admiral Snackbar, Grogoo, Babu Flick (sparks flying), the Mandoclawrian, Kay-2-Snark, Gonky the Power Box, Cassius Andoor (always glancing over his shoulder), Bix Caffeine, Cobb Vance, a Pit Bot (folds up now and then) and Kwill (*"I have spoken."*).
 
 <p align="center">
-  <img src="docs/roster.png" alt="The whole Star Claws cast, dark side and light side" width="760">
+  <img src="docs/roster.png" alt="The whole Star Clawds cast, dark side and light side" width="760">
 </p>
 
 ## Window mode
@@ -114,7 +114,7 @@ The scene is set **where the first session's character belongs**: the Doom Moon 
 22 hand-built places, each with its own little animation: the band plays in the Mos Easy Cantina while the bartender polishes glasses; Princess Laya's hologram flickers in Obi-Juan's Hut; Clawas' eyes glow over heaps of junk in the Clawa Sandcrawler; fog drifts over Dagobog; the Millennial Falcon jumps to hyperspace past its cockpit window; a Star Wrecker lies buried in the sand of Jakkuzzi; Furwok lanterns flicker on the Forest Moon of Ender; and Jabbo's court peers down into the Rancor Pit.
 
 <p align="center">
-  <img src="docs/locations.png" alt="All 22 Star Claws places" width="760">
+  <img src="docs/locations.png" alt="All 22 Star Clawds places" width="760">
 </p>
 
 ## Screen saver
@@ -135,7 +135,7 @@ The window can show the same view, and **Random** location moves the window some
 
 Clawd Wars is now part of **[Clawd Clash](https://github.com/rodclemen/clawd-clash)**, one app with three universes. It needs macOS 13+ and at least one of Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI.
 
-**With Homebrew**, starting in Star Claws:
+**With Homebrew**, starting in Star Clawds:
 
 ```sh
 brew install --cask rodclemen/tap/clawd-wars
@@ -153,7 +153,7 @@ Everything else (how it works, the settings, uninstalling, the source and contri
 
 ## Two more universes
 
-Star Claws is one of three. In **Settings → Universe** you can switch to **Clawvel** or **Detective Claws**, or pick **Random** to change universe on its own every so often. Switching recasts everyone on screen and moves the scene to one of the new universe's places; a scene never mixes them. See [Clawd Clash](https://github.com/rodclemen/clawd-clash) for the other two casts.
+Star Clawds is one of three. In **Settings → Universe** you can switch to **Marvelous Clawds** or **Detective Clawds**, or pick **Random** to change universe on its own every so often. Switching recasts everyone on screen and moves the scene to one of the new universe's places; a scene never mixes them. See [Clawd Clash](https://github.com/rodclemen/clawd-clash) for the other two casts.
 
 ## What's new
 
