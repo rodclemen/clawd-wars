@@ -14,6 +14,7 @@ The changes you'd notice in the Star Clawds universe, newest first. The full, de
 - **The screen saver picks its own universe** in its Options, and a few screen saver glitches were fixed (it no longer disappears from System Settings' list).
 - **Upgrading takes care of itself.** Clawd Clash takes over the AIs the old app had connected, quits the old app and starts in Star Clawds, keeping your sessions' characters.
 - A new icon: a comic cover with one panel per universe.
+- **A new trailer.** The video at the top of this page is redrawn with the Star Clawds names, art and logos, and gains a scene: the blast door blowing in aboard the Tentative IV, the Stormtroupers pouring through the smoke and Darth Vapor stepping in after them.
 
 ## 2.26 to 2.28: the screen saver and a bigger cast
 
