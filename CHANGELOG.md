@@ -5,7 +5,7 @@ The changes you'd notice in the Star Claws universe, newest first. The full, det
 ## 3.0.0: Clawd Wars joins Clawd Clash
 
 - **One app, three universes.** Clawd Wars is now part of Clawd Clash. Star Claws keeps the whole cast (81 characters) and all 22 places, and you can switch to **Clawvel** or **Detective Claws** in Settings. Switching recasts everyone on screen and moves the scene to the new universe.
-- **Parody names.** Star Wars became **Star Claws**, and every character and place has a new name: Darth Vapor, Luke Skyclawer, Han Yolo, Princess Laya, the Millennial Falcon, the Mos Easy Cantina and the rest. The swords are laser swords now, and the lightning is dark lightning.
+- **Parody names.** The universe is now called **Star Claws**, and every character and place has a new name: Darth Vapor, Luke Skyclawer, Han Yolo, Princess Laya, the Millennial Falcon, the Mos Easy Cantina and the rest. The swords are laser swords now, and the lightning is dark lightning.
 - **Random universe.** Pick **Random** and the app changes universe on its own every 1 to 60 minutes, with a wipe across the whole window.
 - **A Settings window.** Every option in one place (universe, window, desktop, connected AIs, screen saver), and a much shorter menu.
 - **The window steps aside** when no AI is running, and comes back when one starts.
