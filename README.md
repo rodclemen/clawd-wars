@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 > **Clawd Wars is now part of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with two more universes to switch to. This page shows off the Star Claws universe; see [Get it](#get-it) to install.
 
 <p align="center">
-  <img src="docs/desktop.png" alt="Three Claudes and eight agents fighting across the bottom of the screen">
+  <img src="docs/desktop.png" alt="Three Claudes and seven agents fighting across the bottom of the screen: Boba Feta, Obi-Juan Kanoobie and Darth Vapor leading">
 </p>
 
 ---
@@ -108,7 +108,7 @@ Clawd Wars opens in a window by default (switch to the desktop from the menu). T
 The scene is set **where the first session's character belongs**: the Doom Moon for Darth Vapor, the Great Pit of Snarkoon for Boba Feta, Jabbo's Palace, the Battle of Froth for the AT-ACK (with more of them marching on the horizon):
 
 <p align="center">
-  <img src="docs/window-hoth.png" alt="Window mode at the Battle of Froth" width="760">
+  <img src="docs/window-froth.png" alt="Window mode at the Battle of Froth" width="760">
 </p>
 
 22 hand-built places, each with its own little animation: the band plays in the Mos Easy Cantina while the bartender polishes glasses; Princess Laya's hologram flickers in Obi-Juan's Hut; Clawas' eyes glow over heaps of junk in the Clawa Sandcrawler; fog drifts over Dagobog; the Millennial Falcon jumps to hyperspace past its cockpit window; a Star Wrecker lies buried in the sand of Jakkuzzi; Furwok lanterns flicker on the Forest Moon of Ender; and Jabbo's court peers down into the Rancor Pit.
