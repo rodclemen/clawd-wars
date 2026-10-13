@@ -32,7 +32,7 @@ https://github.com/user-attachments/assets/84cbea65-6fb8-452a-b4d6-811c69c301cc
 ## Contents
 
 - [What it is](#what-it-is)
-- [The Star Clawds universe](#the-star-claws-universe)
+- [The Star Clawds universe](#the-star-clawds-universe)
 - [The cast](#the-cast)
 - [Window mode](#window-mode)
 - [Screen saver](#screen-saver)
