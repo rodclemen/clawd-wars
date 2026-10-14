@@ -138,13 +138,15 @@ Star Clawds is part of **[Clawd Clash](https://github.com/rodclemen/clawd-clash)
 **With Homebrew**, starting in Star Clawds:
 
 ```sh
-brew install --cask rodclemen/tap/star-clawds
+brew tap rodclemen/tap
+brew trust rodclemen/tap      # newer Homebrew asks you to trust a third-party tap once
+brew install --cask star-clawds
 ```
 
 or the same app under its own name:
 
 ```sh
-brew install --cask rodclemen/tap/clawd-clash
+brew install --cask clawd-clash
 ```
 
 Or download the zip from [Clawd Clash's releases](https://github.com/rodclemen/clawd-clash/releases), unzip it and drag **Clawd Clash** to Applications. Already have the old Clawd Wars app? Clawd Clash takes over its connections and keeps your characters.

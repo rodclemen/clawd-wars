@@ -4,6 +4,6 @@
 
 - Star Clawds is the space-opera parody universe of Clawd Clash: 46 villains and 35 heroes (Darth Vapor, Kylo Rant, Boba Feta, Luke Skyclawder, Han Yolo, Princess Laya, Obi-Juan Kanoobie, Ahh2-De2 and the rest) and 22 places (the Mos Easy Cantina, the Doom Moon, Jabbo's Palace, the Battle of Froth, the Millennial Falcon and more).
 - Set pieces: Han Yolo and Greedy-O face off and Han shoots first; the Millennial Falcon picks Han up; laser swords deflect blaster bolts; with two AIs running they take the light and dark sides.
-- Install: `brew install --cask rodclemen/tap/star-clawds` (Clawd Clash, starting in Star Clawds) or `brew install --cask rodclemen/tap/clawd-clash`.
+- Install: `brew tap rodclemen/tap && brew trust rodclemen/tap && brew install --cask star-clawds` installs Clawd Clash starting in Star Clawds (`brew trust` only on newer Homebrew); or `brew install --cask clawd-clash`.
 - The app, its source, docs and full history: https://github.com/rodclemen/clawd-clash
 - The other two universes: Marvelous Clawds and Detective Clawds.
