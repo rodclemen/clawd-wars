@@ -1,4 +1,4 @@
-# What's new in Clawd Wars
+# What's new in Star Clawds
 
 The changes you'd notice in the Star Clawds universe, newest first. The full, detailed history (every fix, every version) lives in [Clawd Clash](https://github.com/rodclemen/clawd-clash).
 

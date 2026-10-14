@@ -1,8 +1,8 @@
 <p align="center">
-  <img src="docs/icon.png" width="180" alt="Clawd Wars icon: Darth Vapor and Luke Skyclawder crossing red and green laser swords over a starfield">
+  <img src="docs/icon.png" width="180" alt="Star Clawds icon: Darth Vapor and Luke Skyclawder crossing red and green laser swords over a starfield">
 </p>
 
-<h1 align="center">Clawd Wars</h1>
+<h1 align="center">Star Clawds</h1>
 
 <p align="center">
   <b>Your AI coding sessions, as a pixel-art Star Clawds battle on your desktop.</b><br>
@@ -21,7 +21,7 @@ https://github.com/user-attachments/assets/aff1b2f9-9b96-4dea-8eef-c3f469c93a6b
 
 <p align="center"><sub>🔊 <b>Click the speaker in the player for sound</b>: GitHub starts videos muted. Full 1080p version: <a href="promo/clawd-wars-promo.mp4">promo/clawd-wars-promo.mp4</a></sub></p>
 
-> **Clawd Wars is now part of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with two more universes to switch to. This page shows off the Star Clawds universe; see [Get it](#get-it) to install.
+> **Star Clawds (formerly Clawd Wars) is a universe of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with two more universes to switch to. This page shows off the Star Clawds universe; see [Get it](#get-it) to install.
 
 <p align="center">
   <img src="docs/desktop.png" alt="Three Claudes and seven agents fighting across the bottom of the screen: Boba Feta, Obi-Juan Kanoobie and Darth Vapor leading">
@@ -44,7 +44,7 @@ https://github.com/user-attachments/assets/aff1b2f9-9b96-4dea-8eef-c3f469c93a6b
 
 You run Claude Code in three terminals. One is thinking, one is waiting for your permission, one finished ten minutes ago and you didn't notice. You alt-tab around to find out.
 
-**Clawd Wars tells you at a glance, without switching windows.** Every Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI session becomes a character in a pixel-art Star Clawds battle, along the bottom of your screen or in a window of its own.
+**Clawd Clash tells you at a glance, without switching windows.** Every Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI session becomes a character in a pixel-art Star Clawds battle, along the bottom of your screen or in a window of its own.
 
 - 🗡️ **Working?** Your Claude swings a laser sword (or fires a blaster, or throws dark lightning).
 - 💭 **Thinking?** A thought bubble.
@@ -99,7 +99,7 @@ Two gunslingers never just shoot each other. Most bolts get saved:
 
 ## Window mode
 
-Clawd Wars opens in a window by default (switch to the desktop from the menu). The whole crew stands in a scene, and every session gets a card: its project, what it's doing right now, your last prompt, its last reply, and its agents in a little tree underneath.
+Clawd Clash opens in a window by default (switch to the desktop from the menu). The whole crew stands in a scene, and every session gets a card: its project, what it's doing right now, your last prompt, its last reply, and its agents in a little tree underneath.
 
 <p align="center">
   <img src="docs/window-cantina.png" alt="Window mode in the Mos Easy Cantina" width="760">
@@ -123,7 +123,7 @@ The scene is set **where the first session's character belongs**: the Doom Moon 
   <img src="docs/screensaver.png" alt="The screen saver at the Larz Homestead: five sessions' cards over the crew, one needing you, with name tags and beams" width="900">
 </p>
 
-Clawd Wars comes with a screen saver: the place at full screen and the crew fighting across its floor. Every Claude and agent wears a name tag, each session has a card floating above the crew, a clock sits in the corner, and what happened lately crawls along the bottom. Every 10 minutes it wipes to somewhere new with a hard edge or a clock wipe. When there's nothing much to watch, it puts on a show instead: a random crew duelling, light side against dark. It even shows your sessions with the app closed.
+Clawd Clash comes with a screen saver: the place at full screen and the crew fighting across its floor. Every Claude and agent wears a name tag, each session has a card floating above the crew, a clock sits in the corner, and what happened lately crawls along the bottom. Every 10 minutes it wipes to somewhere new with a hard edge or a clock wipe. When there's nothing much to watch, it puts on a show instead: a random crew duelling, light side against dark. It even shows your sessions with the app closed.
 
 The window can show the same view, and **Random** location moves the window somewhere new every 10 minutes, with the same wipe.
 
@@ -133,12 +133,12 @@ The window can show the same view, and **Random** location moves the window some
 
 ## Get it
 
-Clawd Wars is now part of **[Clawd Clash](https://github.com/rodclemen/clawd-clash)**, one app with three universes. It needs macOS 13+ and at least one of Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI.
+Star Clawds is part of **[Clawd Clash](https://github.com/rodclemen/clawd-clash)**, one app with three universes. It needs macOS 13+ and at least one of Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI.
 
 **With Homebrew**, starting in Star Clawds:
 
 ```sh
-brew install --cask rodclemen/tap/clawd-wars
+brew install --cask rodclemen/tap/star-clawds
 ```
 
 or the same app under its own name:
