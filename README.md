@@ -21,7 +21,7 @@ https://github.com/user-attachments/assets/aff1b2f9-9b96-4dea-8eef-c3f469c93a6b
 
 <p align="center"><sub>🔊 <b>Click the speaker in the player for sound</b>: GitHub starts videos muted. Full 1080p version: <a href="promo/clawd-wars-promo.mp4">promo/clawd-wars-promo.mp4</a></sub></p>
 
-> **Star Clawds (formerly Clawd Wars) is a universe of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with two more universes to switch to. This page shows off the Star Clawds universe; see [Get it](#get-it) to install.
+> **Star Clawds (formerly Clawd Wars) is a universe of [Clawd Clash](https://github.com/rodclemen/clawd-clash).** Same crew, same fights, now with more universes to switch to. This page shows off the Star Clawds universe; see [Get it](#get-it) to install.
 
 <p align="center">
   <img src="docs/desktop.png" alt="Three Claudes and seven agents fighting across the bottom of the screen: Boba Feta, Obi-Juan Kanoobie and Darth Vapor leading">
@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/aff1b2f9-9b96-4dea-8eef-c3f469c93a6b
 - [Window mode](#window-mode)
 - [Screen saver](#screen-saver)
 - [Get it](#get-it)
-- [Two more universes](#two-more-universes)
+- [More universes](#more-universes)
 - [What's new](#whats-new)
 
 ## What it is
@@ -133,7 +133,7 @@ The window can show the same view, and **Random** location moves the window some
 
 ## Get it
 
-Star Clawds is part of **[Clawd Clash](https://github.com/rodclemen/clawd-clash)**, one app with three universes. It needs macOS 13+ and at least one of Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI.
+Star Clawds is part of **[Clawd Clash](https://github.com/rodclemen/clawd-clash)**, one app with multiple universes. It needs macOS 13+ and at least one of Claude Code, Codex, Qwen Code, Gemini CLI or GitHub Copilot CLI.
 
 **With Homebrew**, starting in Star Clawds:
 
@@ -153,9 +153,9 @@ Or download the zip from [Clawd Clash's releases](https://github.com/rodclemen/c
 
 Everything else (how it works, the settings, uninstalling, the source and contributing) lives in the **[Clawd Clash repo](https://github.com/rodclemen/clawd-clash)**.
 
-## Two more universes
+## More universes
 
-Star Clawds is one of three. In **Settings → Universe** you can switch to **Marvelous Clawds** or **Detective Clawds**, or pick **Random** to change universe on its own every so often. Switching recasts everyone on screen and moves the scene to one of the new universe's places; a scene never mixes them. See [Clawd Clash](https://github.com/rodclemen/clawd-clash) for the other two casts.
+Star Clawds is one of multiple universes. In **Settings → Universe** you can switch to **[Marvelous Clawds](https://github.com/rodclemen/marvelous-clawds)**, **[Detective Clawds](https://github.com/rodclemen/detective-clawds)** or **[Doctor Clawd](https://github.com/rodclemen/doctor-clawd)**, or pick **Random** to change universe on its own every so often. Switching recasts everyone on screen and moves the scene to one of the new universe's places; a scene never mixes them. See [Clawd Clash](https://github.com/rodclemen/clawd-clash) for the other casts.
 
 ## What's new
 
