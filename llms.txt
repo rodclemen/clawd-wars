@@ -6,4 +6,4 @@
 - Set pieces: Han Yolo and Greedy-O face off and Han shoots first; the Millennial Falcon picks Han up; laser swords deflect blaster bolts; with two AIs running they take the light and dark sides.
 - Install: `brew tap rodclemen/tap && brew trust rodclemen/tap && brew install --cask star-clawds` installs Clawd Clash starting in Star Clawds (`brew trust` only on newer Homebrew); or `brew install --cask clawd-clash`.
 - The app, its source, docs and full history: https://github.com/rodclemen/clawd-clash
-- The other universes: Marvelous Clawds, Detective Clawds, Doctor Clawd and The Clawd Files.
+- The other universes: Marvelous Clawds, Detective Clawds, Doctor Clawd, The Clawd Files and Stevie Clawdberg.
