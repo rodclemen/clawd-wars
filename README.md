@@ -155,7 +155,7 @@ Everything else (how it works, the settings, uninstalling, the source and contri
 
 ## More universes
 
-Star Clawds is one of multiple universes. In **Settings → Universe** you can switch to **[Marvelous Clawds](https://github.com/rodclemen/marvelous-clawds)**, **[Detective Clawds](https://github.com/rodclemen/detective-clawds)**, **[Doctor Clawd](https://github.com/rodclemen/doctor-clawd)**, **[The Clawd Files](https://github.com/rodclemen/the-clawd-files)** or **[Stevie Clawdberg](https://github.com/rodclemen/stevie-clawdberg)**, or pick **Random** to change universe on its own every so often. Switching recasts everyone on screen and moves the scene to one of the new universe's places; a scene never mixes them. See [Clawd Clash](https://github.com/rodclemen/clawd-clash) for the other casts.
+Star Clawds is one of multiple universes. In **Settings → Universe** you can switch to **[Marvelous Clawds](https://github.com/rodclemen/marvelous-clawds)**, **[Detective Clawds](https://github.com/rodclemen/detective-clawds)**, **[Doctor Clawd](https://github.com/rodclemen/doctor-clawd)**, **[The Clawd Files](https://github.com/rodclemen/the-clawd-files)**, **[Stevie Clawdberg](https://github.com/rodclemen/stevie-clawdberg)** or **[Clawd of the Rings](https://github.com/rodclemen/clawd-of-the-rings)**, or pick **Random** to change universe on its own every so often. Switching recasts everyone on screen and moves the scene to one of the new universe's places; a scene never mixes them. See [Clawd Clash](https://github.com/rodclemen/clawd-clash) for the other casts.
 
 ## What's new
 
