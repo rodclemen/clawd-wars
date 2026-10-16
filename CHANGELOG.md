@@ -2,6 +2,10 @@
 
 The changes you'd notice in the Star Clawds universe, newest first. The full, detailed history (every fix, every version) lives in [Clawd Clash](https://github.com/rodclemen/clawd-clash).
 
+## 2026-10-17
+
+- **The trailer plays for everyone.** The video at the top of this page only played for people signed in to GitHub. It's uploaded again, freshly rendered with today's BRING YOUR OWN AI line-up: every AI Clawd Clash supports, pi included.
+
 ## 3.0.0: Clawd Wars joins Clawd Clash
 
 - **One app, three universes.** Clawd Wars is now part of Clawd Clash. Star Clawds keeps the whole cast (81 characters) and all 22 places, and you can switch to **Marvelous Clawds** or **Detective Clawds** in Settings. Switching recasts everyone on screen and moves the scene to the new universe.
